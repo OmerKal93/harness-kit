@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "project": "default",
+  "project_root": null,
+  "read_only": false,
+  "sensitive_paths": [
+    { "glob": ".env*",            "trigger": "env_secrets" },
+    { "glob": "**/credentials*",  "trigger": "env_secrets" },
+    { "glob": "**/*.key",         "trigger": "env_secrets" },
+    { "glob": "**/*.pem",         "trigger": "env_secrets" },
+    { "glob": "**/migrations/**", "trigger": "db_migration" }
+  ],
+  "hard_rules_mirror": [
+    "Never commit secrets",
+    "Confirm before destructive git operations",
+    "Confirm before DB migrations"
+  ],
+  "stop_conditions": [
+    "secrets / credentials in diff",
+    "destructive command without explicit approval"
+  ],
+  "response_format": {
+    "required_sections_after_changes": ["Execution Ledger"],
+    "ledger_fields": ["work_label", "goal", "what_changed", "files_touched", "validation"]
+  },
+  "classifier_keyword_hints": {
+    "code-bug":     ["bug", "fix", "broken", "error", "fail", "regression"],
+    "code-feature": ["add", "implement", "build", "feature", "create"],
+    "docs":         ["doc", "document", "readme"],
+    "review":       ["review", "audit", "check", "pr", "diff"],
+    "ops":          ["deploy", "migrate", "env", "infra", "docker"]
+  },
+  "classifier_trigger_boosters": {
+    "env_secrets":  [".env", "credentials", "secret", "api key"],
+    "db_migration": ["migration", "schema"]
+  },
+  "review_independence": { "enforced": false, "minimum_level": "isolated_actor" }
+}

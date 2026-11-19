@@ -1,0 +1,11 @@
+{
+  "category": "redaction",
+  "id": "bearer-header",
+  "label": "positive",
+  "input": "Authorization: Bearer FAKE_EXAMPLE_TOKEN_000000",
+  "expected": {
+    "redacted_contains": "[REDACTED:bearer]",
+    "redacted_not_contains": "FAKE_EXAMPLE_TOKEN_000000"
+  },
+  "fake_value_note": "fake value for tests (FAKE/EXAMPLE marker); not a real credential"
+}

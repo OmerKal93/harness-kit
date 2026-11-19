@@ -1,0 +1,16 @@
+{
+  "source_repo": "https://github.com/mattpocock/skills",
+  "source_path": "skills/productivity/grill-me/SKILL.md",
+  "pinned_commit": "aaf2453fbdfe7a15c07f11d861224f34ab4b53cb",
+  "fetched_at": "2026-06-06",
+  "fetched_via": "raw.githubusercontent.com exact-path download (never npx skills add)",
+  "license": "MIT",
+  "attribution": "Matt Pocock (mattpocock/skills)",
+  "upstream_sha256": "74147EB6010A65957EFEF2B9E0F0B3FF935C1DEF7FC117697151B1D0F3610556",
+  "upstream_bytes": 635,
+  "body_verbatim": true,
+  "adaptation": "frontmatter extended to the 17 HarnessKit skill-registry required keys (validate-skill-registration.js REQUIRED_FRONTMATTER); upstream name/description preserved verbatim inside it; instruction body byte-identical to upstream",
+  "forensics_scan": "runs/20260606-084405-skill-adoption-grill-pack-v1/forensics-scan.md — CLEAN (9 deterministic checks + manual review)",
+  "upstream_original_archived_at": "runs/20260606-084405-skill-adoption-grill-pack-v1/upstream-original/grill-me/SKILL.md",
+  "re_fetch_policy": "any upstream update = new fetch at a new pinned SHA = full re-scan + re-review cycle; never auto-update"
+}

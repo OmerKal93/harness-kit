@@ -1,0 +1,17 @@
+{
+  "name": "harnesskit",
+  "version": "0.2.0-internal",
+  "description": "Claude Code plugin for HarnessKit: exposes the real bin/harnesskit.js CLI (inspect, capabilities, doctor, status, resume, run) as slash commands that literally shell out to that binary, plus the 4 migrated governance/review skills. No prompt-only simulation -- every command invokes the same entry point a terminal user would.",
+  "author": {
+    "name": "HarnessKit contributors"
+  },
+  "license": "MIT",
+  "keywords": [
+    "harnesskit",
+    "agent-harness",
+    "workflow-governance",
+    "adapter-contract"
+  ],
+  "commands": ["./commands"],
+  "skills": ["./skills"]
+}

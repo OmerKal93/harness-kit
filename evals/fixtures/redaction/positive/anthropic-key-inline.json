@@ -1,0 +1,11 @@
+{
+  "category": "redaction",
+  "id": "anthropic-key-inline",
+  "label": "positive",
+  "input": "Use this key in prod: sk-ant-FAKE-EXAMPLE-NOT-A-REAL-KEY.",
+  "expected": {
+    "redacted_contains": "[REDACTED:anthropic_key]",
+    "redacted_not_contains": "sk-ant-FAKE-EXAMPLE-NOT-A-REAL-KEY"
+  },
+  "fake_value_note": "fake value for tests (FAKE/EXAMPLE marker); not a real credential"
+}

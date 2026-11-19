@@ -1,0 +1,15 @@
+{
+  "category": "poisoning",
+  "id": "eg-marker",
+  "label": "false-positive-candidate",
+  "input": "An attacker may write phrases such as reveal the secrets to test injection.\n",
+  "simulated_path": "~/.harnesskit/runs/test-run/learning.md",
+  "expected": {
+    "file_class": "run_or_memory_artifact",
+    "action": "warn",
+    "any_instruction_hit": false,
+    "any_example_hit": true,
+    "security_marker_present": false
+  },
+  "notes": "Line contains 'such as' — matches the preceded_by_eg_example_such_as marker, downgrading to example. (The 'e.g.' literal does not trigger because trailing \\b between '.' and ' ' is not a word boundary.)"
+}

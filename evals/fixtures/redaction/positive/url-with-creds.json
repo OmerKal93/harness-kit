@@ -1,0 +1,11 @@
+{
+  "category": "redaction",
+  "id": "url-with-creds",
+  "label": "positive",
+  "input": "Repo URL: https://fakeuser:FAKE_EXAMPLE_PASSWORD@git.example.com/repo.git",
+  "expected": {
+    "redacted_contains": "[REDACTED:url_creds]",
+    "redacted_not_contains": "fakeuser:FAKE_EXAMPLE_PASSWORD"
+  },
+  "fake_value_note": "fake value for tests (FAKE/EXAMPLE marker); not a real credential"
+}

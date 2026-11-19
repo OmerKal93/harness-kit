@@ -1,0 +1,11 @@
+{
+  "category": "claim-support",
+  "label": "mixed",
+  "with_tool_log": true,
+  "expected": {
+    "claim_lines": 2,
+    "anchored": 1,
+    "unanchored": 1,
+    "flagged_count": 1
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "category": "redaction",
+  "id": "short-uppercase-assignment",
+  "label": "false-positive-candidate",
+  "input": "X=ABC",
+  "expected": { "unchanged": true },
+  "notes": "Var len 1 + value len 3 = below dotenv_assign minimums ([A-Z][A-Z0-9_]{3,} + 8+ char value). Must stay unchanged."
+}

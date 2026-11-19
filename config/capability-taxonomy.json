@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "_artifact": "ORCH-1: canonical engineering-capability taxonomy. Routing decisions (router/select-adapter.js) are made from these capability IDs, never from adapter/product names.",
+  "_enforcement_status": "advisory_only",
+  "_enforcement_note": "Inventory only. Nothing gates execution on this file yet; router/select-adapter.js (ORCH-2) is the first consumer, and it is itself a stub.",
+  "established_at": "2026-07-09",
+  "source_run": "runs/20260709-220221-orch-r0-r9-harnesskit-cli-first-engineer",
+  "capabilities": [
+    { "id": "planning", "description": "Decomposing a task into an ordered implementation approach before writing code." },
+    { "id": "architecture", "description": "Reasoning about system structure, module boundaries, and design tradeoffs." },
+    { "id": "implementation", "description": "Writing or editing source files to realize a plan." },
+    { "id": "debugging", "description": "Root-causing a defect from a failure signal (error, test failure, unexpected behavior)." },
+    { "id": "testing", "description": "Writing or executing automated tests / eval suites against real code." },
+    { "id": "verification", "description": "Exercising a change end-to-end to confirm it does what it claims, beyond trusting test output alone." },
+    { "id": "review", "description": "Critiquing a diff or plan for correctness, maintainability, or scope issues." },
+    { "id": "security", "description": "Identifying exploitable vulnerabilities, unsafe input handling, or supply-chain risk." },
+    { "id": "terminal", "description": "Executing shell commands and reading their output." },
+    { "id": "browser", "description": "Driving or reading a web browser session." },
+    { "id": "git", "description": "Reading or writing git history/state (diff, commit, branch) safely." },
+    { "id": "CI", "description": "Diagnosing or driving a build/test/gate pipeline, including non-interactive failure diagnosis." },
+    { "id": "documentation", "description": "Producing or maintaining human-readable docs, reports, or structured documents." },
+    { "id": "long-context", "description": "Maintaining useful reasoning quality over a large amount of accumulated context." },
+    { "id": "multimodal", "description": "Reading non-text inputs (images, screenshots) as part of the task." },
+    { "id": "parallel-execution", "description": "Running multiple independent sub-tasks concurrently and aggregating results." },
+    { "id": "isolated-execution", "description": "Running a task in a sandboxed/fresh environment with no leakage into or from the caller's live state." },
+    { "id": "structured-output", "description": "Producing machine-parseable output (JSON/schema-conformant) on request, not just prose." },
+    { "id": "resumability", "description": "Continuing or resuming a prior session/conversation without losing state." },
+    { "id": "cost-reporting", "description": "Reporting token usage, wall-clock time, or dollar cost for a given invocation." }
+  ]
+}

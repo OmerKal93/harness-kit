@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "harnesskit-lock.schema.json",
+  "title": "HarnessKit overlay lock file",
+  "description": "Owned by a CONSUMING overlay (e.g. a private overlay-side distribution), not by the public core. Pins the exact public-core commit the overlay was built/tested against. The public core provides this schema, a generator, and a validator -- it never creates or owns the real lock file for any specific overlay.",
+  "type": "object",
+  "required": ["schema_version", "overlay_name", "core_commit", "generated_at", "generator_version"],
+  "properties": {
+    "schema_version": { "type": "integer", "const": 1 },
+    "overlay_name": { "type": "string", "minLength": 1, "description": "Name of the consuming overlay, e.g. 'example-internal'. Never a personal or machine-specific path." },
+    "core_commit": { "type": "string", "pattern": "^[0-9a-f]{40}$", "description": "Full 40-char git SHA of the public HarnessKit core commit this overlay is pinned to." },
+    "core_repo_url": { "type": ["string", "null"], "description": "Optional: where the public core lives, if published. Null for a purely local/private consumption today." },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "generator_version": { "type": "string", "description": "Identifies which generate-harnesskit-lock.js produced this, for forward-compat." },
+    "notes": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}

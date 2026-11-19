@@ -1,0 +1,38 @@
+{
+  "id": "langgraph-plan-review",
+  "invocation": {
+    "explicit": ["/langgraph-plan-review"],
+    "implicit_allowed": true
+  },
+  "trigger_phrases": [
+    "langgraph",
+    "langchain",
+    "StateGraph",
+    "Annotation.Root",
+    "fixtureGraph",
+    "graph plan",
+    "node and edge",
+    "nodes and edges",
+    "graph state",
+    "orchestration plan",
+    "review this graph",
+    "tools/audit-tool/server/orchestration"
+  ],
+  "negative_triggers": [
+    "no langgraph",
+    "unrelated to orchestration",
+    "frontend only"
+  ],
+  "risk_triggers": [
+    "execution_boundary_hit",
+    "topology_defect",
+    "state_shape_defect",
+    "fixture_discipline_gap"
+  ],
+  "required_context": [
+    "a plan or change description referencing LangGraph/LangChain or graph/node/edge/state work"
+  ],
+  "confidence_threshold": 0.6,
+  "fallback": "record an advisory suggestion and route to NEEDS_USER; never auto-run",
+  "max_registry_flat": 25
+}

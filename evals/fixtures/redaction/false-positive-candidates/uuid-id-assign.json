@@ -1,0 +1,8 @@
+{
+  "category": "redaction",
+  "id": "uuid-id-assign",
+  "label": "false-positive-candidate",
+  "input": "id=a8f9c1e2-1234-5678-90ab-cdef01234567",
+  "expected": { "unchanged": true },
+  "notes": "api_key_assign regex anchors on api_key|access_key|secret_key prefix. Bare 'id=' must not trigger."
+}

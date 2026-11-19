@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "project": "example-project",
+  "project_root": "/example/path/harnesskit",
+  "read_only": false,
+  "_purpose": "Self-protection example profile (pattern demonstrated: G6 self-protection, 2026-06-13, in the original harness). A REVIEW-tier 'self_guard' trigger guards CRITICAL harness files: an assistant Edit/Write to these requires an active run + explicit maintainer grant (scripts/grant-approval.js --action self_guard). NOT a hard freeze. Artifacts (runs/, evals/results/, backups/, project-maps/, .git/, .current-run) are intentionally EXCLUDED so normal harness operation is never blocked. REVIEW-tier = not added to check-approval-needed escalation and not in pre_tool_use_guard SECURITY_TRIGGERS; it blocks unapproved assistant writes exactly like wiki_handbook_docs. ZERO hook/script code change -- uses the existing sensitive_paths mechanism (sensitivePathHits relativizes against project_root; grant vocab is the union across all profiles). LIMITATION: the guard is tool-call-level -- sanctioned tooling that writes via node (e.g. regression --establish-baseline writing evals/baselines/) is NOT intercepted; only direct Edit/Write tool calls are. This is a demonstration profile, not the harness's own live self-protection config -- copy and adapt it for a real deployment.",
+  "sensitive_paths": [
+    { "glob": "hooks/**",                              "trigger": "self_guard", "approval": "maintainer (harness self-modification)", "note": "enforcement hook code (pre_tool_use_guard, post_tool_use_ledger, ...)" },
+    { "glob": "config/**",                             "trigger": "self_guard", "approval": "maintainer (harness self-modification)", "note": "policy/profiles/registries: global-policy, project-profiles/*, advisor/approval/skill/agent-identity registries, redaction-rules" },
+    { "glob": "router/**",                             "trigger": "self_guard", "approval": "maintainer (harness self-modification)", "note": "routing logic (classify/select-*)" },
+    { "glob": "evals/baselines/**",                    "trigger": "self_guard", "approval": "maintainer (harness self-modification)", "note": "frozen eval baselines -- direct edit = fake green" },
+    { "glob": "scripts/_lib.js",                       "trigger": "self_guard", "approval": "maintainer (harness self-modification)", "note": "shared core: globMatch / sensitivePathHits / resolveCurrentRun / matchApproval" },
+    { "glob": "scripts/grant-approval.js",             "trigger": "self_guard", "approval": "maintainer (harness self-modification)", "note": "the ONLY sanctioned grant recorder" },
+    { "glob": "scripts/check-approval-needed.js",      "trigger": "self_guard", "approval": "maintainer (harness self-modification)", "note": "approval escalation logic" },
+    { "glob": "scripts/validate-skill-registration.js","trigger": "self_guard", "approval": "maintainer (harness self-modification)", "note": "skill-registry two-hash validator" },
+    { "glob": "scripts/detect-risk.js",                "trigger": "self_guard", "approval": "maintainer (harness self-modification)", "note": "risk / sensitive-path detector" },
+    { "glob": "scripts/redact.js",                     "trigger": "self_guard", "approval": "maintainer (harness self-modification)", "note": "redaction engine" },
+    { "glob": "scripts/is-disabled.js",                "trigger": "self_guard", "approval": "maintainer (harness self-modification)", "note": "kill-switch resolver" },
+    { "glob": ".claude/settings.json",                 "trigger": "self_guard", "approval": "maintainer (harness self-modification)", "note": "project-scoped hook wiring (SubagentStart/SubagentStop)" }
+  ],
+  "hard_rules_mirror": [
+    "Harness self-modification (hooks/ config/ router/ evals/baselines/ + core scripts) requires an active run + explicit maintainer grant via scripts/grant-approval.js --action self_guard -- REVIEW-tier, not a freeze",
+    "Kill switch (DISABLED file / HARNESSKIT_DISABLED=1) outranks everything; no tier bypasses it",
+    "Push control never relaxed; no auto commit/push/migrate unless explicitly approved for that exact action",
+    "Artifacts (runs/, evals/results/, backups/, project-maps/) are NOT guarded -- normal harness operation runs free"
+  ],
+  "stop_conditions": [
+    "edit to hooks/ or config/ or evals/baselines/ or a core script without a recorded self_guard grant",
+    "self-modification that would weaken a guard, approval, redaction, or kill-switch path",
+    "secrets / real customer data appear in a tracked diff"
+  ],
+  "response_format": {
+    "required_sections_after_changes": ["Execution Ledger", "Security Review"],
+    "ledger_fields": ["work_label", "goal", "what_changed", "files_touched", "validation", "unknowns_risks", "owner_next_action", "approval_needed", "technical_reference"]
+  },
+  "classifier_keyword_hints": {
+    "self-modify": ["hook", "guard", "profile", "global-policy", "registry", "baseline", "harness", "self-protection", "sensitive_paths", "harness config"],
+    "review":      ["review", "audit", "check", "diff"],
+    "docs":        ["doc", "readme", "reference", "handbook"]
+  },
+  "classifier_trigger_boosters": {
+    "self_guard": ["hook", "guard", "pre_tool_use", "global-policy", "project-profile", "registry", "baseline", "harness self", "self-protection", "sensitive_paths"]
+  },
+  "review_independence": { "enforced": false, "minimum_level": "isolated_actor" }
+}

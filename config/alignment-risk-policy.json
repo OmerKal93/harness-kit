@@ -1,0 +1,168 @@
+{
+  "schema_version": 2,
+  "schema_v2_changes": "Phase 3C Batch 3: added external_content_quarantine block, *_ref cross-links, per-class layer_coverage_required matrix expansion. Existing keys preserved.",
+  "schema_v1_date": "2026-05-28 (Phase 3B hotfix)",
+  "schema_v2_date": "2026-05-28 (Phase 3C Batch 3)",
+  "policy_owner": "owner",
+  "created": "2026-05-28",
+  "source_of_truth": "this file",
+  "human_mirror": "reference/memory-poisoning-policy.md",
+  "constitution_ref": "reference/agent-safety-constitution.md",
+  "context_engineering_ref": "config/context-policy.json",
+  "research_ingestion_ref": "config/research-watchlist.json",
+  "approval_registry_ref": "reference/approval-registry.md",
+  "external_content_quarantine_ref": "reference/external-content-quarantine.md",
+
+  "poisoning_scan": {
+    "enabled": true,
+    "scanner_ref": "scripts/memory-poisoning-scan.js",
+    "patterns": [
+      {"id": "ignore_prev_instructions", "pattern": "\\bignore (the )?previous instructions\\b", "flags": "gi"},
+      {"id": "disregard_system_dev",     "pattern": "\\b(disregard|ignore|forget) (the )?(system|developer|prior) (instruction|prompt|message)s?\\b", "flags": "gi"},
+      {"id": "treat_as_system",          "pattern": "\\btreat (this|the following) as (a )?system (message|prompt)\\b", "flags": "gi"},
+      {"id": "reveal_secrets",           "pattern": "\\breveal (the )?secrets?\\b", "flags": "gi"},
+      {"id": "exfiltrate",               "pattern": "\\bexfiltrat(e|ion)\\b", "flags": "gi"},
+      {"id": "upload_files",             "pattern": "\\bupload (the )?files?\\b", "flags": "gi"},
+      {"id": "read_ssh",                 "pattern": "(~/\\.ssh|\\$HOME/\\.ssh|read [^\\n]{0,40}ssh keys?)", "flags": "gi"},
+      {"id": "override_policy",          "pattern": "\\boverride (the )?policy\\b", "flags": "gi"},
+      {"id": "disable_hooks",            "pattern": "\\bdisable (the )?hooks?\\b", "flags": "gi"},
+      {"id": "disable_kill_switch",      "pattern": "\\bdisable (the )?kill[ -]?switch\\b", "flags": "gi"},
+      {"id": "run_shell_command",        "pattern": "\\brun (a )?shell command\\b", "flags": "gi"},
+      {"id": "install_package",          "pattern": "\\binstall (the |a |npm |pip |bun )?packages?\\b", "flags": "gi"},
+      {"id": "change_settings_json",     "pattern": "\\bchange (the )?settings\\.json\\b", "flags": "gi"}
+    ],
+    "classification": {
+      "example_markers": [
+        "inside_code_fence",
+        "inside_inline_code",
+        "preceded_by_eg_example_such_as",
+        "blockquote_line",
+        "inside_quoted_string"
+      ],
+      "security_example_frontmatter_key": "security_example",
+      "security_example_inline_marker": "<!-- security-example -->"
+    },
+    "file_class_rules": [
+      {"glob": "**/.harnesskit/reference/*.md", "class": "reference_or_security_doc"},
+      {"glob": "**/.harnesskit/security/*.md",  "class": "reference_or_security_doc"},
+      {"glob": "**/.harnesskit/runs/**",         "class": "run_or_memory_artifact"},
+      {"glob": "**/.harnesskit/memory/**",       "class": "run_or_memory_artifact"}
+    ],
+    "default_file_class": "other",
+    "actions_by_file_class": {
+      "reference_or_security_doc": {"on_any_match": "warn", "on_instruction": "warn", "on_example": "warn", "never": ["exclude"]},
+      "run_or_memory_artifact":    {"on_instruction": "exclude", "on_example_only": "warn", "on_no_match": "clean"},
+      "other":                     {"on_instruction": "warn", "on_example_only": "clean", "on_no_match": "clean"}
+    }
+  },
+
+  "trust_level": {
+    "assignments": [
+      {"glob": "**/.harnesskit/reference/*.md", "level": "source_of_truth"},
+      {"glob": "**/.harnesskit/security/*.md",  "level": "source_of_truth"},
+      {"glob": "**/.harnesskit/memory/*.md",    "level": "curated_memory"},
+      {"glob": "**/.harnesskit/memory/learnings-index.json", "level": "curated_memory"},
+      {"glob": "**/.harnesskit/runs/*/learning.md",    "level": "run_artifact"},
+      {"glob": "**/.harnesskit/runs/*/review.md",      "level": "run_artifact"},
+      {"glob": "**/.harnesskit/runs/*/verification.md","level": "run_artifact"}
+    ],
+    "default_level": "untrusted_external",
+    "forbidden_in_phase_3b": ["untrusted_external"],
+    "forbidden_in_phase_3c": ["untrusted_external"],
+    "forbidden_in_phase_3d": [],
+    "phase_3d_requires": ["owner_approval", "ceo_sign_off", "per_file_allowlist_review"]
+  },
+
+  "risk_classes": {
+    "memory_poisoning": {
+      "description": "Prompt-injection / policy-override patterns persisted to retrievable memory",
+      "threshold_action_mapping": "see poisoning_scan.actions_by_file_class",
+      "layer_coverage_required": ["scanner", "trust_tier_demotion", "per_file_class_rules", "explicit_security_example_opt_in"]
+    },
+    "secret_leak": {
+      "description": "API keys / credentials / PII landing in persistent state",
+      "threshold_action_mapping": "see config/redaction-rules.json (16 patterns)",
+      "layer_coverage_required": ["redact.js", "path_blocklist", "content_blocklist", "gbrain-audit-secrets.js"]
+    },
+    "trust_violation": {
+      "description": "Untrusted-external content reaching tiers reserved for source-of-truth / curated memory",
+      "threshold_action_mapping": "trust_level.forbidden_in_phase_<x>",
+      "layer_coverage_required": ["trust_level computation", "trust_level frontmatter injection", "diff-report trust_level column"]
+    },
+    "out_of_scope_drift": {
+      "description": "Agent drifts off-goal mid-trajectory",
+      "threshold_action_mapping": "see reference/goal-alignment-policy.md",
+      "layer_coverage_required": ["intake routing", "REVIEW state checklist", "trajectory-risk-audit.js (Phase 4)", "goal-drift-check.js (Phase 4)"],
+      "phase_3c_addition": "trajectory-risk-audit.js"
+    }
+  },
+
+  "approval_tokens": {
+    "_canonical_registry_ref": "reference/approval-registry.md",
+    "master_plan_v4": "approve master-plan-v4",
+    "phase_3c_batch_1": "approve phase-3c batch 1",
+    "phase_3c_batch_2": "approve phase-3c batch 2",
+    "phase_3c_batch_3": "approve phase-3c batch 3 mop-up",
+    "phase_3b_hotfix": "approve harnesskit safety-pack phase-3b-hotfix execute",
+    "phase_3b_execute": "approve harnesskit gbrain phase 3b execute",
+    "live_import_g2": "approve harnesskit gbrain import-curated",
+    "mcp_g3":         "approve harnesskit gbrain mcp",
+    "project_docs_g4": "approve harnesskit gbrain project-docs",
+    "tier_promotion": "approve harnesskit tier L<N>",
+    "tier_demotion":  "demote harnesskit tier L<N>",
+    "proposal_accept": "approve proposal <path>",
+    "proposal_reject": "reject proposal <path>",
+    "eval_baseline_update": "approve harnesskit eval baseline-update",
+    "gbrain_upgrade": "approve harnesskit gbrain upgrade <version>"
+  },
+
+  "external_content_quarantine": {
+    "enabled": true,
+    "_implementation_status": "Phase 3B hotfix shipped memory-poisoning-scan + trust_level; full quarantine-buffer.js + untrusted-instruction interlock land in Phase 4.",
+    "human_mirror": "reference/external-content-quarantine.md",
+    "per_source_trust": {
+      "_comment": "Optional per-source-URL trust elevation. Empty by default; Phase 4 review proposes additions. Elevation never reaches source_of_truth; cap at curated_external.",
+      "elevated_sources": []
+    },
+    "untrusted_instruction_interlock": {
+      "enabled": false,
+      "_enabled_note": "Phase 4 pre_tool_use_guard.js extension. When tool call's trigger context contains untrusted_external fragment with detected instruction-class poisoning, hold for Owner approval."
+    },
+    "re_scan_on_retrieval": {
+      "enabled": false,
+      "_enabled_note": "Phase 4 — GBrain query results pass through poisoning scan again before entering active context window."
+    },
+    "egress_logging": {
+      "enabled": false,
+      "_enabled_note": "Phase 4 PostToolUse hook addition — records every network egress (WebFetch, MCP-HTTP, gbrain remote embedding when/if enabled)."
+    }
+  },
+
+  "context_engineering": {
+    "enabled": false,
+    "_enabled_note": "Phase 5 ships score-context-pack.js + detect-context-drift.js. Today design-target only.",
+    "policy_ref": "config/context-policy.json",
+    "human_mirror": "reference/context-engineering.md"
+  },
+
+  "research_ingestion": {
+    "enabled": true,
+    "_enabled_note": "Watchlist active; manual cadence. Phase 4 ships research-ingest.js + research-to-controls.js.",
+    "watchlist_ref": "config/research-watchlist.json",
+    "human_mirror": "reference/research-ingestion.md"
+  },
+
+  "eval_harness": {
+    "enabled": false,
+    "_enabled_note": "Phase 4 ships run-evals.js orchestrator + 15-category fixtures. Today design-target only.",
+    "human_mirror": "reference/eval-harness.md",
+    "results_dir": "evals/results/",
+    "baseline_dir": "evals/baselines/"
+  },
+
+  "kill_switch": {
+    "file_path": "DISABLED",
+    "env_var": "HARNESSKIT_DISABLED=1",
+    "contract": "Every script and hook MUST guard on isDisabled() first and exit 0 silently when active. No exceptions."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "category": "redaction",
+  "id": "bash-path-mention",
+  "label": "false-positive-candidate",
+  "input": "Run `echo $PATH` to inspect the lookup order.",
+  "expected": { "unchanged": true },
+  "notes": "Mentions PATH but no assignment; must not match dotenv_assign or api_key_assign."
+}

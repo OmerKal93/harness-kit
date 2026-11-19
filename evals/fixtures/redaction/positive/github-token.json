@@ -1,0 +1,11 @@
+{
+  "category": "redaction",
+  "id": "github-token",
+  "label": "positive",
+  "input": "Token: ghp_FAKEEXAMPLEFAKEEXAMPLEFAKEEXAMPLE000",
+  "expected": {
+    "redacted_contains": "[REDACTED:github_token]",
+    "redacted_not_contains": "ghp_FAKEEXAMPLEFAKEEXAMPLEFAKEEXAMPLE000"
+  },
+  "fake_value_note": "fake value for tests (FAKE/EXAMPLE marker); not a real credential"
+}

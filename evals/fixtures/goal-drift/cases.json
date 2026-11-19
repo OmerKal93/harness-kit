@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "description": "Deterministic fixtures for the goal-drift eval. Each case calls check({goal, toolLog}) directly. Jaccard is computed over tokenized(goal) vs tokenized(extractRecentExcerpts(toolLog)). Expected recommendation bands: within_goal_acceptable(sim>=0.30), soft_drift_review_suggested(0.15), drift_likely_NEEDS_USER(0.05), severe_drift_halt_NEEDS_USER(<0.05). recommendationFor() uses similarity, NOT drift_score.",
+  "fixtures": [
+    {
+      "id": "within-goal-high-overlap",
+      "label": "positive",
+      "goal": "auth service refactor token expiry",
+      "tool_log": [
+        { "summary": "auth service refactor token expiry logic code" }
+      ],
+      "_jaccard_notes": "goal={auth,service,refactor,token,expiry}=5; TL={auth,service,refactor,token,expiry,logic,code}=7; inter=5, union=7, sim=5/7=0.714",
+      "expected": { "recommendation": "within_goal_acceptable", "similarity_gte": 0.30 }
+    },
+    {
+      "id": "within-goal-mostly-match",
+      "label": "positive",
+      "goal": "prisma migration add user table schema",
+      "tool_log": [
+        { "summary": "prisma migration user table schema column index" }
+      ],
+      "_jaccard_notes": "goal={prisma,migration,add,user,table,schema}=6; TL={prisma,migration,user,table,schema,column,index}=7; inter=5 (add absent in TL), union=8, sim=5/8=0.625",
+      "expected": { "recommendation": "within_goal_acceptable", "similarity_gte": 0.30 }
+    },
+    {
+      "id": "within-goal-path-tokens",
+      "label": "positive",
+      "goal": "review src services auth middleware code",
+      "tool_log": [
+        { "tool_input": { "file_path": "src/services/auth.middleware.ts" } }
+      ],
+      "_jaccard_notes": "goal={review,src,services,auth,middleware,code}=6; file_path tokenizes (/ and . → space) to {src,services,auth,middleware} (ts filtered len<3)=4; inter=4, union=6, sim=4/6=0.667",
+      "expected": { "recommendation": "within_goal_acceptable", "similarity_gte": 0.30 }
+    },
+    {
+      "id": "soft-drift-partial-match",
+      "label": "positive",
+      "goal": "auth service refactor token expiry",
+      "tool_log": [
+        { "summary": "auth service update button layout padding" }
+      ],
+      "_jaccard_notes": "goal={auth,service,refactor,token,expiry}=5; TL={auth,service,update,button,layout,padding}=6; inter={auth,service}=2, union=9, sim=2/9=0.222",
+      "expected": { "recommendation": "soft_drift_review_suggested", "similarity_gte": 0.15, "similarity_lt": 0.30 }
+    },
+    {
+      "id": "soft-drift-near-boundary",
+      "label": "positive",
+      "goal": "auth migration refactor",
+      "tool_log": [
+        { "summary": "auth migration update button layout padding" }
+      ],
+      "_jaccard_notes": "goal={auth,migration,refactor}=3; TL={auth,migration,update,button,layout,padding}=6; inter={auth,migration}=2, union=7, sim=2/7=0.286",
+      "expected": { "recommendation": "soft_drift_review_suggested", "similarity_gte": 0.15, "similarity_lt": 0.30 }
+    },
+    {
+      "id": "clear-drift-one-overlap",
+      "label": "positive",
+      "goal": "auth service refactor token expiry",
+      "tool_log": [
+        { "summary": "auth update button padding margin css styling layout grid" }
+      ],
+      "_jaccard_notes": "goal={auth,service,refactor,token,expiry}=5; TL={auth,update,button,padding,margin,css,styling,layout,grid}=9; inter={auth}=1, union=13, sim=1/13=0.077",
+      "expected": { "recommendation": "drift_likely_NEEDS_USER", "similarity_gte": 0.05, "similarity_lt": 0.15 }
+    },
+    {
+      "id": "clear-drift-scope-creep",
+      "label": "positive",
+      "goal": "fix auth bug",
+      "tool_log": [
+        { "summary": "fix auth bug handler check" },
+        { "summary": "add frontend button component layout" },
+        { "summary": "update database migration schema" },
+        { "summary": "implement analytics reporting feature" },
+        { "summary": "refactor admin panel interface design" }
+      ],
+      "_jaccard_notes": "goal={fix,auth,bug}=3; TL union ~23 tokens; inter=3 (all present), union=23, sim=3/23=0.130",
+      "expected": { "recommendation": "drift_likely_NEEDS_USER", "similarity_gte": 0.05, "similarity_lt": 0.15 }
+    },
+    {
+      "id": "severe-drift-zero-overlap",
+      "label": "positive",
+      "goal": "auth service refactor token expiry",
+      "tool_log": [
+        { "summary": "update button padding margin css styling layout grid design" }
+      ],
+      "_jaccard_notes": "goal={auth,service,refactor,token,expiry}=5; TL has no overlap; inter=0, sim=0",
+      "expected": { "recommendation": "severe_drift_halt_NEEDS_USER", "similarity_lt": 0.05 }
+    },
+    {
+      "id": "severe-drift-empty-toollog",
+      "label": "positive",
+      "goal": "auth service refactor token expiry",
+      "tool_log": [],
+      "_jaccard_notes": "empty toolLog → activity tokens={}; jaccard(goalTokens, {}) returns 0.0 (empty-one-side branch)",
+      "expected": { "recommendation": "severe_drift_halt_NEEDS_USER", "similarity_lt": 0.05 }
+    },
+    {
+      "id": "stopword-only-goal-with-activity",
+      "label": "positive",
+      "goal": "do it to the and or",
+      "tool_log": [
+        { "summary": "auth service refactor token expiry" }
+      ],
+      "_jaccard_notes": "All goal words are stopwords → goalTokens={}; jaccard({},non-empty)=0.0",
+      "expected": { "recommendation": "severe_drift_halt_NEEDS_USER", "similarity_lt": 0.05 }
+    },
+    {
+      "id": "empty-goal-with-activity",
+      "label": "edge-case",
+      "goal": "",
+      "tool_log": [
+        { "summary": "auth service refactor token expiry" }
+      ],
+      "_jaccard_notes": "goal=''; goalTokens={}; jaccard({},non-empty)=0.0",
+      "expected": { "recommendation": "severe_drift_halt_NEEDS_USER", "similarity_lt": 0.05 }
+    },
+    {
+      "id": "empty-goal-empty-log",
+      "label": "edge-case",
+      "goal": "",
+      "tool_log": [],
+      "_jaccard_notes": "both empty → jaccard({},{})=1.0 (both-empty branch)",
+      "expected": { "recommendation": "within_goal_acceptable", "similarity_gte": 0.99 }
+    }
+  ]
+}

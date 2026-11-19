@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "description": "run-lifecycle fixtures. E2 (rl-01..13): pointer+TTL+consumption; 11-13 = Codex-review additions (never-throw + TTL boundary). G2 (rl-14..21 + rl-07/rl-10 updates): grant-approval.js + strict field enforcement — granted_by:owner, granted_ts/expires_ts REQUIRED (no legacy grace), future-skew guard, optional files scope. 'now' is injected for determinism; matcher calls pass {now}.",
+  "now": "2026-06-05T12:00:00.000Z",
+  "fixtures": [
+    {
+      "id": "rl-01-valid-pointer",
+      "label": "positive",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "INTAKE", "age_hours": 1 } } },
+      "assert": { "resolve": "run-a" }
+    },
+    {
+      "id": "rl-02-pointer-terminal",
+      "label": "fail-closed",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "DONE", "age_hours": 1 } } },
+      "assert": { "resolve": null }
+    },
+    {
+      "id": "rl-03-pointer-past-ttl",
+      "label": "fail-closed",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "EXECUTION", "age_hours": 25 } } },
+      "assert": { "resolve": null }
+    },
+    {
+      "id": "rl-04-no-pointer-zombies-present",
+      "label": "fail-closed",
+      "setup": { "pointer": null, "runs": { "zombie-1": { "state": "INTAKE", "age_hours": 2 }, "zombie-2": { "state": "ROUTING", "age_hours": 3 }, "zombie-3": { "state": "EXECUTION", "age_hours": 1 } } },
+      "assert": { "resolve": null }
+    },
+    {
+      "id": "rl-05-consumed-approval-rejected",
+      "label": "approval",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "INTAKE", "age_hours": 1, "approvals": [{ "action": "dependency_supply_chain", "consumed": true }] } } },
+      "assert": { "resolve": "run-a", "match_trigger": "dependency_supply_chain", "match_expected": false }
+    },
+    {
+      "id": "rl-06-approval-in-non-pointer-run-ignored",
+      "label": "approval",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "INTAKE", "age_hours": 1, "approvals": [] }, "run-b": { "state": "INTAKE", "age_hours": 1, "approvals": [{ "action": "dependency_supply_chain" }] } } },
+      "assert": { "resolve": "run-a", "match_trigger": "dependency_supply_chain", "match_expected": false }
+    },
+    {
+      "id": "rl-07-single-use-flip",
+      "label": "approval",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "INTAKE", "age_hours": 1, "approvals": [{ "action": "dependency_supply_chain", "granted_by": "owner", "granted_ts": "2026-06-05T11:00:00.000Z", "expires_ts": "2026-06-06T11:00:00.000Z" }] } } },
+      "assert": { "resolve": "run-a", "flip_trigger": "dependency_supply_chain", "match_before": true, "match_after_flip": false }
+    },
+    {
+      "id": "rl-08-close-run-end-to-end",
+      "label": "tooling",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "EXECUTION", "age_hours": 1 } } },
+      "assert": { "close_run": { "run_id": "run-a", "to": "BLOCKED" }, "after": { "resolve": null, "pointer_exists": false, "next_action_exists": true, "index_last_state": "BLOCKED" } }
+    },
+    {
+      "id": "rl-09-expired-terminal-everywhere",
+      "label": "fail-closed",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "EXPIRED", "age_hours": 1 } } },
+      "assert": { "resolve": null, "policy_includes_expired": true, "close_already_terminal_fails": { "run_id": "run-a", "to": "DONE" } }
+    },
+    {
+      "id": "rl-10-legacy-run-json-degrades-safely",
+      "label": "compat",
+      "comment": "G2 update: legacy approval without granted_by/granted_ts/expires_ts is now REJECTED (no legacy grace). Resolver still degrades safely; only the match expectation flipped.",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "INTAKE", "age_hours": 1, "legacy": true, "approvals": [{ "action": "audit_tool_docs" }] } } },
+      "assert": { "resolve": "run-a", "match_trigger": "audit_tool_docs", "match_expected": false, "no_throw": true }
+    },
+    {
+      "id": "rl-11-pointer-missing-run-dir",
+      "label": "never-throw",
+      "setup": { "pointer": "ghost-run", "runs": {} },
+      "assert": { "resolve": null, "no_throw": true }
+    },
+    {
+      "id": "rl-12-corrupt-pointer-and-corrupt-run-json",
+      "label": "never-throw",
+      "setup": { "pointer_raw": "{{{not json", "runs": { "run-a": { "state": "INTAKE", "age_hours": 1 } }, "also_corrupt_run_json_variant": { "pointer": "run-c", "run_json_raw": "<<<garbage-bytes-not-json" } },
+      "assert": { "resolve": null, "corrupt_run_json_resolve": null, "no_throw": true }
+    },
+    {
+      "id": "rl-13-ttl-boundary",
+      "label": "boundary",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "INTAKE", "age_hours": 24 } }, "epsilon_variant": { "age_hours_over": 24.0003 } },
+      "assert": { "resolve_at_exact_ttl": "run-a", "resolve_just_over_ttl": null }
+    },
+    {
+      "id": "rl-14-grant-script-appends-correctly",
+      "label": "grant",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "INTAKE", "age_hours": 1 }, "run-b": { "state": "INTAKE", "age_hours": 1 } }, "profile_triggers": ["dependency_supply_chain", "prisma"] },
+      "assert": { "grant": { "args": { "action": "dependency_supply_chain", "scope": "fixture grant" }, "expect_exit": 0, "check_run": "run-a", "approvals_count": 1, "fields_stamped": true, "expires_delta_hours": 24, "match_trigger": "dependency_supply_chain", "match_expected": true, "other_run_untouched": "run-b" } }
+    },
+    {
+      "id": "rl-15-grant-refused-no-resolver",
+      "label": "grant-fail-closed",
+      "setup": { "pointer": null, "runs": { "run-a": { "state": "INTAKE", "age_hours": 1 } }, "profile_triggers": ["dependency_supply_chain"] },
+      "assert": { "grant": { "args": { "action": "dependency_supply_chain", "scope": "should fail" }, "expect_exit": 1, "check_run": "run-a", "approvals_count": 0 } }
+    },
+    {
+      "id": "rl-16-expired-approval-rejected",
+      "label": "field-enforcement",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "INTAKE", "age_hours": 1, "approvals": [{ "action": "dependency_supply_chain", "granted_by": "owner", "granted_ts": "2026-06-05T10:00:00.000Z", "expires_ts": "2026-06-05T11:00:00.000Z" }] } } },
+      "assert": { "resolve": "run-a", "match_trigger": "dependency_supply_chain", "match_expected": false }
+    },
+    {
+      "id": "rl-17-granted-by-missing-or-wrong-rejected",
+      "label": "field-enforcement",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "INTAKE", "age_hours": 1, "approvals": [
+        { "action": "dependency_supply_chain", "granted_ts": "2026-06-05T11:00:00.000Z", "expires_ts": "2026-06-06T11:00:00.000Z" },
+        { "action": "dependency_supply_chain", "granted_by": "assistant", "granted_ts": "2026-06-05T11:00:00.000Z", "expires_ts": "2026-06-06T11:00:00.000Z" }
+      ] } } },
+      "assert": { "resolve": "run-a", "match_trigger": "dependency_supply_chain", "match_expected": false }
+    },
+    {
+      "id": "rl-18-files-scope-both-directions",
+      "label": "file-scope",
+      "comment": "files glob narrows write tools only; no-path (Bash) match is NOT narrowed — documented limitation.",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "INTAKE", "age_hours": 1, "approvals": [{ "action": "prisma", "granted_by": "owner", "granted_ts": "2026-06-05T11:00:00.000Z", "expires_ts": "2026-06-06T11:00:00.000Z", "files": "prisma/**" }] } } },
+      "assert": { "resolve": "run-a", "match_cases": [
+        { "written_path": "C:/example/proj/prisma/schema.prisma", "expected": true },
+        { "written_path": "C:/example/proj/src/app.ts", "expected": false },
+        { "expected": true }
+      ] }
+    },
+    {
+      "id": "rl-19-grant-to-flip-end-to-end",
+      "label": "grant",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "INTAKE", "age_hours": 1 } }, "profile_triggers": ["prisma"] },
+      "assert": { "grant": { "args": { "action": "prisma", "scope": "e2e fixture", "files": "prisma/**" }, "expect_exit": 0, "check_run": "run-a", "approvals_count": 1, "fields_stamped": true, "match_trigger": "prisma", "match_expected": true, "match_written_path": "C:/example/proj/prisma/schema.prisma", "then_flip": true } }
+    },
+    {
+      "id": "rl-20-missing-ts-fields-rejected",
+      "label": "field-enforcement",
+      "comment": "no legacy grace: missing expires_ts OR granted_ts → rejected fail-closed; future-dated granted_ts beyond 5 min → rejected.",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "INTAKE", "age_hours": 1, "approvals": [
+        { "action": "dependency_supply_chain", "granted_by": "owner", "granted_ts": "2026-06-05T11:00:00.000Z" },
+        { "action": "dependency_supply_chain", "granted_by": "owner", "expires_ts": "2026-06-06T11:00:00.000Z" },
+        { "action": "dependency_supply_chain", "granted_by": "owner", "granted_ts": "2026-06-05T12:10:00.000Z", "expires_ts": "2026-06-06T11:00:00.000Z" }
+      ] } } },
+      "assert": { "resolve": "run-a", "match_trigger": "dependency_supply_chain", "match_expected": false }
+    },
+    {
+      "id": "rl-21-grant-unknown-action-refused",
+      "label": "grant-fail-closed",
+      "setup": { "pointer": "run-a", "runs": { "run-a": { "state": "INTAKE", "age_hours": 1 } }, "profile_triggers": ["prisma"] },
+      "assert": { "grant": { "args": { "action": "not_a_real_trigger", "scope": "should fail" }, "expect_exit": 1, "check_run": "run-a", "approvals_count": 0 } }
+    }
+  ]
+}

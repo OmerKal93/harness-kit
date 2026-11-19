@@ -1,0 +1,8 @@
+{
+  "category": "redaction",
+  "id": "bearer-doc-mention",
+  "label": "false-positive-candidate",
+  "input": "Pass the API token via a Bearer header.",
+  "expected": { "unchanged": true },
+  "notes": "bearer_header regex requires literal Authorization: Bearer <token>. Bare 'Bearer header' in prose must not match."
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "description": "Skill-local ILLUSTRATIVE examples only (validation-hash domain). Authoritative graded fixtures live at evals/fixtures/skill-langgraph-plan-review/cases.json; driver at evals/core/skill-langgraph-plan-review/run.js.",
+  "cases": [
+    {
+      "id": "local-01-provider-block",
+      "plan_text": "Add a summarize node that uses ChatOpenAI to compress run context.",
+      "expected_verdict": "BLOCK_RECOMMENDED",
+      "why": "non-negated provider hit = execution-boundary violation under freeze/§0"
+    },
+    {
+      "id": "local-02-clean-fixture-extension",
+      "plan_text": "Extend the fixture graph with a deterministic dedupe node wired a->dedupe->b. Fixture-only, offline, tests added for the new node. Cited: tools/audit-tool/server/orchestration/fixtureGraph.ts",
+      "expected_verdict": "PASS",
+      "why": "no boundary hits, literal wiring reachable, discipline claims verifiable"
+    },
+    {
+      "id": "local-03-thin",
+      "plan_text": "improve the graph",
+      "expected_verdict": "INSUFFICIENT_INPUT",
+      "why": "thin_input: true — fail-closed, never best-effort guessing"
+    },
+    {
+      "id": "local-04-honest-negation",
+      "plan_text": "This phase stays fixture-only. We will NOT call the LLM provider; no network access is added. One new edge b->c with a test.",
+      "expected_verdict": "PASS",
+      "why": "provider/network hits carry negated:true; noted, not blocked"
+    }
+  ]
+}

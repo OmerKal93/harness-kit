@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "description": "Phase 4 Batch 3 routing-accuracy fixture corpus. 30 labelled prompts spanning the task-type taxonomy in config/global-policy.json. Driver: evals/core/routing/run.js. Classifier: router/classify-task.js (invoked with --profile example-app --no-risk). Prompts/triggers are synthetic examples matched against the generic example profile at config/project-profiles/example-app.json (schema/shape demo, no real project content).",
+  "profile": "example-app",
+  "pass_criteria": {
+    "task_type_exact_min_ratio": 0.85,
+    "trigger_jaccard_min": 0.90
+  },
+  "prompts": [
+    { "id": "r01", "prompt": "fix the bug where the audit tool crashes on empty input",           "expected_task_type": "code-bug",       "expected_triggers": ["audit_tool_docs"] },
+    { "id": "r02", "prompt": "broken regression in the audit tool runtime traceback",             "expected_task_type": "code-bug",       "expected_triggers": ["audit_tool_docs"] },
+    { "id": "r03", "prompt": "crash exception when redact runs on long strings",                  "expected_task_type": "code-bug",       "expected_triggers": [] },
+
+    { "id": "r04", "prompt": "implement a new endpoint that returns audit tool metrics",           "expected_task_type": "code-feature",   "expected_triggers": ["audit_tool_docs"] },
+    { "id": "r05", "prompt": "build feature for the cold outreach pipeline",                       "expected_task_type": "code-feature",   "expected_triggers": ["outreach_pipeline"] },
+    { "id": "r06", "prompt": "create a new endpoint for the audit tool run",                       "expected_task_type": "code-feature",   "expected_triggers": ["audit_tool_docs"] },
+
+    { "id": "r07", "prompt": "strategy roadmap update for the next quarter pivot",                 "expected_task_type": "strategy",       "expected_triggers": [] },
+    { "id": "r08", "prompt": "set the north star vision for the platform",                         "expected_task_type": "strategy",       "expected_triggers": [] },
+
+    { "id": "r09", "prompt": "ideate options for explore the outreach pipeline restart",           "expected_task_type": "ideate",         "expected_triggers": ["outreach_pipeline"] },
+    { "id": "r10", "prompt": "explore ideas for ux refresh",                                       "expected_task_type": "ideate",         "expected_triggers": [] },
+
+    { "id": "r11", "prompt": "brainstorm what should we ship before the first client",             "expected_task_type": "brainstorm",     "expected_triggers": [] },
+    { "id": "r12", "prompt": "let's think through the auth session refactor",                      "expected_task_type": "brainstorm",     "expected_triggers": ["auth_hmac_session"] },
+
+    { "id": "r13", "prompt": "update the handbook with the new decisions and wiki entries",        "expected_task_type": "docs",           "expected_triggers": ["wiki_handbook_docs"] },
+    { "id": "r14", "prompt": "rewrite the readme document for the audit tool",                     "expected_task_type": "docs",           "expected_triggers": ["audit_tool_docs"] },
+
+    { "id": "r15", "prompt": "review the doc for the new wiki entry",                              "expected_task_type": "doc-review",     "expected_triggers": ["wiki_handbook_docs"] },
+    { "id": "r16", "prompt": "audit doc accuracy in the handbook",                                 "expected_task_type": "doc-review",     "expected_triggers": ["wiki_handbook_docs"] },
+
+    { "id": "r17", "prompt": "code review of the latest PR diff",                                  "expected_task_type": "review",         "expected_triggers": [] },
+    { "id": "r18", "prompt": "audit check the audit tool changes",                                 "expected_task_type": "review",         "expected_triggers": ["audit_tool_docs"] },
+
+    { "id": "r19", "prompt": "run prisma migrate against the staging schema",                      "expected_task_type": "ops",            "expected_triggers": ["prisma"] },
+    { "id": "r20", "prompt": "deploy the docker image with the env secrets",                       "expected_task_type": "ops",            "expected_triggers": ["env_secrets"] },
+
+    { "id": "r21", "prompt": "capture this learning compound this insight",                        "expected_task_type": "memory-capture", "expected_triggers": [] },
+    { "id": "r22", "prompt": "save learning about the migration approach",                         "expected_task_type": "memory-capture", "expected_triggers": ["prisma"] },
+
+    { "id": "r23", "prompt": "refresh learnings update stale learning catalog",                    "expected_task_type": "memory-refresh", "expected_triggers": [] },
+
+    { "id": "r24", "prompt": "resume from where were we last session please recover state",        "expected_task_type": "session-recover","expected_triggers": [] },
+
+    { "id": "r25", "prompt": "run a playwright browser e2e smoke ui pass",                         "expected_task_type": "browser-qa",     "expected_triggers": [] },
+
+    { "id": "r26", "prompt": "polish the copy tighten ux on the dashboard",                        "expected_task_type": "polish",         "expected_triggers": [] },
+
+    { "id": "r27", "prompt": "dogfood the new internal test build",                                "expected_task_type": "dogfood",        "expected_triggers": [] },
+
+    { "id": "r28", "prompt": "optimize the perf throughput speed up the audit tool",                "expected_task_type": "optimize",       "expected_triggers": ["audit_tool_docs"] },
+
+    { "id": "r29", "prompt": "post-mortem retro learning from the prisma migration",                "expected_task_type": "learning",       "expected_triggers": ["prisma"] },
+
+    { "id": "r30", "prompt": "fix bug in hmac session token regression",                            "expected_task_type": "code-bug",       "expected_triggers": ["auth_hmac_session"] }
+  ]
+}

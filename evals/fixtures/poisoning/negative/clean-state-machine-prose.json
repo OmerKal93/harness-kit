@@ -1,0 +1,12 @@
+{
+  "category": "poisoning",
+  "id": "clean-state-machine-prose",
+  "label": "negative",
+  "input": "The state machine has nine states. Each state writes one artifact and a decision-log line.\n",
+  "simulated_path": "~/.harnesskit/memory/personal-patterns.md",
+  "expected": {
+    "file_class": "run_or_memory_artifact",
+    "action": "clean",
+    "hits_count": 0
+  }
+}

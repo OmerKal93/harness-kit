@@ -1,0 +1,25 @@
+{
+  "name": "harnesskit",
+  "version": "0.2.0-internal",
+  "description": "AI-agent workflow harness: task discovery/classification, workflow execution, independent review, verification, and skill/capability governance. Runs locally.",
+  "private": true,
+  "bin": {
+    "harnesskit": "bin/harnesskit.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "doctor": "node scripts/doctor.js",
+    "evals": "node scripts/run-evals.js",
+    "test": "node scripts/run-evals.js",
+    "validate-config": "node scripts/validate-config.js",
+    "verify-install": "node scripts/verify-install.js",
+    "gbrain-check": "node scripts/gbrain-bootstrap-check.js"
+  },
+  "dependencies": {
+    "@langchain/langgraph": "^1.4.7",
+    "@langchain/langgraph-checkpoint-sqlite": "^1.0.3"
+  },
+  "license": "MIT"
+}

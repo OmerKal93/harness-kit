@@ -1,0 +1,53 @@
+# HarnessKit
+
+# --- Secrets, keys, tokens, credentials ---
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.keystore.*
+keystore.properties
+*.secret
+*.secrets
+*credentials*.json
+*.token
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+
+# --- Local config and per-machine state ---
+*.local
+*.local.*
+.claude/settings.local.json
+.claude/freeze-boundary.local.txt
+.harnesskit/
+/DISABLED
+
+# --- Run artifacts + transient run state ---
+runs/
+backups/
+project-maps/
+
+# --- Eval run outputs (regenerated; evals/baselines + evals/fixtures ARE tracked) ---
+evals/results/
+evals/_tmp/
+
+# --- Transient scratch ---
+*.tmp
+*.log
+
+# --- OS / editor noise ---
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+
+# --- Node ---
+node_modules/

@@ -1,0 +1,40 @@
+{
+  "schema_version": 2,
+  "description": "Redaction patterns applied before any write to tool-log, decision-log, context-pack, memory, or learning files. See reference/privacy-and-redaction.md. v2 fixes: stripped (?i) inline flags (not supported by JS RegExp); added explicit flags; reordered so specific patterns precede general ones (anthropic_key BEFORE openai_key, stripe BEFORE openai, etc.).",
+  "patterns": [
+    { "name": "private_key_block",   "regex": "-----BEGIN [A-Z ]*PRIVATE KEY-----[\\s\\S]*?-----END [A-Z ]*PRIVATE KEY-----", "replacement": "[REDACTED:private_key_block]", "flags": "g" },
+    { "name": "anthropic_key",       "regex": "sk-ant-[A-Za-z0-9_\\-]{20,}",                                                   "replacement": "[REDACTED:anthropic_key]",      "flags": "g" },
+    { "name": "stripe_key",          "regex": "(?:sk|pk|rk)_(?:test|live)_[A-Za-z0-9]{20,}",                                  "replacement": "[REDACTED:stripe_key]",         "flags": "g" },
+    { "name": "openai_key",          "regex": "sk-[A-Za-z0-9_\\-]{20,}",                                                       "replacement": "[REDACTED:openai_key]",         "flags": "g" },
+    { "name": "github_token",        "regex": "gh[pousr]_[A-Za-z0-9]{36,}",                                                    "replacement": "[REDACTED:github_token]",       "flags": "g" },
+    { "name": "aws_access_key",      "regex": "AKIA[0-9A-Z]{16}",                                                              "replacement": "[REDACTED:aws_access_key]",     "flags": "g" },
+    { "name": "aws_secret",          "regex": "aws(.{0,20})?(secret|sk)[\"'=\\s:]+[A-Za-z0-9/+=]{32,}",                       "replacement": "[REDACTED:aws_secret]",         "flags": "gi" },
+    { "name": "google_api_key",      "regex": "AIza[0-9A-Za-z_\\-]{30,}",                                                      "replacement": "[REDACTED:google_api_key]",     "flags": "g" },
+    { "name": "supabase_anon_key",   "regex": "eyJ[A-Za-z0-9_\\-]{20,}\\.eyJ[A-Za-z0-9_\\-]{20,}\\.[A-Za-z0-9_\\-]{10,}",     "replacement": "[REDACTED:jwt_like]",           "flags": "g" },
+    { "name": "slack_token",         "regex": "xox[abprs]-[A-Za-z0-9\\-]{10,}",                                                "replacement": "[REDACTED:slack_token]",        "flags": "g" },
+    { "name": "bearer_header",       "regex": "(Authorization\\s*:\\s*Bearer\\s+)[A-Za-z0-9\\-_.=]{16,}",                     "replacement": "$1[REDACTED:bearer]",           "flags": "gi" },
+    { "name": "basic_auth_header",   "regex": "(Authorization\\s*:\\s*Basic\\s+)[A-Za-z0-9+/=]{16,}",                          "replacement": "$1[REDACTED:basic_auth]",       "flags": "gi" },
+    { "name": "url_with_creds",      "regex": "(https?://)[^/\\s:]+:[^@/\\s]+@",                                              "replacement": "$1[REDACTED:url_creds]@",       "flags": "g" },
+    { "name": "password_assign",     "regex": "(password|passwd|pwd)\\s*[=:]\\s*[\"']?([^\\s\"',;]{6,})[\"']?",                "replacement": "$1=[REDACTED:password]",        "flags": "gi" },
+    { "name": "api_key_assign",      "regex": "(api[_\\-]?key|access[_\\-]?key|secret[_\\-]?key)\\s*[=:]\\s*[\"']?([^\\s\"',;]{12,})[\"']?", "replacement": "$1=[REDACTED:api_key]", "flags": "gi" },
+    { "name": "dotenv_assign",       "regex": "^([A-Z][A-Z0-9_]{3,})=([^\\n\\r]{8,})$",                                        "replacement": "$1=[REDACTED:env_value]",       "flags": "gm" },
+    { "name": "email_pii",           "regex": "[A-Za-z0-9._%+\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,}",                          "replacement": "[REDACTED:email]",              "flags": "g" },
+    { "name": "il_phone",            "regex": "(?<![\\d\\-])(?:\\+972|0)(?:[ \\-]?\\d){8,9}(?!\\d)",                          "replacement": "[REDACTED:phone]",              "flags": "g" },
+    { "name": "credit_card",         "regex": "(?<![\\d\\w\\-])(?:\\d[ \\-]?){13,16}(?![\\d\\w\\-])",                          "replacement": "[REDACTED:credit_card]",        "flags": "g" },
+    { "name": "client_real_name_marker", "regex": "\\b(Example Client Name|Example Client Co)\\b",                                          "replacement": "[REDACTED:client_marker]",      "flags": "gi" }
+  ],
+  "path_blocklist": [
+    ".env",
+    ".env.local",
+    ".env.production",
+    ".env.txt",
+    "credentials.json",
+    "service-account.json",
+    "*.pem",
+    "*.key",
+    "*.p12",
+    "id_rsa",
+    "id_ed25519"
+  ],
+  "path_blocklist_note": "Tool calls that read from these files have their CONTENT redacted to a marker; only file metadata (path, size) is logged."
+}

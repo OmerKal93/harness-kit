@@ -1,0 +1,422 @@
+{
+  "schema_version": 1,
+  "description": "Phase 5 Batch 2 context-quality scoring fixtures. 30 packs across exemplary/clean/rough/bad tiers. All paths use _synthetic/ prefix. _now anchors freshness scoring to a deterministic reference time.",
+  "_reference_now": "2026-05-29T00:00:00Z",
+  "fixtures": [
+    {
+      "id": "exemplary-01",
+      "expected": { "accepted_tiers": ["exemplary"] },
+      "pack": {
+        "task_description": "research context engineering patterns and isolation contracts",
+        "task_type": "research",
+        "total_tokens": 6000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "s1", "section_type": "learnings_index", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 2000, "content_excerpt": "research context engineering isolation patterns provenance authority", "provenance": { "source": "_synthetic/learnings.md", "mtime": "2026-05-28T12:00:00Z", "sha256": "a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "s2", "section_type": "reference_doc_excerpt", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 2000, "content_excerpt": "context engineering research patterns isolation provenance", "provenance": { "source": "_synthetic/reference.md", "mtime": "2026-05-27T12:00:00Z", "sha256": "b1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "s3", "section_type": "memory_tier_files", "kind": "doc", "trust_tier": "curated_memory", "tokens": 2000, "content_excerpt": "context patterns engineering isolation provenance research", "provenance": { "source": "_synthetic/memory.md", "mtime": "2026-05-26T12:00:00Z", "sha256": "c1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "exemplary-02",
+      "expected": { "accepted_tiers": ["exemplary"] },
+      "pack": {
+        "task_description": "code-bug fix authentication middleware token expiry race condition",
+        "task_type": "code-bug",
+        "total_tokens": 18000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "b1", "section_type": "memory_tier_files", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 4000, "content_excerpt": "authentication middleware token expiry race condition fix code bug", "provenance": { "source": "_synthetic/middleware.md", "mtime": "2026-05-28T12:00:00Z", "sha256": "d1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "b2", "section_type": "architecture_map", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 6000, "content_excerpt": "authentication architecture middleware token expiry race condition", "provenance": { "source": "_synthetic/arch.md", "mtime": "2026-05-28T08:00:00Z", "sha256": "e1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "b3", "section_type": "reference_doc_excerpt", "kind": "code", "trust_tier": "curated_memory", "tokens": 8000, "content_excerpt": "auth middleware code token expiry implementation race fix", "provenance": { "source": "_synthetic/auth.ts", "mtime": "2026-05-28T16:00:00Z", "sha256": "f1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "exemplary-03",
+      "expected": { "accepted_tiers": ["exemplary"] },
+      "pack": {
+        "task_description": "review pull request security audit input validation",
+        "task_type": "review",
+        "total_tokens": 8000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "r1", "section_type": "memory_tier_files", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 3000, "content_excerpt": "review pull request security audit input validation patterns", "provenance": { "source": "_synthetic/review-mem.md", "mtime": "2026-05-28T00:00:00Z", "sha256": "11b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "r2", "section_type": "specification_gaming_checklist_excerpt", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 5000, "content_excerpt": "specification gaming security review audit validation input checklist", "provenance": { "source": "_synthetic/specgaming.md", "mtime": "2026-05-27T00:00:00Z", "sha256": "21b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "exemplary-04",
+      "expected": { "accepted_tiers": ["exemplary"] },
+      "pack": {
+        "task_description": "planning new feature architecture design specification",
+        "task_type": "planning",
+        "total_tokens": 12000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "p1", "section_type": "memory_tier_files", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 4000, "content_excerpt": "planning feature architecture design specification patterns", "provenance": { "source": "_synthetic/plan-mem.md", "mtime": "2026-05-28T12:00:00Z", "sha256": "31b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "p2", "section_type": "learnings_index", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 8000, "content_excerpt": "learnings planning architecture design feature specification", "provenance": { "source": "_synthetic/learnings-idx.json", "mtime": "2026-05-28T06:00:00Z", "sha256": "41b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "exemplary-05",
+      "expected": { "accepted_tiers": ["exemplary"] },
+      "pack": {
+        "task_description": "research database query optimization indexing strategies",
+        "task_type": "research",
+        "total_tokens": 8000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "x1", "section_type": "learnings_index", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 3000, "content_excerpt": "database query optimization indexing strategies research patterns", "provenance": { "source": "_synthetic/db-learnings.md", "mtime": "2026-05-28T18:00:00Z", "sha256": "51b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "x2", "section_type": "reference_doc_excerpt", "kind": "doc", "trust_tier": "curated_memory", "tokens": 5000, "content_excerpt": "query optimization database indexing strategies research patterns", "provenance": { "source": "_synthetic/db-ref.md", "mtime": "2026-05-27T12:00:00Z", "sha256": "61b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "exemplary-06",
+      "expected": { "accepted_tiers": ["exemplary"] },
+      "pack": {
+        "task_description": "code-bug fix nullpointer exception in user service",
+        "task_type": "code-bug",
+        "total_tokens": 16000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "u1", "section_type": "memory_tier_files", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 4000, "content_excerpt": "code bug nullpointer exception user service fix", "provenance": { "source": "_synthetic/user-mem.md", "mtime": "2026-05-28T12:00:00Z", "sha256": "71b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "u2", "section_type": "architecture_map", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 4000, "content_excerpt": "user service architecture nullpointer exception code", "provenance": { "source": "_synthetic/user-arch.md", "mtime": "2026-05-28T06:00:00Z", "sha256": "81b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "u3", "section_type": "reference_doc_excerpt", "kind": "code", "trust_tier": "curated_memory", "tokens": 8000, "content_excerpt": "user service code nullpointer exception fix implementation", "provenance": { "source": "_synthetic/user.ts", "mtime": "2026-05-28T16:00:00Z", "sha256": "91b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "exemplary-07",
+      "expected": { "accepted_tiers": ["exemplary"] },
+      "pack": {
+        "task_description": "migration database schema add column with backfill strategy",
+        "task_type": "migration",
+        "total_tokens": 16000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "m1", "section_type": "architecture_map", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 8000, "content_excerpt": "migration database schema add column backfill strategy architecture", "provenance": { "source": "_synthetic/mig-arch.md", "mtime": "2026-05-28T18:00:00Z", "sha256": "a2b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "m2", "section_type": "reference_doc_excerpt", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 8000, "content_excerpt": "schema migration database column backfill strategy patterns", "provenance": { "source": "_synthetic/mig-ref.md", "mtime": "2026-05-28T12:00:00Z", "sha256": "b2b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "exemplary-08",
+      "expected": { "accepted_tiers": ["exemplary"] },
+      "pack": {
+        "task_description": "doc-write update API reference with new endpoint specifications",
+        "task_type": "doc-write",
+        "total_tokens": 8000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "d1", "section_type": "agent_safety_constitution_excerpt", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 4000, "content_excerpt": "agent safety constitution doc write API reference endpoint specifications", "provenance": { "source": "_synthetic/safety.md", "mtime": "2026-05-28T12:00:00Z", "sha256": "c2b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "d2", "section_type": "reference_doc_excerpt", "kind": "doc", "trust_tier": "curated_memory", "tokens": 4000, "content_excerpt": "API doc write reference endpoint specifications new update", "provenance": { "source": "_synthetic/api-ref.md", "mtime": "2026-05-28T00:00:00Z", "sha256": "d2b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+
+    {
+      "id": "clean-01",
+      "expected": { "accepted_tiers": ["clean", "exemplary"] },
+      "pack": {
+        "task_description": "research distributed systems consensus algorithms",
+        "task_type": "research",
+        "total_tokens": 16000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "c1", "section_type": "learnings_index", "kind": "doc", "trust_tier": "curated_memory", "tokens": 8000, "content_excerpt": "distributed systems consensus algorithms research", "provenance": { "source": "_synthetic/dist-learnings.md", "mtime": "2026-05-22T00:00:00Z", "sha256": "e2b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "c2", "section_type": "reference_doc_excerpt", "kind": "doc", "trust_tier": "curated_external", "tokens": 8000, "content_excerpt": "consensus algorithms distributed systems research", "provenance": { "source": "_synthetic/dist-ref.md", "mtime": "2026-05-25T00:00:00Z", "sha256": "f2b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "clean-02",
+      "expected": { "accepted_tiers": ["clean", "exemplary"] },
+      "pack": {
+        "task_description": "code-bug fix race condition in event handler",
+        "task_type": "code-bug",
+        "total_tokens": 24000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "rc1", "section_type": "memory_tier_files", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 8000, "content_excerpt": "code bug race condition event handler fix", "provenance": { "source": "_synthetic/race-mem.md", "mtime": "2026-05-26T00:00:00Z", "sha256": "12b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "rc2", "section_type": "architecture_map", "kind": "doc", "trust_tier": "curated_memory", "tokens": 8000, "content_excerpt": "race condition event handler architecture code", "provenance": { "source": "_synthetic/race-arch.md", "mtime": "2026-05-24T00:00:00Z", "sha256": "22b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "rc3", "section_type": "reference_doc_excerpt", "kind": "code", "trust_tier": "curated_memory", "tokens": 8000, "content_excerpt": "race condition handler event code implementation", "provenance": { "source": "_synthetic/race.ts", "mtime": "2026-05-25T00:00:00Z", "sha256": "32b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "clean-03",
+      "expected": { "accepted_tiers": ["clean", "exemplary"] },
+      "pack": {
+        "task_description": "review tests for new payment processing module",
+        "task_type": "review",
+        "total_tokens": 24000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "pay1", "section_type": "memory_tier_files", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 6000, "content_excerpt": "review tests payment processing module new", "provenance": { "source": "_synthetic/pay-mem.md", "mtime": "2026-05-26T00:00:00Z", "sha256": "42b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "pay2", "section_type": "specification_gaming_checklist_excerpt", "kind": "doc", "trust_tier": "curated_memory", "tokens": 18000, "content_excerpt": "specification gaming checklist review tests payment", "provenance": { "source": "_synthetic/pay-spec.md", "mtime": "2026-05-23T00:00:00Z", "sha256": "52b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "clean-04",
+      "expected": { "accepted_tiers": ["clean", "exemplary"] },
+      "pack": {
+        "task_description": "planning sprint backlog grooming and prioritization",
+        "task_type": "planning",
+        "total_tokens": 20000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "sp1", "section_type": "memory_tier_files", "kind": "doc", "trust_tier": "curated_memory", "tokens": 8000, "content_excerpt": "planning sprint backlog grooming prioritization", "provenance": { "source": "_synthetic/sprint-mem.md", "mtime": "2026-05-24T00:00:00Z", "sha256": "62b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "sp2", "section_type": "learnings_index", "kind": "doc", "trust_tier": "curated_memory", "tokens": 12000, "content_excerpt": "learnings sprint planning backlog grooming", "provenance": { "source": "_synthetic/sprint-learn.md", "mtime": "2026-05-22T00:00:00Z", "sha256": "72b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "clean-05",
+      "expected": { "accepted_tiers": ["clean", "exemplary"] },
+      "pack": {
+        "task_description": "research caching strategies http response patterns",
+        "task_type": "research",
+        "total_tokens": 12000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "ca1", "section_type": "learnings_index", "kind": "doc", "trust_tier": "curated_memory", "tokens": 6000, "content_excerpt": "caching strategies http response patterns research", "provenance": { "source": "_synthetic/cache-learn.md", "mtime": "2026-05-25T00:00:00Z", "sha256": "82b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "ca2", "section_type": "reference_doc_excerpt", "kind": "doc", "trust_tier": "curated_external", "tokens": 6000, "content_excerpt": "http caching response patterns strategies research", "provenance": { "source": "_synthetic/cache-ref.md", "mtime": "2026-05-26T00:00:00Z", "sha256": "92b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "clean-06",
+      "expected": { "accepted_tiers": ["clean", "exemplary"] },
+      "pack": {
+        "task_description": "code-bug logging output truncation on long messages",
+        "task_type": "code-bug",
+        "total_tokens": 32000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "lg1", "section_type": "memory_tier_files", "kind": "doc", "trust_tier": "curated_memory", "tokens": 12000, "content_excerpt": "logging output truncation long messages code bug", "provenance": { "source": "_synthetic/log-mem.md", "mtime": "2026-05-26T00:00:00Z", "sha256": "a3b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "lg2", "section_type": "architecture_map", "kind": "doc", "trust_tier": "curated_memory", "tokens": 10000, "content_excerpt": "logging architecture output truncation messages bug", "provenance": { "source": "_synthetic/log-arch.md", "mtime": "2026-05-25T00:00:00Z", "sha256": "b3b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "lg3", "section_type": "reference_doc_excerpt", "kind": "code", "trust_tier": "curated_external", "tokens": 10000, "content_excerpt": "logger code output truncation messages handling", "provenance": { "source": "_synthetic/log.ts", "mtime": "2026-05-24T00:00:00Z", "sha256": "c3b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "clean-07",
+      "expected": { "accepted_tiers": ["clean", "exemplary"] },
+      "pack": {
+        "task_description": "review code quality refactoring legacy modules",
+        "task_type": "review",
+        "total_tokens": 24000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "rv1", "section_type": "memory_tier_files", "kind": "doc", "trust_tier": "curated_memory", "tokens": 10000, "content_excerpt": "review code quality refactoring legacy modules", "provenance": { "source": "_synthetic/rv-mem.md", "mtime": "2026-05-25T00:00:00Z", "sha256": "d3b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "rv2", "section_type": "specification_gaming_checklist_excerpt", "kind": "doc", "trust_tier": "curated_memory", "tokens": 14000, "content_excerpt": "specification gaming checklist code review refactoring", "provenance": { "source": "_synthetic/rv-spec.md", "mtime": "2026-05-24T00:00:00Z", "sha256": "e3b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "clean-08",
+      "expected": { "accepted_tiers": ["clean", "exemplary"] },
+      "pack": {
+        "task_description": "planning quarter roadmap feature prioritization",
+        "task_type": "planning",
+        "total_tokens": 28000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "qr1", "section_type": "memory_tier_files", "kind": "doc", "trust_tier": "curated_memory", "tokens": 12000, "content_excerpt": "planning quarter roadmap feature prioritization", "provenance": { "source": "_synthetic/qr-mem.md", "mtime": "2026-05-25T00:00:00Z", "sha256": "f3b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "qr2", "section_type": "learnings_index", "kind": "doc", "trust_tier": "curated_memory", "tokens": 16000, "content_excerpt": "learnings planning quarter roadmap features", "provenance": { "source": "_synthetic/qr-learn.md", "mtime": "2026-05-23T00:00:00Z", "sha256": "14b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+
+    {
+      "id": "rough-01",
+      "expected": { "accepted_tiers": ["rough", "clean"] },
+      "pack": {
+        "task_description": "research generic topic with thin coverage",
+        "task_type": "research",
+        "total_tokens": 30000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "rg1", "section_type": "untrusted_external_appendix", "kind": "doc", "trust_tier": "untrusted_external", "tokens": 30000, "content_excerpt": "some loosely related content vaguely about topics", "provenance": { "source": "_synthetic/external-blob.txt", "mtime": "2026-05-28T00:00:00Z", "sha256": "24b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "rough-02",
+      "expected": { "accepted_tiers": ["rough", "bad"] },
+      "pack": {
+        "task_description": "code-bug missing context for diagnosis",
+        "task_type": "code-bug",
+        "total_tokens": 48000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "rg2a", "section_type": "memory_tier_files", "kind": "doc", "trust_tier": "curated_external", "tokens": 24000, "content_excerpt": "some text related to code", "provenance": { "source": "_synthetic/rg2-mem.md", "mtime": "2026-05-20T00:00:00Z", "sha256": "34b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } },
+          { "id": "rg2b", "kind": "code", "trust_tier": "curated_external", "tokens": 24000, "content_excerpt": "more text vaguely about implementation", "provenance": { "source": "_synthetic/rg2-code.ts" } }
+        ]
+      }
+    },
+    {
+      "id": "rough-03",
+      "expected": { "accepted_tiers": ["rough", "clean"] },
+      "pack": {
+        "task_description": "review weak coverage no specgaming",
+        "task_type": "review",
+        "total_tokens": 32000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "rg3a", "section_type": "untrusted_external_appendix", "kind": "doc", "trust_tier": "untrusted_external", "tokens": 32000, "content_excerpt": "review external content unrelated patterns", "provenance": { "source": "_synthetic/rg3.md", "mtime": "2026-05-28T00:00:00Z", "sha256": "44b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2c3d4e5f6a7b8c9d0a1b2" } }
+        ]
+      }
+    },
+    {
+      "id": "rough-04",
+      "expected": { "accepted_tiers": ["rough", "clean"] },
+      "pack": {
+        "task_description": "planning generic top-level overview",
+        "task_type": "planning",
+        "total_tokens": 40000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "rg4a", "section_type": "gbrain_hits", "kind": "doc", "trust_tier": "curated_external", "tokens": 40000, "content_excerpt": "generic planning text about top-level overview themes", "provenance": { "source": "_synthetic/rg4.md", "mtime": "2026-05-25T00:00:00Z" } }
+        ]
+      }
+    },
+    {
+      "id": "rough-05",
+      "expected": { "accepted_tiers": ["rough", "clean"] },
+      "pack": {
+        "task_description": "research minimal context single section",
+        "task_type": "research",
+        "total_tokens": 8000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "rg5a", "kind": "doc", "trust_tier": "curated_external", "tokens": 8000, "content_excerpt": "minimal context research single section text", "provenance": { "source": "_synthetic/rg5.md", "mtime": "2026-05-20T00:00:00Z" } }
+        ]
+      }
+    },
+    {
+      "id": "rough-06",
+      "expected": { "accepted_tiers": ["rough", "clean"] },
+      "pack": {
+        "task_description": "code-bug shallow context near budget",
+        "task_type": "code-bug",
+        "total_tokens": 44000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "rg6a", "kind": "doc", "trust_tier": "curated_external", "tokens": 44000, "content_excerpt": "shallow context code bug debugging hints budget near", "provenance": { "source": "_synthetic/rg6.md", "mtime": "2026-05-22T00:00:00Z" } }
+        ]
+      }
+    },
+    {
+      "id": "rough-07",
+      "expected": { "accepted_tiers": ["rough", "clean"] },
+      "pack": {
+        "task_description": "doc-write weak provenance for short article",
+        "task_type": "doc-write",
+        "total_tokens": 20000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "rg7a", "section_type": "agent_safety_constitution_excerpt", "kind": "doc", "trust_tier": "curated_external", "tokens": 20000, "content_excerpt": "doc write weak provenance short article text some safety", "provenance": { "source": "_synthetic/rg7.md", "mtime": "2026-05-24T00:00:00Z" } }
+        ]
+      }
+    },
+    {
+      "id": "rough-08",
+      "expected": { "accepted_tiers": ["rough", "clean"] },
+      "pack": {
+        "task_description": "spike unknown territory loose",
+        "task_type": "spike",
+        "total_tokens": 30000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "rg8a", "kind": "doc", "trust_tier": "curated_external", "tokens": 30000, "content_excerpt": "spike unknown territory loose exploration content text general", "provenance": { "source": "_synthetic/rg8.md", "mtime": "2026-05-25T00:00:00Z" } }
+        ]
+      }
+    },
+
+    {
+      "id": "bad-01",
+      "expected": { "accepted_tiers": ["bad"] },
+      "pack": {
+        "task_description": "code-bug pack with forbidden glob hit",
+        "task_type": "code-bug",
+        "total_tokens": 24000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "bd1a", "kind": "doc", "trust_tier": "untrusted_external", "tokens": 24000, "content_excerpt": "leaked content from forbidden source", "provenance": { "source": "runs/x/tool-log.ndjson", "mtime": "2026-05-28T00:00:00Z" } }
+        ]
+      }
+    },
+    {
+      "id": "bad-02",
+      "expected": { "accepted_tiers": ["bad"] },
+      "pack": {
+        "task_description": "research forbidden secrets file in pack",
+        "task_type": "research",
+        "total_tokens": 4000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "bd2a", "kind": "doc", "trust_tier": "untrusted_external", "tokens": 4000, "content_excerpt": "secret material exposed", "provenance": { "source": ".env.production", "mtime": "2026-05-28T00:00:00Z" } }
+        ]
+      }
+    },
+    {
+      "id": "bad-03",
+      "expected": { "accepted_tiers": ["bad"] },
+      "pack": {
+        "task_description": "code-bug entirely missing required sources",
+        "task_type": "code-bug",
+        "total_tokens": 60000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "bd3a", "kind": "doc", "trust_tier": "untrusted_external", "tokens": 60000, "content_excerpt": "unrelated text", "provenance": { "source": "_synthetic/bd3.md" } }
+        ]
+      }
+    },
+    {
+      "id": "bad-04",
+      "expected": { "accepted_tiers": ["bad"] },
+      "pack": {
+        "task_description": "review tier-4 source very stale and no specgaming",
+        "task_type": "review",
+        "total_tokens": 64000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "bd4a", "section_type": "untrusted_external_appendix", "kind": "doc", "trust_tier": "untrusted_external", "tokens": 64000, "content_excerpt": "stale unrelated very old content review", "provenance": { "source": "_synthetic/bd4.md", "mtime": "2025-01-01T00:00:00Z" } }
+        ]
+      }
+    },
+    {
+      "id": "bad-05",
+      "expected": { "accepted_tiers": ["bad"] },
+      "pack": {
+        "task_description": "research forbidden credentials path",
+        "task_type": "research",
+        "total_tokens": 8000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "bd5a", "kind": "doc", "trust_tier": "untrusted_external", "tokens": 8000, "content_excerpt": "stuff", "provenance": { "source": "infra/credentials.json", "mtime": "2026-05-28T00:00:00Z" } }
+        ]
+      }
+    },
+    {
+      "id": "bad-06",
+      "expected": { "accepted_tiers": ["bad"] },
+      "pack": {
+        "task_description": "planning ssh key referenced as source",
+        "task_type": "planning",
+        "total_tokens": 4000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "bd6a", "kind": "doc", "trust_tier": "untrusted_external", "tokens": 4000, "content_excerpt": "private", "provenance": { "source": "/home/example-user/.ssh/id_rsa", "mtime": "2026-05-28T00:00:00Z" } }
+        ]
+      }
+    }
+  ]
+}

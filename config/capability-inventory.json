@@ -1,0 +1,1677 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-12T16:39:22.259Z",
+  "note": "Supersedes both config/capability-matrix.json and config/capability-registry.json in SCOPE (this is now the single capability inventory for HarnessKit) -- but this is a supersession, not a merge: the 18 capability-matrix.json rows keep their exact machine-verified shape (scripts/validate-capability-matrix.js still live-re-runs every 'verified' entry's self-test against THIS file), the 37 capability-registry.json rows keep their content carried forward with a new source_registry + classification, and 1 new row (Outsourcerer) is added per the owner's explicit instruction. Both predecessor files remain on disk, marked _deprecated, for rollback safety.",
+  "_supersedes": [
+    "config/capability-matrix.json",
+    "config/capability-registry.json"
+  ],
+  "registry_owner": "owner",
+  "established_at": "2026-06-13",
+  "revised_at": "2026-07-12 (P2 capability-inventory supersession: unified capability-matrix.json + capability-registry.json into one file with source_registry + 8-state classification per entry, +1 Outsourcerer reference entry)",
+  "_enforcement_status": "advisory_only",
+  "_enforcement_note": "Inventory + attestation only. No code gates execution on this file today; wiring enforcement is a later batch behind its own approval. Policies/config/evals remain authority.",
+  "links": {
+    "skill_registry": "config/skill-registry.json",
+    "advisor_registry": "config/advisor-registry.json",
+    "global_policy": "config/global-policy.json",
+    "autonomy_levels": "reference/autonomy-levels.md"
+  },
+  "_rule_links_not_duplicate": "Skill records here carry only summary + links_to_skill_registry; the authoritative two-hash/attested_surface lives in skill-registry.json. Do not duplicate skill internals.",
+  "_classification_scheme": {
+    "ADOPT_AS_IS": "Use the capability/tool/skill exactly as-is, no wrapping or modification needed.",
+    "ADAPT_BEHIND_HARNESSKIT_INTERFACE": "Real capability worth using, but only via a HarnessKit-owned interface/gate wrapping it -- never raw/direct.",
+    "PROJECT_OVERLAY_ONLY": "Scoped to a specific project overlay (e.g. an example project) -- not a general HarnessKit capability, must not be treated as one.",
+    "USE_AS_REFERENCE": "Design patterns are worth learning from and reimplementing clean-room; the artifact itself is not adopted/installed/run.",
+    "DUPLICATE": "This row duplicates another row's capability content -- the other row is canonical; this one is kept only for provenance.",
+    "QUARANTINE": "Present/built but deliberately blocked pending a scan, decision, or policy gate -- not thrown away, just held.",
+    "REJECT": "Explicitly rejected -- not installed, not adopted, not a future candidate absent a new explicit decision.",
+    "DEFER": "A real decision (adopt/reject/adapt) has not yet been made -- postponed pending a named future gate or batch."
+  },
+  "families": [
+    "agent",
+    "tool",
+    "review",
+    "memory",
+    "context",
+    "lifecycle"
+  ],
+  "_fable_status": "REJECTED — out of routing (no cheap-model tier; subagents fill it)",
+  "_mimo_status": "external-reference-only (MIMO-0 source intel); NOT installable/runnable/connectable via this registry",
+  "_status_legend": "verified | experimental | partial | deferred | absent | rejected | quarantined -- 'verified' is the only status this validator holds to its strict evidentiary bar (implementation path exists, cited self-test script actually passes on live re-run, real_run_evidence non-empty); all others only need schema completeness.",
+  "_selectable_rule": "selectable:true ONLY for capabilities usable NOW (PRESENT + enabled, or a PARTIAL capability's verified read-safe subset). selectable:false for ABSENT | DISABLED | UNKNOWN | REJECTED | PLANNED, and for any network/secret/domain skill not explicitly enabled for routing. A selectable:false capability is NEVER a routable active-execution target; it may still carry fallback + risk metadata.",
+  "_write_gates": {
+    "_note": "Mandatory close-out gates for every write batch (Tests + Security + Simplify). Maps to capabilities/agents available TODAY (compound-engineering ENABLED). Routing wiring is CE-1, not this batch.",
+    "tests": {
+      "primary": [
+        "ce-proof",
+        "harnesskit-eval-suite"
+      ],
+      "also": [
+        "ce-test-browser",
+        "ce-test-xcode"
+      ],
+      "agents": [
+        "ce-testing-reviewer",
+        "ce-deployment-verification-agent"
+      ],
+      "later": [
+        "superpowers:test-driven-development",
+        "superpowers:verification-before-completion"
+      ]
+    },
+    "security": {
+      "primary": [
+        "ce-code-review",
+        "repo-forensics"
+      ],
+      "agents": [
+        "ce-security-reviewer",
+        "ce-security-sentinel",
+        "ce-adversarial-reviewer"
+      ],
+      "later": []
+    },
+    "simplify": {
+      "primary": [
+        "ce-simplify-code"
+      ],
+      "agents": [
+        "ce-code-simplicity-reviewer",
+        "ce-maintainability-reviewer"
+      ],
+      "later": []
+    },
+    "plan_review": {
+      "primary": [
+        "grill-me",
+        "zoom-out",
+        "project-plan-review",
+        "langgraph-plan-review",
+        "ce-plan"
+      ],
+      "agents": [
+        "ce-feasibility-reviewer",
+        "ce-scope-guardian-reviewer",
+        "ce-product-lens-reviewer"
+      ]
+    },
+    "code_review": {
+      "primary": [
+        "ce-code-review"
+      ],
+      "agents": [
+        "ce-correctness-reviewer",
+        "ce-api-contract-reviewer",
+        "ce-performance-reviewer",
+        "ce-reliability-reviewer"
+      ]
+    },
+    "learning": {
+      "primary": [
+        "ce-compound"
+      ],
+      "agents": [
+        "ce-learnings-researcher",
+        "ce-session-historian"
+      ],
+      "later": [
+        "dreamer",
+        "distiller"
+      ]
+    }
+  },
+  "capabilities": [
+    {
+      "capability_id": "execution_kernel_run_state_resume",
+      "user_surface": "/harness-run, harnesskit run, scripts/new-run.js, scripts/resume-run.js",
+      "implementation": "scripts/new-run.js",
+      "status": "verified",
+      "supported_stacks": [
+        "any (repo-agnostic)"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [
+        "node",
+        "git"
+      ],
+      "tests": "scripts/resume-run.js --self-test",
+      "real_run_evidence": "Exercised in every /harness-run this session, incl. REVIEW-INDEPENDENCE-1 (9 commits) and this Phase-1 batch; resume-run.js has 19 self-test assertions incl. a full state-space sweep",
+      "security_boundary": "local-only, no network, kill-switch honored",
+      "public_or_private": "public",
+      "known_limitations": [
+        "tool-log completeness depends on hooks, which are dormant by default"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "capability_resolver",
+      "user_surface": "internal (used by compose-workflow.js/execute-workflow.js)",
+      "implementation": "scripts/capability-resolver.js",
+      "status": "verified",
+      "supported_stacks": [
+        "any (repo-agnostic)"
+      ],
+      "runtime_adapters": [
+        "claude-code",
+        "codex-cli",
+        "detected-repository-command"
+      ],
+      "required_tools": [
+        "node"
+      ],
+      "tests": "scripts/capability-resolver.js --self-test",
+      "real_run_evidence": "Real resolution exercised against the live adapter-registry and against synthetic + real (ART target, this batch) repo profiles",
+      "security_boundary": "read-only, no execution itself",
+      "public_or_private": "public",
+      "known_limitations": [
+        "repo.* namespace covers test/lint/typecheck/build only, not the full breadth of possible repo-detected capabilities"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "generic_repo_inspection",
+      "user_surface": "harnesskit inspect",
+      "implementation": "scripts/inspect-repo.js",
+      "status": "verified",
+      "supported_stacks": [
+        "python (pyproject.toml)",
+        "node (package.json)"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [
+        "node",
+        "git"
+      ],
+      "tests": "scripts/inspect-repo.js --self-test",
+      "real_run_evidence": "Run for real against harnesskit itself (correctly reported stack:unknown, no package.json/pyproject.toml) and against a synthetic Python smoke-test repo (correctly detected pytest/stack)",
+      "security_boundary": "read-only, bounded scan depth, no execution of scanned code",
+      "public_or_private": "public",
+      "known_limitations": [
+        "unknown-stack repos beyond python/node report absent, not a guess",
+        "ambiguous multi-package-root repos default to first-found, marked medium confidence"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "generic_task_discovery",
+      "user_surface": "internal (used by harnesskit run)",
+      "implementation": "scripts/task-discovery.js",
+      "status": "verified",
+      "supported_stacks": [
+        "any (text/doc-based heuristics, stack-agnostic)"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [
+        "node",
+        "git"
+      ],
+      "tests": "scripts/task-discovery.js --self-test",
+      "real_run_evidence": "7 self-test assertions incl. a real bug found and fixed via a live smoke-test run (active-phrase scoring was too strict on filename); pending real evidence from the ART black-box run (this batch, in progress)",
+      "security_boundary": "read-only",
+      "public_or_private": "public",
+      "known_limitations": [
+        "roadmap-ID regex covers 1-5-uppercase-letter + 2-4-digit ID shapes (E05, AR003, PR-012); longer word-based IDs are not matched",
+        "confidence threshold (0.6) and scoring weights are a first calibration, not validated against a large corpus"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "dynamic_workflow_composition_execution",
+      "user_surface": "internal (used by harnesskit run)",
+      "implementation": "scripts/compose-workflow.js, scripts/execute-workflow.js",
+      "status": "verified",
+      "supported_stacks": [
+        "any (repo-agnostic)"
+      ],
+      "runtime_adapters": [
+        "claude-code",
+        "codex-cli",
+        "detected-repository-command"
+      ],
+      "required_tools": [
+        "node"
+      ],
+      "tests": "scripts/compose-workflow.js --self-test, scripts/execute-workflow.js --self-test",
+      "real_run_evidence": "24 self-test assertions across both files; real end-to-end CLI run against a synthetic smoke-test repo correctly ran the automated stage prefix and paused honestly at the first orchestrator stage. Phase 8: the independent-review stage now resolves its 'review' capability via router/select-adapter.js's existing independent_review policy with excludeAdapter set to whatever the execute stage actually selected (generalized capability resolution, not a hardcoded vendor), and completeStage() rejects an independent-review completion (status flips to 'rejected_not_independent') whose declared reviewer_adapter_id/reviewer_dispatch_id matches the producer's -- a real blocking gate, not documentation.",
+      "security_boundary": "deterministic-verify runs real detected commands with a 300s timeout and tokenized argv (no shell string concatenation); independent-review completions are checked for producer/reviewer independence before being honored as 'completed'",
+      "public_or_private": "public",
+      "known_limitations": [
+        "linear default dependency chain (a template), not a general DAG scheduler",
+        "orchestrator stages (plan/execute/independent-review) require the calling agent -- a script cannot autonomously plan, implement, or dispatch a review subagent",
+        "the independence check is adapter_id/dispatch_id equality only -- it does not (yet) call into scripts/review-independence/core/evaluator.js's richer context_mode/tier-ladder checks"
+      ],
+      "last_verified_at": "2026-07-11",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "unified_cli",
+      "user_surface": "harnesskit <inspect|capabilities|doctor|status|resume|run>",
+      "implementation": "bin/harnesskit.js",
+      "status": "experimental",
+      "supported_stacks": [
+        "any (repo-agnostic)"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [
+        "node"
+      ],
+      "tests": "manual real invocation this session (status, capabilities, doctor, inspect, run all exercised for real); no --self-test on the CLI layer itself, which is thin glue over already-tested modules",
+      "real_run_evidence": "Real invocation against the live harnesskit repo (status/doctor/inspect/capabilities) and a synthetic smoke-test repo (run, full automated-prefix pipeline)",
+      "security_boundary": "delegates entirely to already-scoped underlying scripts",
+      "public_or_private": "public",
+      "known_limitations": [
+        "only 6 of the 12 originally-requested verbs are exposed; the other 7 (ask/verify/security/release/plugins/knowledge) are simply absent, not stubbed"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "harnesskit_lock_mechanism",
+      "user_surface": "scripts/generate-harnesskit-lock.js, scripts/validate-harnesskit-lock.js",
+      "implementation": "scripts/generate-harnesskit-lock.js, scripts/validate-harnesskit-lock.js, config/harnesskit-lock.schema.json",
+      "status": "verified",
+      "supported_stacks": [
+        "any (repo-agnostic)"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [
+        "node",
+        "git"
+      ],
+      "tests": "scripts/generate-harnesskit-lock.js --self-test, scripts/validate-harnesskit-lock.js --self-test",
+      "real_run_evidence": "Generated and validated a real synthetic example (examples/overlay-example/harnesskit.lock.json) including a real git-reachability check against this repo's actual history",
+      "security_boundary": "read-only against git history; writes only to the caller-specified --out path",
+      "public_or_private": "public",
+      "known_limitations": [
+        "the real overlay-side lock is not created by this mechanism -- project-side writes remain frozen; only the generic mechanism is built and tested"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "claude_code_adapter",
+      "user_surface": "primary adapter for all planning/implementation/review stages",
+      "implementation": "native (Claude Code itself)",
+      "status": "verified",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "n/a (native)",
+      "real_run_evidence": "Continuous throughout every run this session",
+      "security_boundary": "trusted-local per config/adapter-registry.json",
+      "public_or_private": "public",
+      "known_limitations": [],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "direct_codex_adapter",
+      "user_surface": "scripts/codex-adapter.js (reviewReadOnly, implementBounded)",
+      "implementation": "scripts/codex-adapter.js",
+      "status": "verified",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "codex-cli"
+      ],
+      "required_tools": [
+        "codex CLI installed"
+      ],
+      "tests": "scripts/codex-adapter.js --self-test",
+      "real_run_evidence": "ENOENT bug fixed this session (prior work); 3+ real live calls this session including a full reviewReadOnly() and a real runCodexReview() through the production call site",
+      "security_boundary": "quarantined trust_tier; sandboxed; no shell:true/exec/string-concatenation",
+      "public_or_private": "public",
+      "known_limitations": [
+        "Windows sandbox sub-spawn failures for Codex's own investigative commands inside --sandbox read-only (documented incident, not this session's to fix)"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision.",
+      "related_capability_id": [
+        "codex-cli"
+      ]
+    },
+    {
+      "capability_id": "official_codex_plugin_adapter",
+      "user_surface": "would be /codex:* commands once installed",
+      "implementation": "n/a -- not installed",
+      "status": "deferred",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [],
+      "required_tools": [
+        "local interactive /plugin install (not available over Remote Control)"
+      ],
+      "tests": "n/a",
+      "real_run_evidence": "none -- CODEX-EXEC-1 deferred",
+      "security_boundary": "n/a",
+      "public_or_private": "public",
+      "known_limitations": [
+        "blocked on a human-only local interactive install step; must not block Monday readiness per direct instruction"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision.",
+      "related_capability_id": [
+        "codex-cli"
+      ]
+    },
+    {
+      "capability_id": "producer_reviewer_independence",
+      "user_surface": "scripts/check-review-independence.js, scripts/create-review-request.js",
+      "implementation": "scripts/review-independence/",
+      "status": "verified",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [
+        "node"
+      ],
+      "tests": "scripts/review-independence/core/*.js --self-test, scripts/review-independence/adapters/claude-code-hooks.js --self-test",
+      "real_run_evidence": "REVIEW-INDEPENDENCE-1 (9 commits, prior work this session): real agent_id-based dispatch identity, real cross-process lock, full end-to-end pipeline walkthrough with real hook piping",
+      "security_boundary": "report-only, enforced:false everywhere, RI-8 (blocking) not approved",
+      "public_or_private": "public",
+      "known_limitations": [
+        "no bridge yet between the real /ce-code-review skill's own output and the expected verdict-file shape -- a real subagent dispatch writing directly to expected_verdict_path is used as a substitute"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "repo_command_verification",
+      "user_surface": "deterministic-verify workflow stage (repo.test/repo.lint/repo.typecheck/repo.build)",
+      "implementation": "scripts/execute-workflow.js#handleDeterministicVerify, scripts/verification-classifier.js",
+      "status": "verified",
+      "supported_stacks": [
+        "python",
+        "node"
+      ],
+      "runtime_adapters": [
+        "detected-repository-command"
+      ],
+      "required_tools": [
+        "whatever the target repo's own toolchain requires (uv/pytest/ruff/mypy, or npm/yarn/pnpm)"
+      ],
+      "tests": "scripts/execute-workflow.js --self-test, scripts/verification-classifier.js --self-test (real command execution, real tokenizer, real 7-state classification incl. a real rerun-and-compare flakiness check)",
+      "real_run_evidence": "Phase 8: binary pass/fail replaced by a 7-state canonical status (VERIFIED_PASS/KNOWN_PREEXISTING_FAILURES/ENVIRONMENT_BLOCKED/REGRESSION_DETECTED/FLAKY_OR_INCONCLUSIVE/VERIFICATION_NOT_AVAILABLE/FAILED); only REGRESSION_DETECTED/FAILED hard-block, the other 4 require an explicit recorded override (isValidOverride) before prepare-commit proceeds; a real end-to-end run classified this repo's own scripts/local-ci.js output live",
+      "security_boundary": "argv-tokenized (no shell string concatenation), 300s timeout per command; override objects are always recorded in outputs, never applied silently",
+      "public_or_private": "public",
+      "known_limitations": [
+        "command detection is config-file-based (pyproject.toml sections, package.json scripts) -- a repo with commands declared elsewhere (Makefile, tox.ini, custom scripts) is not yet detected",
+        "failing-test-name extraction is pattern-based (this repo's own self-test convention + common jest/mocha/TAP/pytest shapes) -- an unrecognized test-output format degrades to 0 named failures rather than a guess",
+        "REGRESSION_DETECTED's diff-overlap check is a basename heuristic, not a real coverage map"
+      ],
+      "last_verified_at": "2026-07-11",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "verification_status_classification",
+      "user_surface": "internal (used by scripts/execute-workflow.js#handleDeterministicVerify)",
+      "implementation": "scripts/verification-classifier.js",
+      "status": "verified",
+      "supported_stacks": [
+        "any (repo-agnostic)"
+      ],
+      "runtime_adapters": [
+        "detected-repository-command"
+      ],
+      "required_tools": [
+        "node"
+      ],
+      "tests": "scripts/verification-classifier.js --self-test",
+      "real_run_evidence": "21 self-test assertions covering all 7 statuses with synthetic fixtures, combineStatuses severity ordering, isValidOverride shape checking, a REAL subprocess-level flakiness rerun (not just an injected fixture), and a real end-to-end run of scripts/local-ci.js classified live",
+      "security_boundary": "read-only classification logic; the one real rerun it performs re-executes the SAME already-detected repo command (no new attack surface beyond what deterministic-verify already runs)",
+      "public_or_private": "public",
+      "known_limitations": [
+        "baseline allowlist matching is exact-string, case-sensitive by design (a fuzzy match would risk laundering a new failure into 'known')",
+        "no per-repo persisted baseline file convention yet -- baselines are supplied via ctx.verificationBaselines, not auto-loaded from a repo-local config"
+      ],
+      "last_verified_at": "2026-07-11",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "harness_self_ci_gate",
+      "user_surface": "harnesskit doctor, node scripts/local-ci.js, node scripts/preflight.js",
+      "implementation": "scripts/local-ci.js, scripts/preflight.js",
+      "status": "verified",
+      "supported_stacks": [
+        "harnesskit itself only"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [
+        "node"
+      ],
+      "tests": "scripts/preflight.js --self-test",
+      "real_run_evidence": "Run repeatedly throughout this session, currently 14/14 preflight checks, 22+/22+ local-ci checks",
+      "security_boundary": "local-only, no network",
+      "public_or_private": "public",
+      "known_limitations": [
+        "gates harnesskit itself only -- a target repo's own CI is covered by repo_command_verification, a separate, narrower capability"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "skills_plugin_governance",
+      "user_surface": "config/skill-registry.json, validate-skill-registration.js",
+      "implementation": "config/skill-registry.json",
+      "status": "partial",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [
+        "node"
+      ],
+      "tests": "scripts/validate-skill-registration.js",
+      "real_run_evidence": "Two-hash attestation exists and is checked; no full reachability-from-routing audit exists across the 50+ CE/Superpowers skills",
+      "security_boundary": "advisory-only registry, never blocks",
+      "public_or_private": "public",
+      "known_limitations": [
+        "NEEDS_DECISION: a full skill-reachability + capability-research-workflow audit is a real, larger follow-up, not built this pass"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "repository_knowledge_chat",
+      "user_surface": "would be harnesskit ask",
+      "implementation": "n/a -- only the lean repo-knowledge-index.json from inspect-repo.js exists",
+      "status": "absent",
+      "supported_stacks": [],
+      "runtime_adapters": [],
+      "required_tools": [],
+      "tests": "n/a",
+      "real_run_evidence": "none",
+      "security_boundary": "n/a",
+      "public_or_private": "public",
+      "known_limitations": [
+        "explicitly deferred this batch -- named, not built"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "cicd_adapter_breadth",
+      "user_surface": "would be harnesskit release check / security check",
+      "implementation": "n/a beyond repo_command_verification's test/lint/typecheck/build",
+      "status": "absent",
+      "supported_stacks": [],
+      "runtime_adapters": [],
+      "required_tools": [],
+      "tests": "n/a",
+      "real_run_evidence": "none",
+      "security_boundary": "n/a",
+      "public_or_private": "public",
+      "known_limitations": [
+        "SBOM/vuln-scan/license-inventory/release-provenance explicitly deferred this batch -- named, not built"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "open_source_forensics_full",
+      "user_surface": "would be a full PUBLIC_SAFE/PRIVATE_OVERLAY/... classification of the whole repo",
+      "implementation": "n/a -- only the profile-level classification in docs/PUBLIC-PRIVATE-PROFILE-BOUNDARY.md exists",
+      "status": "partial",
+      "supported_stacks": [
+        "harnesskit itself"
+      ],
+      "runtime_adapters": [],
+      "required_tools": [],
+      "tests": "n/a",
+      "real_run_evidence": "one file (example-app.json) classified; full-repo pass not attempted",
+      "security_boundary": "n/a",
+      "public_or_private": "public",
+      "known_limitations": [
+        "LICENSE/SBOM/CONTRIBUTING generation, full personal-data scan explicitly deferred this batch"
+      ],
+      "last_verified_at": "2026-07-10",
+      "source_registry": "config/capability-matrix.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Native HarnessKit capability -- already fully adopted (it is the implementation itself), not an external-adoption decision."
+    },
+    {
+      "capability_id": "claude-orchestrator",
+      "user_surface": "Claude Opus 4.8 orchestrator",
+      "implementation": "https://claude.com/claude-code",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "n/a (host model)",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=all (HarnessKit run rules apply); network_access=gated; write_access=scoped; secret_access=gated; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "drift",
+        "premature-done"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Builtin host model; core to Claude Code itself, continuously exercised.",
+      "type": "orchestrator",
+      "family": "agent",
+      "source": "builtin",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "claude-subagents",
+      "user_surface": "Claude subagents (Agent tool)",
+      "implementation": "https://claude.com/claude-code",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "spawn read-only review; assert no writes",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=read-only/inspect (single-writer rule; main agent writes); network_access=gated; write_access=none; secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [
+        "isolation-failure",
+        "depth-blowup"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Builtin Agent tool; core mechanism this task itself runs under.",
+      "type": "subagent",
+      "family": "agent",
+      "source": "builtin",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "fable-5",
+      "user_surface": "Fable 5 (cheap Claude tier)",
+      "implementation": "https://claude.com/claude-code",
+      "status": "rejected",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [],
+      "required_tools": [],
+      "tests": "n/a",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=REJECTED, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=none; network_access=none; write_access=none; secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [
+        "disabled per the owner directive"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "REJECT",
+      "classification_note": "Explicit owner directive: OUT, no cheap-model tier -- subagents fill that role instead.",
+      "type": "model",
+      "family": "agent",
+      "source": "builtin",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "codex-cli",
+      "user_surface": "OpenAI Codex CLI",
+      "implementation": "https://github.com/openai/codex",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "codex-cli"
+      ],
+      "required_tools": [],
+      "tests": "read-only query in sandbox; assert no writes",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=unscanned, last_verified=2026-06-14). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=read-only/adversarial review only (when wired); network_access=gated; write_access=none; secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [
+        "auto-apply (never enable)",
+        "WSL/path quirks"
+      ],
+      "last_verified_at": "2026-06-14",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Present, in active read-only (C1) use. Complementary to (not a duplicate of) capability-matrix.json's direct_codex_adapter/official_codex_plugin_adapter -- this row captures the raw CLI/OAuth/phased-trust-escalation facts (C0-C3), those rows capture HarnessKit's own wrapper module. Kept distinct rather than merged or marked DUPLICATE because removing either loses real, non-overlapping information.",
+      "type": "cli",
+      "family": "review",
+      "source": "official",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "compound-engineering-plugin",
+      "user_surface": "Compound Engineering plugin",
+      "implementation": "~/.claude/plugins/cache/compound-engineering-plugin/compound-engineering/3.9.2",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "invoke /ce-plan on fixture task",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=unscanned (verify forensics), last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=per-skill; network_access=gated; write_access=scoped; secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "supply-chain (no formal forensics record yet)"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Present, primary gate provider (tests/security/simplify/plan_review/code_review/learning write-gates all route through it).",
+      "type": "plugin",
+      "family": "tool",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "ce-plan",
+      "user_surface": "/ce-plan",
+      "implementation": ".../3.9.2/skills/ce-plan",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "via compound-run smoke",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=via plugin, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=per-plugin; network_access=gated; write_access=run-folder; secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Present, actively used skill within the adopted plugin.",
+      "type": "skill",
+      "family": "tool",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "ce-work",
+      "user_surface": "/ce-work",
+      "implementation": ".../3.9.2/skills/ce-work",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "via compound-run smoke",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=via plugin, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=per-plugin; network_access=gated; write_access=scoped; secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "scope-expansion"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Present, actively used skill within the adopted plugin.",
+      "type": "skill",
+      "family": "tool",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "ce-debug",
+      "user_surface": "/ce-debug",
+      "implementation": ".../3.9.2/skills/ce-debug",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "via compound-run smoke",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=via plugin, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=per-plugin; network_access=gated; write_access=scoped; secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "retry-storm"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Present, actively used skill within the adopted plugin.",
+      "type": "skill",
+      "family": "tool",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "ce-code-review",
+      "user_surface": "/ce-code-review",
+      "implementation": ".../3.9.2/skills/ce-code-review",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "via compound-run smoke",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=via plugin, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=read-only review; network_access=gated; write_access=run-folder; secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Present, actively used skill; primary security write-gate.",
+      "type": "skill",
+      "family": "review",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "ce-simplify-code",
+      "user_surface": "/ce-simplify-code",
+      "implementation": ".../3.9.2/skills/ce-simplify-code",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "invoke on a fixture diff; assert findings schema",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=via plugin, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=read-only review; network_access=gated; write_access=run-folder; secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Present, actively used skill; primary simplify write-gate.",
+      "type": "skill",
+      "family": "review",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "ce-proof",
+      "user_surface": "/ce-proof (+ ce-test-browser / ce-test-xcode)",
+      "implementation": ".../3.9.2/skills/ce-proof",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "run on a fixture; assert pass/fail surfaced",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=via plugin, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=per-plugin; network_access=gated; write_access=run-folder; secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "env-specific test runners (browser/xcode) not always applicable"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Present, actively used skill; primary tests write-gate.",
+      "type": "skill",
+      "family": "tool",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "harnesskit-eval-suite",
+      "user_surface": "HarnessKit eval/regression suite",
+      "implementation": "scripts/run-evals.js + evals/core/* + evals/core/regression/run.js",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "node scripts/run-evals.js --run-id smoke",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=trusted-local, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=read-only run + writes evals/results/*; network_access=none; write_access=run-folder; secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "baseline drift if not re-anchored"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Local-authored, real CLI (scripts/run-evals.js) -- but has no --self-test of its own, so held to 'experimental' here rather than 'verified' (no live-rerunnable self-test to cite for this validator's strict bar).",
+      "type": "cli",
+      "family": "tool",
+      "source": "local-authored",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "ce-compound",
+      "user_surface": "/ce-compound",
+      "implementation": ".../3.9.2/skills/ce-compound",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "via learning-promotion eval",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=via plugin, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=per-plugin; network_access=gated; write_access=memory; secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "memory-poisoning if auto-applied"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Present, actively used skill; primary learning write-gate.",
+      "type": "skill",
+      "family": "tool",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "grill-me",
+      "user_surface": "/grill-me",
+      "implementation": "skills/grill-me",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "n/a (manual)",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=forensics-clean, last_verified=2026-06-06). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=Read/Grep/Glob; network_access=none; write_access=none; secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [],
+      "last_verified_at": "2026-06-06",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Present, forensics-clean, actively used plan-review skill. Per _rule_links_not_duplicate: this row carries summary + links_to_skill_registry only.",
+      "type": "skill",
+      "family": "review",
+      "source": "third-party",
+      "links_to_skill_registry": "skill-registry.json#grill-me"
+    },
+    {
+      "capability_id": "zoom-out",
+      "user_surface": "/zoom-out",
+      "implementation": "skills/zoom-out",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "n/a (manual, disable-model-invocation)",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=forensics-clean, last_verified=2026-06-06). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=Read/Grep/Glob; network_access=none; write_access=none; secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [],
+      "last_verified_at": "2026-06-06",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Present, forensics-clean, altitude-check skill. Per _rule_links_not_duplicate: summary + link only.",
+      "type": "skill",
+      "family": "review",
+      "source": "third-party",
+      "links_to_skill_registry": "skill-registry.json#zoom-out"
+    },
+    {
+      "capability_id": "project-plan-review",
+      "user_surface": "project-plan-review",
+      "implementation": "skills/project-plan-review",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "eval skill-project-plan-review 14/14",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=trusted-local, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=Read/Grep/Glob; network_access=none; write_access=none; secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "PROJECT_OVERLAY_ONLY",
+      "classification_note": "Local-authored, but scoped specifically to the example project overlay -- not a general HarnessKit capability. Per _rule_links_not_duplicate: summary + link only.",
+      "type": "skill",
+      "family": "review",
+      "source": "local-authored",
+      "links_to_skill_registry": "skill-registry.json#project-plan-review"
+    },
+    {
+      "capability_id": "langgraph-plan-review",
+      "user_surface": "langgraph-plan-review",
+      "implementation": "skills/langgraph-plan-review",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "eval skill-langgraph-plan-review 13/13",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=trusted-local, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=Read/Grep/Glob; network_access=none; write_access=none; secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "PROJECT_OVERLAY_ONLY",
+      "classification_note": "Local-authored, scoped to LangGraph-boundary review for a specific project track -- not a general HarnessKit capability. Per _rule_links_not_duplicate: summary + link only.",
+      "type": "skill",
+      "family": "review",
+      "source": "local-authored",
+      "links_to_skill_registry": "skill-registry.json#langgraph-plan-review"
+    },
+    {
+      "capability_id": "repo-forensics",
+      "user_surface": "repo-forensics (supply-chain scanner)",
+      "implementation": "~/.claude/skills/repo-forensics",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "scan a known fixture; self-scan before registering",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=loaded; NOT yet in skill-registry, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=Bash Read Glob Grep (read-only scan); network_access=none; write_access=scoped (scan report); secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [
+        "third-party skill — recommend self-scan + skill-registry registration before formal gate use"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Present, actively used security-scan skill (this very session loaded it for the security-review skill list). NOT yet in skill-registry per its own scan_status note -- carried forward unchanged.",
+      "type": "skill",
+      "family": "tool",
+      "source": "third-party",
+      "links_to_skill_registry": "PENDING (register two-hash)"
+    },
+    {
+      "capability_id": "project-source-audit",
+      "user_surface": "project-source-audit",
+      "implementation": "~/.claude/skills/project-source-audit",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "audit a fixture component; assert verdict schema",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=loaded; NOT yet in skill-registry, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=read-only audit; network_access=none; write_access=scoped (sanitized repair plan only; LOCAL-ONLY, never commit to a downstream project); secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [
+        "governance-sensitive (freeze-aware: outputs are proposal-only)",
+        "NOT yet in skill-registry"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "PROJECT_OVERLAY_ONLY",
+      "classification_note": "Explicitly project-scoped (governance-sensitive, outputs proposal-only, LOCAL-ONLY never-commit-to-the-project per its own known_risks) -- not a general HarnessKit capability.",
+      "type": "skill",
+      "family": "review",
+      "source": "local-authored",
+      "links_to_skill_registry": "PENDING (register trusted-local)"
+    },
+    {
+      "capability_id": "hebrew-seo-geo-toolkit",
+      "user_surface": "hebrew-seo-geo-toolkit",
+      "implementation": "~/.claude/skills/hebrew-seo-geo-toolkit",
+      "status": "quarantined",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "deferred (network) — forensics first",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=unscanned (run repo-forensics before any trust), last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=network-dependent (keyword analysis/audits); network_access=yes; write_access=scoped; secret_access=gated; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "network egress",
+        "unverified third-party provenance",
+        "domain/product tool — NOT a harness gate"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "QUARANTINE",
+      "classification_note": "selectable:false, network egress, unverified third-party provenance, explicit \"run repo-forensics before any trust\" -- present but blocked pending scan, the definition of quarantined.",
+      "type": "skill",
+      "family": "tool",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "notebooklm",
+      "user_surface": "notebooklm (Google NotebookLM API)",
+      "implementation": "~/.claude/skills/notebooklm",
+      "status": "quarantined",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "deferred (network+ext pkg) — forensics first",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=unscanned (run repo-forensics before any trust), last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=network + external python pkg; network_access=yes; write_access=scoped; secret_access=gated; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "network egress",
+        "external pkg dependency",
+        "unverified provenance — NOT a harness gate"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "QUARANTINE",
+      "classification_note": "selectable:false, network + external pkg dependency, unverified provenance, same \"forensics before any trust\" gate as hebrew-seo-geo-toolkit.",
+      "type": "skill",
+      "family": "tool",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "timeless-api",
+      "user_surface": "timeless-api (meetings/transcripts)",
+      "implementation": "~/.claude/skills/timeless-api",
+      "status": "quarantined",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "deferred (network+secret) — forensics first",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=unscanned (run repo-forensics before any trust), last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=network + env secret (openclaw requires.env); network_access=yes; write_access=scoped; secret_access=yes (env-required); mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "network egress",
+        "requires env SECRET",
+        "unverified provenance — NOT a harness gate"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "QUARANTINE",
+      "classification_note": "selectable:false, network + env SECRET required, unverified provenance -- highest-risk of the three unscanned domain skills, quarantined pending forensics.",
+      "type": "skill",
+      "family": "tool",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "superpowers",
+      "user_surface": "Superpowers discipline plugin",
+      "implementation": "~/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0",
+      "status": "partial",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "post-ENABLE: confirm gate actually fires (no silent no-op)",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=unscanned (run repo-forensics on 5.1.0 before enable), last_verified=2026-06-14). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=per-skill (when enabled); network_access=gated; write_access=scoped; secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [
+        "CACHED on disk (5.1.0, .in_use locks) but NOT in settings.enabledPlugins → gates referencing it are a LATENT no-op until enabled",
+        "ships .git/hooks/install scripts → forensics required before enable"
+      ],
+      "last_verified_at": "2026-06-14",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADAPT_BEHIND_HARNESSKIT_INTERFACE",
+      "classification_note": "Forensics CLEAN per its own _role note, but explicitly positioned as an additive discipline layer \"additive to CE, NOT a replacement\" -- the intended integration is adapted behind HarnessKit's own write-gates (config/global-policy.json A2 workflow-scoped enforcement), not raw/direct use.",
+      "type": "plugin",
+      "family": "tool",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "frontend-design-plugin",
+      "user_surface": "frontend-design plugin",
+      "implementation": "~/.claude/plugins/cache/claude-plugins-official/frontend-design",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "invoke on fixture",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=official plugin (unscanned formally), last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=per-skill; network_access=gated; write_access=scoped; secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "not a core write-gate; UI/product use"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Present, enabled, official plugin, UI/design use only -- not a core write-gate but a real adopted capability.",
+      "type": "plugin",
+      "family": "tool",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "mcp-generic",
+      "user_surface": "MCP servers (harnesskit runtime)",
+      "implementation": "n/a",
+      "status": "deferred",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "n/a",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=UNKNOWN, scan_status=unscanned, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=n/a; network_access=yes; write_access=null; secret_access=null; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "supply-chain",
+        "prompt-injection",
+        "excessive-perms"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "DEFER",
+      "classification_note": "installed_status UNKNOWN, selectable:false, no fallback defined beyond \"Skills preferred over MCP\" -- a real decision (which MCP servers, if any) is deferred, not rejected outright.",
+      "type": "mcp",
+      "family": "tool",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "mimo-runtime",
+      "user_surface": "MiMo-Code CLI + MiMo-V2.5 + DeepSeek/Kimi/GLM connectors",
+      "implementation": "https://github.com/XiaomiMiMo/MiMo-Code",
+      "status": "rejected",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [],
+      "required_tools": [],
+      "tests": "n/a",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=REJECTED, scan_status=external-reference-only (not installed/scanned), last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=none; network_access=none; write_access=none; secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [
+        "curl|bash install",
+        "data-egress to CN providers",
+        "auto-git",
+        "auto-memory-mutation",
+        "USE_RESTRICTIONS license"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "REJECT",
+      "classification_note": "installed_status REJECTED explicitly -- curl|bash install, CN data-egress, auto-git, auto-memory-mutation, USE_RESTRICTIONS license. Never installed; source-intelligence only.",
+      "type": "model",
+      "family": "agent",
+      "source": "third-party",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "gbrain",
+      "user_surface": "GBrain memory/retrieval",
+      "implementation": "scripts/gbrain-query-memory.js",
+      "status": "quarantined",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "n/a",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=DISABLED, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=read-only (evidence-candidate-only); network_access=none; write_access=none; secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [
+        "never authority per gbrain-import-policy"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "QUARANTINE",
+      "classification_note": "installed_status DISABLED, read-only evidence-candidate-only, explicit \"never authority\" -- built but deliberately blocked pending a memory-role decision (P7a), the definition of quarantined rather than rejected (it is not being thrown away, just held).",
+      "type": "memory_index",
+      "family": "memory",
+      "source": "local-authored",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "memory_store",
+      "user_surface": "HarnessKit memory store",
+      "implementation": "memory/ + ~/.claude/projects/.../memory/MEMORY.md",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "poisoning eval",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=gated write; network_access=none; write_access=scoped; secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "poisoning"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Builtin, present, core to HarnessKit's own run/memory model.",
+      "type": "memory_store",
+      "family": "memory",
+      "source": "builtin",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "memory_index",
+      "user_surface": "Learnings index + search",
+      "implementation": "memory/learnings-index.json + scripts/search-memory.js",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "recall-accuracy (next batch)",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PARTIAL, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=read-only; network_access=none; write_access=scoped; secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "stale index"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "PARTIAL but its read-only recall subset is usable now -- selectable per the registry's own _selectable_note.",
+      "type": "memory_index",
+      "family": "memory",
+      "source": "builtin",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "stop_judge",
+      "user_surface": "/goal stop-hook condition judge",
+      "implementation": "session Stop hook (/goal) + hooks/stop_next_action_gate.js (advisory)",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "stop-correctness eval (next batch)",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PRESENT, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=evaluate-only; network_access=none; write_access=none; secret_access=none; mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [
+        "false-stop / stuck-loop (observed: unsatisfiable goal)"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "Builtin, present, evaluate-only lifecycle gate.",
+      "type": "stop_judge",
+      "family": "lifecycle",
+      "source": "builtin",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "task_tracker",
+      "user_surface": "Task tracker (run states + Task tools)",
+      "implementation": "runs/<id>/run.json states + TaskCreate/TaskUpdate",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "task-state eval (next batch)",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PARTIAL, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=scoped; network_access=none; write_access=run-folder; secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "no hierarchical T1/T1.1 tree yet"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "PARTIAL but flat run-state tracking is usable now -- selectable per the registry's own _selectable_note.",
+      "type": "task_tracker",
+      "family": "lifecycle",
+      "source": "builtin",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "memory_injector",
+      "user_surface": "Context-pack budgeted injector",
+      "implementation": "scripts/build-context-pack.js + router/select-context.js + config/context-policy.json",
+      "status": "experimental",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "context-quality eval (exists)",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PARTIAL, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=read-only assemble; network_access=none; write_access=run-folder; secret_access=none (redacted); mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [
+        "budget blowout / omission"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "ADOPT_AS_IS",
+      "classification_note": "PARTIAL but read-only context-pack assembly is usable now -- selectable per the registry's own _selectable_note.",
+      "type": "memory_injector",
+      "family": "context",
+      "source": "builtin",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "task_progress_logger",
+      "user_surface": "Per-task progress log",
+      "implementation": "runs/<id>/tasks/<id>/progress.md (CONVENTION, not built — MiMo-style, D2)",
+      "status": "deferred",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "completeness (next batch)",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PLANNED, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=scoped; network_access=none; write_access=run-folder; secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "noise"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "DEFER",
+      "classification_note": "installed_status PLANNED -- a convention (MiMo-style, D2), not yet built. Deferred to that later batch.",
+      "type": "task_progress_logger",
+      "family": "lifecycle",
+      "source": "builtin",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "checkpoint_writer",
+      "user_surface": "Auto checkpoint writer",
+      "implementation": "runs/<id>/checkpoint.md (CONVENTION, not built — MiMo-style, D2/D3)",
+      "status": "deferred",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "restore-fidelity (when built)",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PLANNED, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=scoped; network_access=none; write_access=run-folder; secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "over-write churn"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "DEFER",
+      "classification_note": "installed_status PLANNED (D2/D3) -- not yet built. Deferred.",
+      "type": "checkpoint_writer",
+      "family": "lifecycle",
+      "source": "builtin",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "context_reconstructor",
+      "user_surface": "Context reconstructor (on context pressure)",
+      "implementation": "PLANNED (MiMo-style rebuild from checkpoint+memory+task+recent; D3)",
+      "status": "deferred",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "reconstruction-fidelity (when built)",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PLANNED, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=read-only assemble; network_access=none; write_access=run-folder; secret_access=none (redacted); mutation_policy=read_only",
+      "public_or_private": "public",
+      "known_limitations": [
+        "wrong rebuild -> drift"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "DEFER",
+      "classification_note": "installed_status PLANNED (D3) -- not yet built. Deferred.",
+      "type": "context_reconstructor",
+      "family": "context",
+      "source": "builtin",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "dreamer",
+      "user_surface": "Dreamer (offline lesson candidate gen)",
+      "implementation": "PLANNED (LEARN-0; MiMo /dream analog)",
+      "status": "deferred",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "learning-promotion eval (no behavior-change fixture -> NOT promoted)",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PLANNED, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=read-only propose; network_access=none; write_access=run-folder (candidates only); secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "poisoning",
+        "hallucination",
+        "auto-apply (FORBIDDEN)"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "DEFER",
+      "classification_note": "installed_status PLANNED (LEARN-0) -- not yet built. Deferred, and explicitly \"Dreaming never auto-applies\" regardless.",
+      "type": "dreamer",
+      "family": "memory",
+      "source": "builtin",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "distiller",
+      "user_surface": "Distiller (validated lesson -> artifact)",
+      "implementation": "PLANNED (LEARN-0; MiMo /distill analog)",
+      "status": "deferred",
+      "supported_stacks": [
+        "any"
+      ],
+      "runtime_adapters": [
+        "claude-code"
+      ],
+      "required_tools": [],
+      "tests": "behavior-change fixture required",
+      "real_run_evidence": "Carried forward from config/capability-registry.json (installed_status=PLANNED, scan_status=n/a, last_verified=2026-06-13). Not independently re-verified by this validator this pass.",
+      "security_boundary": "permissions=gated write (post-promotion); network_access=none; write_access=scoped (eval/routing/policy/capability/memory); secret_access=none; mutation_policy=gated",
+      "public_or_private": "public",
+      "known_limitations": [
+        "over-generalization",
+        "auto-apply (FORBIDDEN)"
+      ],
+      "last_verified_at": "2026-06-13",
+      "source_registry": "config/capability-registry.json",
+      "classification": "DEFER",
+      "classification_note": "installed_status PLANNED (LEARN-0) -- not yet built. Deferred, gated behind a promotion decision even once built.",
+      "type": "distiller",
+      "family": "memory",
+      "source": "builtin",
+      "links_to_skill_registry": null
+    },
+    {
+      "capability_id": "outsourcerer",
+      "user_surface": "n/a -- not installed; design reference only (alexgreensh/outsourcerer)",
+      "implementation": "n/a -- no code adopted; clean-room design reference only",
+      "status": "deferred",
+      "supported_stacks": [],
+      "runtime_adapters": [],
+      "required_tools": [],
+      "tests": "n/a -- reference-only, no HarnessKit code to test",
+      "real_run_evidence": "none -- per the owner's explicit instruction, no outsourcerer code was cloned, read, or executed; this entry documents public README/metadata research only, fetched live via `gh repo view alexgreensh/outsourcerer` (see evidence/OUTSOURCERER_RESEARCH.md)",
+      "security_boundary": "n/a -- not installed, no execution surface. AGPL-3.0-only license is itself a reason to never incorporate its source directly into HarnessKit (not itself AGPL-licensed), independent of the Windows question.",
+      "public_or_private": "public",
+      "known_limitations": [
+        "bash-native reference implementation (\"a self-contained bash script\" per its own README) -- no Windows-native path documented or implied anywhere in it",
+        "no Windows proof exists yet for any of the referenced design patterns",
+        "must not be installed as a required dependency",
+        "must not make Bash or WSL mandatory in any HarnessKit clean-room implementation inspired by it",
+        "AGPL-3.0-only source must never be copied/ported into HarnessKit"
+      ],
+      "last_verified_at": "2026-07-11",
+      "source_registry": "new (evidence/OUTSOURCERER_RESEARCH.md)",
+      "classification": "USE_AS_REFERENCE",
+      "classification_note": "Real, proven design patterns worth learning from directly; the bash implementation itself is not assumed to work on this project's Windows-first target without its own proof, and AGPL-3.0 copyleft is a separate, independent reason never to copy its source.",
+      "runtime_adoption": "DEFERRED_PENDING_WINDOWS_PROOF",
+      "license": "AGPL-3.0-only",
+      "implementation_approach": "clean-room, Windows-first, host-neutral",
+      "reference_design_areas": [
+        "multi-host/model routing",
+        "fanout",
+        "advisor panels and consensus",
+        "watchdog/status/cancel/result",
+        "worktree isolation",
+        "cost and subscription-quota receipts",
+        "skills/MCP portability",
+        "fallback lanes",
+        "local/private models"
+      ],
+      "notes": "Per the owner's explicit instruction (see evidence/OUTSOURCERER_RESEARCH.md, this same evidence batch). Do NOT copy AGPL-licensed implementation code into HarnessKit. Do NOT install outsourcerer as a required dependency. Do NOT make Bash or WSL mandatory in any HarnessKit design inspired by these patterns -- a Node.js/cross-platform, Windows-first equivalent is required. Primary intended consumer of these reference patterns: lane hk/p8c-agent-dispatch (Codex routing / agent dispatch), scheduled after Host Contract + Codex routing merge per WORKTREE_FILE_OWNERSHIP_MATRIX.md.",
+      "type": "reference",
+      "family": "agent",
+      "source": "third-party (reference only, not installed)",
+      "links_to_skill_registry": null
+    }
+  ],
+  "_target_architecture": "CE primary (workflow/gates) + Superpowers discipline layer + Codex phased engineering agent (review/simplify/security/implementation under phased permissions). The three cross-check each other; HarnessKit/Claude remains sole committer."
+}

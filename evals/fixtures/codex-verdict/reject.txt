@@ -1,0 +1,8 @@
+Adversarial review of the plan surfaced two blocking issues.
+
+The migration has no rollback path, and the new query adds no index on the
+high-frequency search field. Both must be fixed before implementation.
+
+VERDICT: REJECT
+- Missing rollback for the destructive migration.
+- No index on the new high-frequency query field.

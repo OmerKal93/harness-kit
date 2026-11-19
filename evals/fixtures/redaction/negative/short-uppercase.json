@@ -1,0 +1,7 @@
+{
+  "category": "redaction",
+  "id": "short-uppercase",
+  "label": "negative",
+  "input": "MEETING AT NOON",
+  "expected": { "unchanged": true }
+}

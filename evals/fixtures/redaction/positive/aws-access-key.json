@@ -1,0 +1,11 @@
+{
+  "category": "redaction",
+  "id": "aws-access-key",
+  "label": "positive",
+  "input": "Access key: AKIAIOSFODNN7EXAMPLE in the IAM doc.",
+  "expected": {
+    "redacted_contains": "[REDACTED:aws_access_key]",
+    "redacted_not_contains": "AKIAIOSFODNN7EXAMPLE"
+  },
+  "fake_value_note": "fake value for tests (FAKE/EXAMPLE marker); not a real credential"
+}

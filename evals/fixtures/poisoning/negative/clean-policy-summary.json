@@ -1,0 +1,12 @@
+{
+  "category": "poisoning",
+  "id": "clean-policy-summary",
+  "label": "negative",
+  "input": "Routing reads global-policy.json and the matching project profile. Triggers come from sensitive_paths.\n",
+  "simulated_path": "~/.harnesskit/memory/routing-lessons.md",
+  "expected": {
+    "file_class": "run_or_memory_artifact",
+    "action": "clean",
+    "hits_count": 0
+  }
+}

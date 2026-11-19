@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "global-policy.schema.json",
+  "title": "HarnessKit global policy",
+  "description": "Schema for config/global-policy.json -- the single per-HARNESS_ROOT file describing harness-wide behavior (workflow engine choice, agent routing, discipline gates, state machine, run lifecycle tuning, approval triggers). This is the 'user/machine' config layer: one file per HARNESS_ROOT, not per project. Validated by scripts/validate-config.js. additionalProperties is true throughout because this file is an evolving policy surface -- this schema pins the shape of fields that exist today without freezing the file against legitimate future additions.",
+  "type": "object",
+  "required": ["schema_version"],
+  "properties": {
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "default_workflow_engine": { "type": "string", "minLength": 1 },
+    "default_discipline_gates": { "type": "string", "minLength": 1 },
+    "superpowers_enabled": { "type": "boolean" },
+    "agent_routing": {
+      "type": "object",
+      "properties": {
+        "always_on": { "type": "array", "items": { "type": "string" } },
+        "on_trigger": {
+          "type": "object",
+          "additionalProperties": { "type": "array", "items": { "type": "string" } }
+        },
+        "phase_gates": { "type": "object" },
+        "active_phase": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "discipline_gates": {
+      "type": "object",
+      "properties": {
+        "superpowers_skills_active": { "type": "array", "items": { "type": "string" } },
+        "superpowers_skills_demoted": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "state_machine": {
+      "type": "object",
+      "properties": {
+        "states": { "type": "array", "items": { "type": "string" } },
+        "hard_states_require_artifact": { "type": "object", "additionalProperties": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "run_lifecycle": {
+      "type": "object",
+      "description": "Advisory tuning for scripts/_lib.js#runLifecyclePolicy. On read failure or malformed content the hardcoded RUN_LIFECYCLE_FALLBACK applies; the effective inactive_states set is always the UNION of the hardcoded set and this list -- this schema cannot express that union invariant, it only pins field shape.",
+      "properties": {
+        "ttl_hours": { "type": "number", "exclusiveMinimum": 0 },
+        "inactive_states": { "type": "array", "items": { "type": "string" } },
+        "pointer_file": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "approval_required_when": { "type": "array", "items": { "type": "string" } },
+    "classifier_confidence_threshold_for_approval": { "type": "number", "minimum": 0, "maximum": 1 },
+    "task_type_to_workflow": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["primary", "gates"],
+        "properties": {
+          "primary": { "type": ["string", "null"] },
+          "execution": { "type": ["string", "null"] },
+          "gates": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

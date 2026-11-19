@@ -1,0 +1,12 @@
+{
+  "category": "redaction",
+  "id": "google-api-key",
+  "label": "positive",
+  "input": "Use Google API key AIzaFAKE-EXAMPLE-NOT-A-REAL-KEY-000000 for the maps call.",
+  "expected": {
+    "redacted_contains": "[REDACTED:google_api_key]",
+    "redacted_not_contains": "AIzaFAKE-EXAMPLE-NOT-A-REAL-KEY-000000"
+  },
+  "notes": "Avoid UPPER=value form so dotenv_assign does not overwrite the specific google_api_key placeholder.",
+  "fake_value_note": "fake value for tests (FAKE/EXAMPLE marker); not a real credential"
+}

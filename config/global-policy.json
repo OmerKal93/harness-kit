@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "default_workflow_engine": "compound",
+  "default_discipline_gates": "compound",
+  "superpowers_enabled": false,
+  "agent_routing": {
+    "always_on": [
+      "ce-correctness-reviewer",
+      "ce-scope-guardian-reviewer",
+      "ce-project-standards-reviewer"
+    ],
+    "on_trigger": {
+      "prisma":                    ["ce-data-migration-reviewer", "ce-data-integrity-guardian"],
+      "auth_hmac_session":         ["ce-security-reviewer", "ce-security-sentinel"],
+      "legacy_service":            ["ce-security-reviewer"],
+      "audit_tool_docs":      ["ce-architecture-strategist", "ce-adversarial-reviewer"],
+      "outreach_pipeline":               ["ce-scope-guardian-reviewer"],
+      "env_secrets":               ["ce-security-sentinel"],
+      "wiki_handbook_docs":        ["ce-adversarial-document-reviewer"],
+      "new_skill_or_agent_proposed": ["ce-learnings-researcher"]
+    },
+    "phase_gates": {
+      "phase_1_now": {
+        "active": [
+          "ce-correctness-reviewer", "ce-scope-guardian-reviewer", "ce-project-standards-reviewer",
+          "ce-data-migration-reviewer", "ce-data-integrity-guardian",
+          "ce-security-reviewer", "ce-security-sentinel",
+          "ce-adversarial-reviewer", "ce-architecture-strategist", "ce-learnings-researcher"
+        ]
+      },
+      "phase_2_before_first_client": {
+        "active_additions": [
+          "ce-testing-reviewer", "ce-api-contract-reviewer", "ce-deployment-verification-agent",
+          "ce-coherence-reviewer", "ce-spec-flow-analyzer",
+          "ce-design-implementation-reviewer", "ce-design-lens-reviewer", "ce-product-lens-reviewer"
+        ]
+      },
+      "phase_3_after_first_client": {
+        "active_additions": [
+          "ce-performance-oracle", "ce-performance-reviewer",
+          "ce-session-historian", "ce-pr-comment-resolver", "ce-previous-comments-reviewer",
+          "ce-issue-intelligence-analyst", "ce-reliability-reviewer", "ce-maintainability-reviewer",
+          "ce-feasibility-reviewer", "ce-design-iterator", "ce-figma-design-sync",
+          "ce-pattern-recognition-specialist", "ce-git-history-analyzer"
+        ]
+      },
+      "permanently_skipped": [
+        "ce-swift-ios-reviewer", "ce-julik-frontend-races-reviewer",
+        "ce-slack-researcher", "ce-ankane-readme-writer",
+        "ce-web-researcher", "ce-framework-docs-researcher", "ce-repo-research-analyst"
+      ]
+    },
+    "active_phase": "phase_1_now"
+  },
+  "discipline_gates": {
+    "superpowers_skills_active": [
+      "using-superpowers",
+      "verification-before-completion",
+      "test-driven-development",
+      "systematic-debugging",
+      "subagent-driven-development"
+    ],
+    "superpowers_skills_demoted": [
+      "brainstorming",
+      "writing-plans",
+      "executing-plans",
+      "requesting-code-review",
+      "receiving-code-review",
+      "using-git-worktrees",
+      "finishing-a-development-branch",
+      "dispatching-parallel-agents",
+      "writing-skills"
+    ]
+  },
+  "state_machine": {
+    "states": [
+      "INTAKE", "CONTEXT_GATHERING", "ROUTING",
+      "PLANNING_OR_DEBUGGING", "EXECUTION", "REVIEW", "VERIFICATION", "LEARNING",
+      "DONE", "BLOCKED", "NEEDS_USER", "SUSPEND", "EXPIRED"
+    ],
+    "hard_states_require_artifact": {
+      "PLANNING_OR_DEBUGGING": "plan.md",
+      "REVIEW":                "review.md",
+      "VERIFICATION":          "verification.md",
+      "LEARNING":              "learning.md",
+      "DONE":                  "next-action.md",
+      "BLOCKED":               "next-action.md",
+      "NEEDS_USER":            "next-action.md",
+      "EXPIRED":               "next-action.md"
+    }
+  },
+  "run_lifecycle": {
+    "_note": "Advisory tuning for scripts/_lib.js#runLifecyclePolicy. On read failure or malformed content the hardcoded fallback applies; the effective inactive set is always the UNION of the hardcoded set and this list (config can widen, never narrow).",
+    "ttl_hours": 24,
+    "inactive_states": ["DONE", "BLOCKED", "NEEDS_USER", "EXPIRED"],
+    "pointer_file": "runs/.current-run"
+  },
+  "approval_required_when": [
+    "destructive_command_detected",
+    "force_push",
+    "reset_hard",
+    "delete",
+    "prisma_migration",
+    "auth_secret_hmac_hkdf_change",
+    "production_or_client_impact",
+    "scope_expansion_more_than_5_files_outside_named_scope",
+    "ambiguous_product_decision",
+    "high_cost_long_running_action",
+    "conflicting_sources_of_truth"
+  ],
+  "classifier_confidence_threshold_for_approval": 0.55,
+  "task_type_to_workflow": {
+    "code-feature":  { "primary": "/ce-plan",    "execution": "/ce-work",  "gates": ["verification-before-completion"] },
+    "code-bug":      { "primary": "/ce-debug",   "execution": "/ce-work",  "gates": ["systematic-debugging", "verification-before-completion"] },
+    "strategy":      { "primary": "/ce-strategy", "execution": null,        "gates": [] },
+    "ideate":        { "primary": "/ce-ideate",  "execution": null,        "gates": [] },
+    "brainstorm":    { "primary": "/ce-brainstorm", "execution": null,     "gates": [] },
+    "docs":          { "primary": "/ce-plan",    "execution": "/ce-work",  "gates": [] },
+    "doc-review":    { "primary": "/ce-doc-review", "execution": null,     "gates": [] },
+    "review":        { "primary": "/ce-code-review", "execution": null,    "gates": ["verification-before-completion"] },
+    "memory-capture":{ "primary": "/ce-compound", "execution": null,       "gates": [] },
+    "memory-refresh":{ "primary": "/ce-compound-refresh", "execution": null, "gates": [] },
+    "session-recover":{ "primary": "/ce-sessions", "execution": null,      "gates": [] },
+    "browser-qa":    { "primary": "/ce-test-browser", "execution": null,   "gates": [] },
+    "polish":        { "primary": "/ce-polish-beta", "execution": null,    "gates": [] },
+    "dogfood":       { "primary": "/ce-dogfood-beta", "execution": null,   "gates": [] },
+    "optimize":      { "primary": "/ce-optimize", "execution": null,       "gates": [] },
+    "ops":           { "primary": "/ce-plan",    "execution": "/ce-work",  "gates": [] },
+    "learning":      { "primary": "/ce-compound", "execution": null,       "gates": [] },
+    "unknown":       { "primary": "/ce-brainstorm", "execution": null,     "gates": [] }
+  }
+}

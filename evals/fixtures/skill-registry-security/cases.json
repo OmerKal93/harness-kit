@@ -1,0 +1,547 @@
+{
+  "schema_version": 1,
+  "category": "skill-registry-security",
+  "description": "Deterministic fixtures for validate-skill-registration.js. Each case is a synthetic {skill_stub, record} pair. Hashes are NEVER hand-typed: hash_mode=computed derives both hashes from the stub files at eval time; corrupt-runtime / corrupt-validation deliberately break exactly one domain. Expected violation sets are asserted as exact matches.",
+  "fixtures": [
+    {
+      "id": "trusted-local-clean",
+      "label": "positive",
+      "hash_mode": "computed",
+      "skill_stub": {
+        "files": {
+          "SKILL.md": "---\nid: fx-skill\nname: Fixture Skill\nversion: 0.1.0\ndescription: Synthetic fixture skill for registry security eval.\ncategory: review\nstatus: experimental\nowner: owner\nsource_of_truth: this file\nallowed_tools: [Read, Grep]\nforbidden_tools: [Edit, Write, Bash]\nrisk_level: low\nrequires_approval: false\nimplicit_invocation_allowed: false\nevidence_required: true\nrollback: delete the skill dir\ndeprecation_policy: supersede-by-id\nlast_reviewed_at: 2026-06-04\nsecurity:\n  trust_level: trusted-local\n  file_write_scope: none\n  network_permission: none\n  secret_handling: none\n  external_content_handling: not-applicable\n  prompt_injection_exposure: none\n  required_evals: [task-success]\n  required_human_approval_conditions: []\n---\n\n# Fixture Skill\n",
+          "resolver.json": "{\"id\":\"fx-skill\",\"invocation\":{\"explicit\":[\"/fx-skill\"],\"implicit_allowed\":false},\"trigger_phrases\":[\"fixture trigger\"],\"negative_triggers\":[],\"risk_triggers\":[],\"required_context\":[],\"confidence_threshold\":0.6,\"fallback\":\"escalate to NEEDS_USER\",\"max_registry_flat\":25}",
+          "scripts/helper.js": "'use strict';\nmodule.exports = { run: () => ({ ok: true }) };\n",
+          "tests/helper.test.js": "'use strict';\nconst h = require('../scripts/helper.js');\nif (!h.run().ok) process.exit(1);\n",
+          "evals/cases.json": "{\"fixtures\":[{\"id\":\"illustrative-1\"}]}"
+        }
+      },
+      "record": {
+        "id": "fx-skill",
+        "version": "0.1.0",
+        "origin": "local-authored",
+        "author_source": "owner",
+        "runtime_hash": "computed-at-eval-time",
+        "validation_hash": "computed-at-eval-time",
+        "readme_excluded_from_runtime_hash": false,
+        "reviewed_by": "owner",
+        "reviewed_at": "2026-06-04",
+        "trust_level": "trusted-local",
+        "enable_state": "enabled",
+        "attested_surface": {
+          "allowed_tools": ["Read", "Grep"],
+          "forbidden_tools": ["Edit", "Write", "Bash"],
+          "file_write_scope": "none",
+          "network_permission": "none",
+          "secret_handling": "none",
+          "external_content_handling": "not-applicable",
+          "prompt_injection_exposure": "none",
+          "required_evals": ["task-success"]
+        },
+        "helper_present": true,
+        "helper_reviewed": true,
+        "eval_status": "pass",
+        "resolver_status": "valid",
+        "last_run": null,
+        "incidents": [],
+        "rollback": "delete the skill dir",
+        "deprecation_status": "active"
+      },
+      "expected_ok": true,
+      "expected_violations": []
+    },
+    {
+      "id": "runtime-hash-mismatch",
+      "label": "positive",
+      "hash_mode": "corrupt-runtime",
+      "skill_stub": {
+        "files": {
+          "SKILL.md": "---\nid: fx-skill\nname: Fixture Skill\nversion: 0.1.0\ndescription: Synthetic fixture skill for registry security eval.\ncategory: review\nstatus: experimental\nowner: owner\nsource_of_truth: this file\nallowed_tools: [Read, Grep]\nforbidden_tools: [Edit, Write, Bash]\nrisk_level: low\nrequires_approval: false\nimplicit_invocation_allowed: false\nevidence_required: true\nrollback: delete the skill dir\ndeprecation_policy: supersede-by-id\nlast_reviewed_at: 2026-06-04\nsecurity:\n  trust_level: trusted-local\n  file_write_scope: none\n  network_permission: none\n  secret_handling: none\n  external_content_handling: not-applicable\n  prompt_injection_exposure: none\n  required_evals: [task-success]\n  required_human_approval_conditions: []\n---\n\n# Fixture Skill\n",
+          "resolver.json": "{\"id\":\"fx-skill\",\"invocation\":{\"explicit\":[\"/fx-skill\"],\"implicit_allowed\":false},\"trigger_phrases\":[\"fixture trigger\"],\"negative_triggers\":[],\"risk_triggers\":[],\"required_context\":[],\"confidence_threshold\":0.6,\"fallback\":\"escalate to NEEDS_USER\",\"max_registry_flat\":25}",
+          "scripts/helper.js": "'use strict';\nmodule.exports = { run: () => ({ ok: true }) };\n",
+          "tests/helper.test.js": "'use strict';\nconst h = require('../scripts/helper.js');\nif (!h.run().ok) process.exit(1);\n",
+          "evals/cases.json": "{\"fixtures\":[{\"id\":\"illustrative-1\"}]}"
+        }
+      },
+      "record": {
+        "id": "fx-skill",
+        "version": "0.1.0",
+        "origin": "local-authored",
+        "author_source": "owner",
+        "runtime_hash": "computed-at-eval-time",
+        "validation_hash": "computed-at-eval-time",
+        "readme_excluded_from_runtime_hash": false,
+        "reviewed_by": "owner",
+        "reviewed_at": "2026-06-04",
+        "trust_level": "trusted-local",
+        "enable_state": "enabled",
+        "attested_surface": {
+          "allowed_tools": ["Read", "Grep"],
+          "forbidden_tools": ["Edit", "Write", "Bash"],
+          "file_write_scope": "none",
+          "network_permission": "none",
+          "secret_handling": "none",
+          "external_content_handling": "not-applicable",
+          "prompt_injection_exposure": "none",
+          "required_evals": ["task-success"]
+        },
+        "helper_present": true,
+        "helper_reviewed": true,
+        "eval_status": "pass",
+        "resolver_status": "valid",
+        "last_run": null,
+        "incidents": [],
+        "rollback": "delete the skill dir",
+        "deprecation_status": "active"
+      },
+      "expected_ok": false,
+      "expected_violations": ["runtime_hash_mismatch"]
+    },
+    {
+      "id": "validation-hash-mismatch",
+      "label": "positive",
+      "hash_mode": "corrupt-validation",
+      "skill_stub": {
+        "files": {
+          "SKILL.md": "---\nid: fx-skill\nname: Fixture Skill\nversion: 0.1.0\ndescription: Synthetic fixture skill for registry security eval.\ncategory: review\nstatus: experimental\nowner: owner\nsource_of_truth: this file\nallowed_tools: [Read, Grep]\nforbidden_tools: [Edit, Write, Bash]\nrisk_level: low\nrequires_approval: false\nimplicit_invocation_allowed: false\nevidence_required: true\nrollback: delete the skill dir\ndeprecation_policy: supersede-by-id\nlast_reviewed_at: 2026-06-04\nsecurity:\n  trust_level: trusted-local\n  file_write_scope: none\n  network_permission: none\n  secret_handling: none\n  external_content_handling: not-applicable\n  prompt_injection_exposure: none\n  required_evals: [task-success]\n  required_human_approval_conditions: []\n---\n\n# Fixture Skill\n",
+          "resolver.json": "{\"id\":\"fx-skill\",\"invocation\":{\"explicit\":[\"/fx-skill\"],\"implicit_allowed\":false},\"trigger_phrases\":[\"fixture trigger\"],\"negative_triggers\":[],\"risk_triggers\":[],\"required_context\":[],\"confidence_threshold\":0.6,\"fallback\":\"escalate to NEEDS_USER\",\"max_registry_flat\":25}",
+          "scripts/helper.js": "'use strict';\nmodule.exports = { run: () => ({ ok: true }) };\n",
+          "tests/helper.test.js": "'use strict';\nconst h = require('../scripts/helper.js');\nif (!h.run().ok) process.exit(1);\n",
+          "evals/cases.json": "{\"fixtures\":[{\"id\":\"illustrative-1\"}]}"
+        }
+      },
+      "record": {
+        "id": "fx-skill",
+        "version": "0.1.0",
+        "origin": "local-authored",
+        "author_source": "owner",
+        "runtime_hash": "computed-at-eval-time",
+        "validation_hash": "computed-at-eval-time",
+        "readme_excluded_from_runtime_hash": false,
+        "reviewed_by": "owner",
+        "reviewed_at": "2026-06-04",
+        "trust_level": "trusted-local",
+        "enable_state": "enabled",
+        "attested_surface": {
+          "allowed_tools": ["Read", "Grep"],
+          "forbidden_tools": ["Edit", "Write", "Bash"],
+          "file_write_scope": "none",
+          "network_permission": "none",
+          "secret_handling": "none",
+          "external_content_handling": "not-applicable",
+          "prompt_injection_exposure": "none",
+          "required_evals": ["task-success"]
+        },
+        "helper_present": true,
+        "helper_reviewed": true,
+        "eval_status": "pass",
+        "resolver_status": "valid",
+        "last_run": null,
+        "incidents": [],
+        "rollback": "delete the skill dir",
+        "deprecation_status": "active"
+      },
+      "expected_ok": false,
+      "expected_violations": ["validation_hash_mismatch"]
+    },
+    {
+      "id": "imported-auto-enable",
+      "label": "positive",
+      "hash_mode": "computed",
+      "skill_stub": {
+        "files": {
+          "SKILL.md": "---\nid: fx-imported\nname: Imported Fixture Skill\nversion: 0.1.0\ndescription: Synthetic imported skill stub.\ncategory: review\nstatus: experimental\nowner: owner\nsource_of_truth: this file\nallowed_tools: [Read, Grep]\nforbidden_tools: [Edit, Write, Bash]\nrisk_level: low\nrequires_approval: false\nimplicit_invocation_allowed: false\nevidence_required: true\nrollback: delete the skill dir\ndeprecation_policy: supersede-by-id\nlast_reviewed_at: 2026-06-04\nsecurity:\n  trust_level: imported\n  file_write_scope: none\n  network_permission: none\n  secret_handling: none\n  external_content_handling: not-applicable\n  prompt_injection_exposure: none\n  required_evals: [task-success]\n  required_human_approval_conditions: []\n---\n\n# Imported Fixture Skill\n",
+          "resolver.json": "{\"id\":\"fx-imported\",\"invocation\":{\"explicit\":[\"/fx-imported\"],\"implicit_allowed\":false},\"trigger_phrases\":[\"fixture trigger\"],\"negative_triggers\":[],\"risk_triggers\":[],\"required_context\":[],\"confidence_threshold\":0.6,\"fallback\":\"escalate to NEEDS_USER\",\"max_registry_flat\":25}"
+        }
+      },
+      "record": {
+        "id": "fx-imported",
+        "version": "0.1.0",
+        "origin": "imported:github.com/example/fx-imported",
+        "author_source": "third-party",
+        "runtime_hash": "computed-at-eval-time",
+        "validation_hash": "computed-at-eval-time",
+        "readme_excluded_from_runtime_hash": false,
+        "reviewed_by": null,
+        "reviewed_at": null,
+        "trust_level": "imported",
+        "enable_state": "enabled",
+        "attested_surface": {
+          "allowed_tools": ["Read", "Grep"],
+          "forbidden_tools": ["Edit", "Write", "Bash"],
+          "file_write_scope": "none",
+          "network_permission": "none",
+          "secret_handling": "none",
+          "external_content_handling": "not-applicable",
+          "prompt_injection_exposure": "none",
+          "required_evals": ["task-success"]
+        },
+        "helper_present": false,
+        "helper_reviewed": false,
+        "eval_status": "none",
+        "resolver_status": "valid",
+        "last_run": null,
+        "incidents": [],
+        "rollback": "delete the skill dir",
+        "deprecation_status": "active"
+      },
+      "expected_ok": false,
+      "expected_violations": ["auto_enable_forbidden"]
+    },
+    {
+      "id": "generated-auto-enable",
+      "label": "positive",
+      "hash_mode": "computed",
+      "skill_stub": {
+        "files": {
+          "SKILL.md": "---\nid: fx-generated\nname: Generated Fixture Skill\nversion: 0.1.0\ndescription: Synthetic model-generated skill stub.\ncategory: review\nstatus: experimental\nowner: owner\nsource_of_truth: this file\nallowed_tools: [Read, Grep]\nforbidden_tools: [Edit, Write, Bash]\nrisk_level: low\nrequires_approval: false\nimplicit_invocation_allowed: false\nevidence_required: true\nrollback: delete the skill dir\ndeprecation_policy: supersede-by-id\nlast_reviewed_at: 2026-06-04\nsecurity:\n  trust_level: generated\n  file_write_scope: none\n  network_permission: none\n  secret_handling: none\n  external_content_handling: not-applicable\n  prompt_injection_exposure: none\n  required_evals: [task-success]\n  required_human_approval_conditions: []\n---\n\n# Generated Fixture Skill\n",
+          "resolver.json": "{\"id\":\"fx-generated\",\"invocation\":{\"explicit\":[\"/fx-generated\"],\"implicit_allowed\":false},\"trigger_phrases\":[\"fixture trigger\"],\"negative_triggers\":[],\"risk_triggers\":[],\"required_context\":[],\"confidence_threshold\":0.6,\"fallback\":\"escalate to NEEDS_USER\",\"max_registry_flat\":25}"
+        }
+      },
+      "record": {
+        "id": "fx-generated",
+        "version": "0.1.0",
+        "origin": "generated",
+        "author_source": "model",
+        "runtime_hash": "computed-at-eval-time",
+        "validation_hash": "computed-at-eval-time",
+        "readme_excluded_from_runtime_hash": false,
+        "reviewed_by": null,
+        "reviewed_at": null,
+        "trust_level": "generated",
+        "enable_state": "enabled",
+        "attested_surface": {
+          "allowed_tools": ["Read", "Grep"],
+          "forbidden_tools": ["Edit", "Write", "Bash"],
+          "file_write_scope": "none",
+          "network_permission": "none",
+          "secret_handling": "none",
+          "external_content_handling": "not-applicable",
+          "prompt_injection_exposure": "none",
+          "required_evals": ["task-success"]
+        },
+        "helper_present": false,
+        "helper_reviewed": false,
+        "eval_status": "none",
+        "resolver_status": "valid",
+        "last_run": null,
+        "incidents": [],
+        "rollback": "delete the skill dir",
+        "deprecation_status": "active"
+      },
+      "expected_ok": false,
+      "expected_violations": ["auto_enable_forbidden"]
+    },
+    {
+      "id": "quarantined-default",
+      "label": "negative",
+      "hash_mode": "computed",
+      "skill_stub": {
+        "files": {
+          "SKILL.md": "---\nid: fx-imported\nname: Imported Fixture Skill\nversion: 0.1.0\ndescription: Synthetic imported skill stub held in quarantine.\ncategory: review\nstatus: experimental\nowner: owner\nsource_of_truth: this file\nallowed_tools: [Read, Grep]\nforbidden_tools: [Edit, Write, Bash]\nrisk_level: low\nrequires_approval: false\nimplicit_invocation_allowed: false\nevidence_required: true\nrollback: delete the skill dir\ndeprecation_policy: supersede-by-id\nlast_reviewed_at: 2026-06-04\nsecurity:\n  trust_level: imported\n  file_write_scope: none\n  network_permission: none\n  secret_handling: none\n  external_content_handling: not-applicable\n  prompt_injection_exposure: none\n  required_evals: [task-success]\n  required_human_approval_conditions: []\n---\n\n# Imported Fixture Skill\n",
+          "resolver.json": "{\"id\":\"fx-imported\",\"invocation\":{\"explicit\":[\"/fx-imported\"],\"implicit_allowed\":false},\"trigger_phrases\":[\"fixture trigger\"],\"negative_triggers\":[],\"risk_triggers\":[],\"required_context\":[],\"confidence_threshold\":0.6,\"fallback\":\"escalate to NEEDS_USER\",\"max_registry_flat\":25}"
+        }
+      },
+      "record": {
+        "id": "fx-imported",
+        "version": "0.1.0",
+        "origin": "imported:github.com/example/fx-imported",
+        "author_source": "third-party",
+        "runtime_hash": "computed-at-eval-time",
+        "validation_hash": "computed-at-eval-time",
+        "readme_excluded_from_runtime_hash": false,
+        "reviewed_by": null,
+        "reviewed_at": null,
+        "trust_level": "imported",
+        "enable_state": "quarantined",
+        "attested_surface": {
+          "allowed_tools": ["Read", "Grep"],
+          "forbidden_tools": ["Edit", "Write", "Bash"],
+          "file_write_scope": "none",
+          "network_permission": "none",
+          "secret_handling": "none",
+          "external_content_handling": "not-applicable",
+          "prompt_injection_exposure": "none",
+          "required_evals": ["task-success"]
+        },
+        "helper_present": false,
+        "helper_reviewed": false,
+        "eval_status": "none",
+        "resolver_status": "valid",
+        "last_run": null,
+        "incidents": [],
+        "rollback": "delete the skill dir",
+        "deprecation_status": "active"
+      },
+      "expected_ok": true,
+      "expected_violations": []
+    },
+    {
+      "id": "blocked-escape",
+      "label": "positive",
+      "hash_mode": "computed",
+      "skill_stub": {
+        "files": {
+          "SKILL.md": "---\nid: fx-blocked\nname: Blocked Fixture Skill\nversion: 0.1.0\ndescription: Synthetic skill with an open blocked incident.\ncategory: review\nstatus: experimental\nowner: owner\nsource_of_truth: this file\nallowed_tools: [Read, Grep]\nforbidden_tools: [Edit, Write, Bash]\nrisk_level: low\nrequires_approval: false\nimplicit_invocation_allowed: false\nevidence_required: true\nrollback: delete the skill dir\ndeprecation_policy: supersede-by-id\nlast_reviewed_at: 2026-06-04\nsecurity:\n  trust_level: trusted-local\n  file_write_scope: none\n  network_permission: none\n  secret_handling: none\n  external_content_handling: not-applicable\n  prompt_injection_exposure: none\n  required_evals: [task-success]\n  required_human_approval_conditions: []\n---\n\n# Blocked Fixture Skill\n",
+          "resolver.json": "{\"id\":\"fx-blocked\",\"invocation\":{\"explicit\":[\"/fx-blocked\"],\"implicit_allowed\":false},\"trigger_phrases\":[\"fixture trigger\"],\"negative_triggers\":[],\"risk_triggers\":[],\"required_context\":[],\"confidence_threshold\":0.6,\"fallback\":\"escalate to NEEDS_USER\",\"max_registry_flat\":25}"
+        }
+      },
+      "record": {
+        "id": "fx-blocked",
+        "version": "0.1.0",
+        "origin": "local-authored",
+        "author_source": "owner",
+        "runtime_hash": "computed-at-eval-time",
+        "validation_hash": "computed-at-eval-time",
+        "readme_excluded_from_runtime_hash": false,
+        "reviewed_by": "owner",
+        "reviewed_at": "2026-06-04",
+        "trust_level": "trusted-local",
+        "enable_state": "enabled",
+        "attested_surface": {
+          "allowed_tools": ["Read", "Grep"],
+          "forbidden_tools": ["Edit", "Write", "Bash"],
+          "file_write_scope": "none",
+          "network_permission": "none",
+          "secret_handling": "none",
+          "external_content_handling": "not-applicable",
+          "prompt_injection_exposure": "none",
+          "required_evals": ["task-success"]
+        },
+        "helper_present": false,
+        "helper_reviewed": false,
+        "eval_status": "pass",
+        "resolver_status": "valid",
+        "last_run": null,
+        "incidents": [
+          { "at": "2026-06-03T00:00:00Z", "blocked": true, "cleared_at": null, "note": "synthetic security incident — exfil pattern found in helper" }
+        ],
+        "rollback": "delete the skill dir",
+        "deprecation_status": "active"
+      },
+      "expected_ok": false,
+      "expected_violations": ["blocked_escape"]
+    },
+    {
+      "id": "executable-helper-unreviewed",
+      "label": "positive",
+      "hash_mode": "computed",
+      "skill_stub": {
+        "files": {
+          "SKILL.md": "---\nid: fx-helper\nname: Helper Fixture Skill\nversion: 0.1.0\ndescription: Synthetic skill with an unreviewed executable helper.\ncategory: review\nstatus: experimental\nowner: owner\nsource_of_truth: this file\nallowed_tools: [Read, Grep]\nforbidden_tools: [Edit, Write, Bash]\nrisk_level: low\nrequires_approval: false\nimplicit_invocation_allowed: false\nevidence_required: true\nrollback: delete the skill dir\ndeprecation_policy: supersede-by-id\nlast_reviewed_at: 2026-06-04\nsecurity:\n  trust_level: trusted-local\n  file_write_scope: none\n  network_permission: none\n  secret_handling: none\n  external_content_handling: not-applicable\n  prompt_injection_exposure: none\n  required_evals: [task-success]\n  required_human_approval_conditions: []\n---\n\n# Helper Fixture Skill\n",
+          "resolver.json": "{\"id\":\"fx-helper\",\"invocation\":{\"explicit\":[\"/fx-helper\"],\"implicit_allowed\":false},\"trigger_phrases\":[\"fixture trigger\"],\"negative_triggers\":[],\"risk_triggers\":[],\"required_context\":[],\"confidence_threshold\":0.6,\"fallback\":\"escalate to NEEDS_USER\",\"max_registry_flat\":25}",
+          "scripts/helper.js": "'use strict';\nmodule.exports = { run: () => ({ ok: true }) };\n"
+        }
+      },
+      "record": {
+        "id": "fx-helper",
+        "version": "0.1.0",
+        "origin": "local-authored",
+        "author_source": "owner",
+        "runtime_hash": "computed-at-eval-time",
+        "validation_hash": "computed-at-eval-time",
+        "readme_excluded_from_runtime_hash": false,
+        "reviewed_by": "owner",
+        "reviewed_at": "2026-06-04",
+        "trust_level": "trusted-local",
+        "enable_state": "enabled",
+        "attested_surface": {
+          "allowed_tools": ["Read", "Grep"],
+          "forbidden_tools": ["Edit", "Write", "Bash"],
+          "file_write_scope": "none",
+          "network_permission": "none",
+          "secret_handling": "none",
+          "external_content_handling": "not-applicable",
+          "prompt_injection_exposure": "none",
+          "required_evals": ["task-success"]
+        },
+        "helper_present": true,
+        "helper_reviewed": false,
+        "eval_status": "pass",
+        "resolver_status": "valid",
+        "last_run": null,
+        "incidents": [],
+        "rollback": "delete the skill dir",
+        "deprecation_status": "active"
+      },
+      "expected_ok": false,
+      "expected_violations": ["unreviewed_helper_enabled"]
+    },
+    {
+      "id": "network-access-unreviewed",
+      "label": "positive",
+      "hash_mode": "computed",
+      "skill_stub": {
+        "files": {
+          "SKILL.md": "---\nid: fx-network\nname: Network Fixture Skill\nversion: 0.1.0\ndescription: Synthetic skill declaring network access without review.\ncategory: review\nstatus: experimental\nowner: owner\nsource_of_truth: this file\nallowed_tools: [Read, Grep]\nforbidden_tools: [Edit, Write, Bash]\nrisk_level: low\nrequires_approval: false\nimplicit_invocation_allowed: false\nevidence_required: true\nrollback: delete the skill dir\ndeprecation_policy: supersede-by-id\nlast_reviewed_at: 2026-06-04\nsecurity:\n  trust_level: imported\n  file_write_scope: none\n  network_permission: full\n  secret_handling: none\n  external_content_handling: not-applicable\n  prompt_injection_exposure: none\n  required_evals: [task-success]\n  required_human_approval_conditions: []\n---\n\n# Network Fixture Skill\n",
+          "resolver.json": "{\"id\":\"fx-network\",\"invocation\":{\"explicit\":[\"/fx-network\"],\"implicit_allowed\":false},\"trigger_phrases\":[\"fixture trigger\"],\"negative_triggers\":[],\"risk_triggers\":[],\"required_context\":[],\"confidence_threshold\":0.6,\"fallback\":\"escalate to NEEDS_USER\",\"max_registry_flat\":25}"
+        }
+      },
+      "record": {
+        "id": "fx-network",
+        "version": "0.1.0",
+        "origin": "imported:github.com/example/fx-network",
+        "author_source": "third-party",
+        "runtime_hash": "computed-at-eval-time",
+        "validation_hash": "computed-at-eval-time",
+        "readme_excluded_from_runtime_hash": false,
+        "reviewed_by": null,
+        "reviewed_at": null,
+        "trust_level": "imported",
+        "enable_state": "quarantined",
+        "attested_surface": {
+          "allowed_tools": ["Read", "Grep"],
+          "forbidden_tools": ["Edit", "Write", "Bash"],
+          "file_write_scope": "none",
+          "network_permission": "full",
+          "secret_handling": "none",
+          "external_content_handling": "not-applicable",
+          "prompt_injection_exposure": "none",
+          "required_evals": ["task-success"]
+        },
+        "helper_present": false,
+        "helper_reviewed": false,
+        "eval_status": "none",
+        "resolver_status": "valid",
+        "last_run": null,
+        "incidents": [],
+        "rollback": "delete the skill dir",
+        "deprecation_status": "active"
+      },
+      "expected_ok": false,
+      "expected_violations": ["unreviewed_network"]
+    },
+    {
+      "id": "external-content-no-injection-eval",
+      "label": "positive",
+      "hash_mode": "computed",
+      "skill_stub": {
+        "files": {
+          "SKILL.md": "---\nid: fx-external\nname: External Content Fixture Skill\nversion: 0.1.0\ndescription: Synthetic skill reading third-party content without injection eval.\ncategory: ingestion\nstatus: experimental\nowner: owner\nsource_of_truth: this file\nallowed_tools: [Read, Grep]\nforbidden_tools: [Edit, Write, Bash]\nrisk_level: medium\nrequires_approval: false\nimplicit_invocation_allowed: false\nevidence_required: true\nrollback: delete the skill dir\ndeprecation_policy: supersede-by-id\nlast_reviewed_at: 2026-06-04\nsecurity:\n  trust_level: trusted-local\n  file_write_scope: none\n  network_permission: none\n  secret_handling: none\n  external_content_handling: reads-third-party\n  prompt_injection_exposure: reads-untrusted\n  required_evals: [task-success]\n  required_human_approval_conditions: []\n---\n\n# External Content Fixture Skill\n",
+          "resolver.json": "{\"id\":\"fx-external\",\"invocation\":{\"explicit\":[\"/fx-external\"],\"implicit_allowed\":false},\"trigger_phrases\":[\"fixture trigger\"],\"negative_triggers\":[],\"risk_triggers\":[],\"required_context\":[],\"confidence_threshold\":0.6,\"fallback\":\"escalate to NEEDS_USER\",\"max_registry_flat\":25}"
+        }
+      },
+      "record": {
+        "id": "fx-external",
+        "version": "0.1.0",
+        "origin": "local-authored",
+        "author_source": "owner",
+        "runtime_hash": "computed-at-eval-time",
+        "validation_hash": "computed-at-eval-time",
+        "readme_excluded_from_runtime_hash": false,
+        "reviewed_by": "owner",
+        "reviewed_at": "2026-06-04",
+        "trust_level": "trusted-local",
+        "enable_state": "enabled",
+        "attested_surface": {
+          "allowed_tools": ["Read", "Grep"],
+          "forbidden_tools": ["Edit", "Write", "Bash"],
+          "file_write_scope": "none",
+          "network_permission": "none",
+          "secret_handling": "none",
+          "external_content_handling": "reads-third-party",
+          "prompt_injection_exposure": "reads-untrusted",
+          "required_evals": ["task-success"]
+        },
+        "helper_present": false,
+        "helper_reviewed": false,
+        "eval_status": "pass",
+        "resolver_status": "valid",
+        "last_run": null,
+        "incidents": [],
+        "rollback": "delete the skill dir",
+        "deprecation_status": "active"
+      },
+      "expected_ok": false,
+      "expected_violations": ["missing_injection_eval"]
+    },
+    {
+      "id": "malicious-frontmatter",
+      "label": "positive",
+      "hash_mode": "computed",
+      "skill_stub": {
+        "files": {
+          "SKILL.md": "---\nid: fx-malicious\nname: Malicious Fixture Skill\nversion: 0.1.0\ndescription: Synthetic skill whose frontmatter grants tools beyond its declared read-only surface.\ncategory: review\nstatus: experimental\nowner: owner\nsource_of_truth: this file\nallowed_tools: [Read, Grep, Bash, Write]\nforbidden_tools: [Bash, Write, Edit]\nrisk_level: low\nrequires_approval: false\nimplicit_invocation_allowed: false\nevidence_required: true\nrollback: delete the skill dir\ndeprecation_policy: supersede-by-id\nlast_reviewed_at: 2026-06-04\nsecurity:\n  trust_level: trusted-local\n  file_write_scope: none\n  network_permission: none\n  secret_handling: none\n  external_content_handling: not-applicable\n  prompt_injection_exposure: none\n  required_evals: [task-success]\n  required_human_approval_conditions: []\n---\n\n# Malicious Fixture Skill\n",
+          "resolver.json": "{\"id\":\"fx-malicious\",\"invocation\":{\"explicit\":[\"/fx-malicious\"],\"implicit_allowed\":false},\"trigger_phrases\":[\"fixture trigger\"],\"negative_triggers\":[],\"risk_triggers\":[],\"required_context\":[],\"confidence_threshold\":0.6,\"fallback\":\"escalate to NEEDS_USER\",\"max_registry_flat\":25}"
+        }
+      },
+      "record": {
+        "id": "fx-malicious",
+        "version": "0.1.0",
+        "origin": "local-authored",
+        "author_source": "owner",
+        "runtime_hash": "computed-at-eval-time",
+        "validation_hash": "computed-at-eval-time",
+        "readme_excluded_from_runtime_hash": false,
+        "reviewed_by": "owner",
+        "reviewed_at": "2026-06-04",
+        "trust_level": "trusted-local",
+        "enable_state": "quarantined",
+        "attested_surface": {
+          "allowed_tools": ["Read", "Grep"],
+          "forbidden_tools": ["Edit", "Write", "Bash"],
+          "file_write_scope": "none",
+          "network_permission": "none",
+          "secret_handling": "none",
+          "external_content_handling": "not-applicable",
+          "prompt_injection_exposure": "none",
+          "required_evals": ["task-success"]
+        },
+        "helper_present": false,
+        "helper_reviewed": false,
+        "eval_status": "pass",
+        "resolver_status": "valid",
+        "last_run": null,
+        "incidents": [],
+        "rollback": "delete the skill dir",
+        "deprecation_status": "active"
+      },
+      "expected_ok": false,
+      "expected_violations": ["frontmatter_overreach", "tool_contradiction"]
+    },
+    {
+      "id": "resolver-overreach",
+      "label": "positive",
+      "hash_mode": "computed",
+      "skill_stub": {
+        "files": {
+          "SKILL.md": "---\nid: fx-resolver\nname: Resolver Overreach Fixture Skill\nversion: 0.1.0\ndescription: Synthetic security-sensitive skill with match-all implicit resolver.\ncategory: safety\nstatus: experimental\nowner: owner\nsource_of_truth: this file\nallowed_tools: [Read, Grep]\nforbidden_tools: [Edit, Write, Bash]\nrisk_level: security-sensitive\nrequires_approval: true\nimplicit_invocation_allowed: true\nevidence_required: true\nrollback: delete the skill dir\ndeprecation_policy: supersede-by-id\nlast_reviewed_at: 2026-06-04\nsecurity:\n  trust_level: trusted-local\n  file_write_scope: none\n  network_permission: none\n  secret_handling: none\n  external_content_handling: not-applicable\n  prompt_injection_exposure: none\n  required_evals: [task-success]\n  required_human_approval_conditions: []\n---\n\n# Resolver Overreach Fixture Skill\n",
+          "resolver.json": "{\"id\":\"fx-resolver\",\"invocation\":{\"explicit\":[\"/fx-resolver\"],\"implicit_allowed\":true},\"trigger_phrases\":[\"*\"],\"negative_triggers\":[],\"risk_triggers\":[],\"required_context\":[],\"confidence_threshold\":0.1,\"fallback\":\"escalate to NEEDS_USER\",\"max_registry_flat\":25}"
+        }
+      },
+      "record": {
+        "id": "fx-resolver",
+        "version": "0.1.0",
+        "origin": "local-authored",
+        "author_source": "owner",
+        "runtime_hash": "computed-at-eval-time",
+        "validation_hash": "computed-at-eval-time",
+        "readme_excluded_from_runtime_hash": false,
+        "reviewed_by": "owner",
+        "reviewed_at": "2026-06-04",
+        "trust_level": "trusted-local",
+        "enable_state": "quarantined",
+        "attested_surface": {
+          "allowed_tools": ["Read", "Grep"],
+          "forbidden_tools": ["Edit", "Write", "Bash"],
+          "file_write_scope": "none",
+          "network_permission": "none",
+          "secret_handling": "none",
+          "external_content_handling": "not-applicable",
+          "prompt_injection_exposure": "none",
+          "required_evals": ["task-success"]
+        },
+        "helper_present": false,
+        "helper_reviewed": false,
+        "eval_status": "pass",
+        "resolver_status": "valid",
+        "last_run": null,
+        "incidents": [],
+        "rollback": "delete the skill dir",
+        "deprecation_status": "active"
+      },
+      "expected_ok": false,
+      "expected_violations": ["resolver_overreach"]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "description": "Indexed search across all captured learnings. Entries appended by the learn command / LEARNING state of the run command. Bootstrapped empty for a fresh HarnessKit checkout -- zero personal content. See examples/memory/learnings-index.example.json for a populated illustrative example.",
+  "entries": []
+}

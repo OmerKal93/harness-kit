@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "overlay_name": "example-overlay",
+  "core_commit": "5ed56ec5dc4f62aa65fd550a8e213e266d040e4f",
+  "core_repo_url": null,
+  "generated_at": "2026-07-10T17:52:06.778Z",
+  "generator_version": "generate-harnesskit-lock.js@1",
+  "notes": "SYNTHETIC EXAMPLE ONLY -- demonstrates the lock mechanism's shape. Not a real project lock; the real one belongs to the private overlay-side overlay, which HarnessKit's public core does not and cannot write to (standing execution freeze)."
+}

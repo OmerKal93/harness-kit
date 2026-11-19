@@ -1,0 +1,11 @@
+{
+  "category": "redaction",
+  "id": "openai-key-inline",
+  "label": "positive",
+  "input": "openai key=sk-FAKE-EXAMPLE-NOT-A-REAL-KEY-000000",
+  "expected": {
+    "redacted_contains": "[REDACTED:openai_key]",
+    "redacted_not_contains": "sk-FAKE-EXAMPLE-NOT-A-REAL-KEY-000000"
+  },
+  "fake_value_note": "fake value for tests (FAKE/EXAMPLE marker); not a real credential"
+}

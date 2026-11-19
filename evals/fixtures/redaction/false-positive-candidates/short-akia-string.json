@@ -1,0 +1,8 @@
+{
+  "category": "redaction",
+  "id": "short-akia-string",
+  "label": "false-positive-candidate",
+  "input": "Run grep AKIA1234 against the source tree.",
+  "expected": { "unchanged": true },
+  "notes": "aws_access_key requires AKIA + 16 chars. AKIA1234 (4 chars) must not match."
+}

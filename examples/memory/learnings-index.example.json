@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "description": "SYNTHETIC EXAMPLE ONLY -- illustrates memory/learnings-index.json's shape. Indexed search across all captured learnings; entries appended by the learn command / LEARNING state of the run command.",
+  "entries": [
+    {
+      "id": "20260101-000000-example-review-the-uncommitted-config-change",
+      "title": "Learning candidate — run_id 20260101-000000-example-review-the-uncommitted-config-change",
+      "summary": "- request: review the uncommitted config change for safety + correctness",
+      "tags": [
+        "docs",
+        "example_tag"
+      ],
+      "related_files": [
+        "scripts/example-script.js"
+      ],
+      "path": "runs/20260101-000000-example-review-the-uncommitted-config-change/learning.md",
+      "created": "2026-01-01T00:00:00.000Z",
+      "reference_count": 0
+    }
+  ]
+}

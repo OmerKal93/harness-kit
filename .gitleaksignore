@@ -1,0 +1,9 @@
+# Fake test values (all start with FAKEEX): security self-tests and redaction fixtures.
+evals/fixtures/redaction/positive/github-token.json:github-pat:5
+evals/fixtures/redaction/positive/github-token.json:github-pat:8
+evals/fixtures/redaction/positive/stripe-test-key.json:stripe-access-token:5
+evals/fixtures/redaction/positive/stripe-test-key.json:stripe-access-token:8
+scripts/security-brokers/commit-broker.js:github-pat:62
+scripts/security-brokers/commit-broker.js:github-pat:63
+scripts/security-boundary.js:github-pat:263
+scripts/security-boundary.js:github-pat:267

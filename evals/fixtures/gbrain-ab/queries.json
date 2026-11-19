@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "description": "Phase 4 Batch 2 A/B corpus. 10 representative queries spanning reference docs, memory tier files, and security artifacts. GBrain page IDs follow <top-dir>_<basename-without-ext> convention observed in gbrain-query-memory.js output.",
+  "queries": [
+    {
+      "id": "q01-kill-switch-contract",
+      "query": "kill switch DISABLED env HARNESSKIT_DISABLED contract",
+      "topic": "kill switch contract",
+      "tags": ["kill-switch", "security"],
+      "expected_ground_truth": {
+        "must_cite_one_of": ["reference_kill-switch", "reference_security-hardening"],
+        "must_mention": ["DISABLED"],
+        "is_safety_critical": true
+      }
+    },
+    {
+      "id": "q02-redaction-patterns",
+      "query": "redaction privacy redactString patterns regex",
+      "topic": "redaction patterns",
+      "tags": ["redaction", "privacy"],
+      "expected_ground_truth": {
+        "must_cite_one_of": ["reference_privacy-and-redaction"],
+        "must_mention": ["redactString"],
+        "is_safety_critical": true
+      }
+    },
+    {
+      "id": "q03-state-machine",
+      "query": "state machine INTAKE CONTEXT_GATHERING ROUTING EXECUTION states",
+      "topic": "state machine",
+      "tags": ["state-machine"],
+      "expected_ground_truth": {
+        "must_cite_one_of": ["reference_state-machine"],
+        "must_mention": ["INTAKE"],
+        "is_safety_critical": false
+      }
+    },
+    {
+      "id": "q04-push-control",
+      "query": "push control rule approval named action commits pushes",
+      "topic": "push control",
+      "tags": ["push-control", "approval"],
+      "expected_ground_truth": {
+        "must_cite_one_of": ["memory_personal-patterns", "reference_project-policy-map", "reference_agent-routing-policy"],
+        "must_mention": ["push"],
+        "is_safety_critical": true
+      }
+    },
+    {
+      "id": "q05-recurring-failures",
+      "query": "recurring failures patterns log history",
+      "topic": "recurring failures",
+      "tags": ["recurring-failures"],
+      "expected_ground_truth": {
+        "must_cite_one_of": ["memory_recurring-failures"],
+        "must_mention": ["recurring"],
+        "is_safety_critical": false
+      }
+    },
+    {
+      "id": "q06-gbrain-forensics",
+      "query": "GBrain forensics scan conditional clear verdict",
+      "topic": "gbrain forensics",
+      "tags": ["forensics", "gbrain"],
+      "expected_ground_truth": {
+        "must_cite_one_of": ["security_gbrain-forensics-2026-05-28"],
+        "must_mention": ["conditional"],
+        "is_safety_critical": true
+      }
+    },
+    {
+      "id": "q07-sensitive-paths-routing",
+      "query": "sensitive paths routing policy auth migrations prisma",
+      "topic": "sensitive paths routing",
+      "tags": ["routing", "sensitive-paths"],
+      "expected_ground_truth": {
+        "must_cite_one_of": ["reference_project-policy-map", "reference_agent-routing-policy"],
+        "must_mention": ["sensitive"],
+        "is_safety_critical": true
+      }
+    },
+    {
+      "id": "q08-run-quality-score",
+      "query": "run quality score five dimensions weighted classifier confidence verification",
+      "topic": "run quality score",
+      "tags": ["run-quality"],
+      "expected_ground_truth": {
+        "must_cite_one_of": ["reference_run-quality-score"],
+        "must_mention": ["dimensions"],
+        "is_safety_critical": false
+      }
+    },
+    {
+      "id": "q09-compound-engineering",
+      "query": "compound engineering plugin skills agents map",
+      "topic": "compound engineering",
+      "tags": ["compound-engineering"],
+      "expected_ground_truth": {
+        "must_cite_one_of": ["reference_compound-engineering-map"],
+        "must_mention": ["compound"],
+        "is_safety_critical": false
+      }
+    },
+    {
+      "id": "q10-integration-test-real-db",
+      "query": "integration tests real database mocks Prisma migration policy",
+      "topic": "integration test database",
+      "tags": ["integration-tests", "personal-patterns"],
+      "expected_ground_truth": {
+        "must_cite_one_of": ["memory_personal-patterns"],
+        "must_mention": ["mocks"],
+        "is_safety_critical": false
+      }
+    }
+  ]
+}

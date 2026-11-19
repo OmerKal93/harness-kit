@@ -1,0 +1,7 @@
+{
+  "category": "redaction",
+  "id": "doc-prose",
+  "label": "negative",
+  "input": "This document describes the HarnessKit state machine and routing layer.",
+  "expected": { "unchanged": true }
+}

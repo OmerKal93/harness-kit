@@ -1,0 +1,16 @@
+{
+  "source_repo": "https://github.com/mattpocock/skills",
+  "source_path": "skills/engineering/zoom-out/SKILL.md",
+  "pinned_commit": "aaf2453fbdfe7a15c07f11d861224f34ab4b53cb",
+  "fetched_at": "2026-06-06",
+  "fetched_via": "raw.githubusercontent.com exact-path download (never npx skills add)",
+  "license": "MIT",
+  "attribution": "Matt Pocock (mattpocock/skills)",
+  "upstream_sha256": "2A6894C7F9B1C9C55F451C625A834C4F377E217B623A85280E55DB5FE9CACF48",
+  "upstream_bytes": 430,
+  "body_verbatim": true,
+  "adaptation": "frontmatter extended to the 17 HarnessKit skill-registry required keys; upstream name/description/disable-model-invocation preserved verbatim inside it; instruction body byte-identical to upstream",
+  "forensics_scan": "runs/20260606-084405-skill-adoption-grill-pack-v1/forensics-scan.md — CLEAN (9 deterministic checks + manual review)",
+  "upstream_original_archived_at": "runs/20260606-084405-skill-adoption-grill-pack-v1/upstream-original/zoom-out/SKILL.md",
+  "re_fetch_policy": "any upstream update = new fetch at a new pinned SHA = full re-scan + re-review cycle; never auto-update"
+}

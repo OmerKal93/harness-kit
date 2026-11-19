@@ -1,0 +1,7 @@
+{
+  "category": "redaction",
+  "id": "number-list",
+  "label": "negative",
+  "input": "Items: 1, 2, 3, 4, 5.",
+  "expected": { "unchanged": true }
+}

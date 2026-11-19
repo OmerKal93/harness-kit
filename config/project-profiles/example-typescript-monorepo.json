@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "project": "example-typescript-monorepo",
+  "_purpose": "SYNTHETIC EXAMPLE, no real project's data. Illustrates the profile shape for a TypeScript/Node monorepo (package.json workspaces, npm/yarn/pnpm) -- the stack inspect-repo.js actually detects. Copy and adapt for a real TS project's project-profile, do not use as-is.",
+  "project_root": null,
+  "read_only": false,
+  "sensitive_paths": [
+    { "glob": ".env*",              "trigger": "env_secrets" },
+    { "glob": "**/credentials*",    "trigger": "env_secrets" },
+    { "glob": "**/*.key",           "trigger": "env_secrets" },
+    { "glob": "**/*.pem",           "trigger": "env_secrets" },
+    { "glob": "**/migrations/**",   "trigger": "db_migration" },
+    { "glob": "**/prisma/schema.prisma", "trigger": "db_migration" },
+    { "glob": "**/node_modules/**", "trigger": "build_artifact", "note": "installed, not source -- avoid staging" },
+    { "glob": "**/dist/**",         "trigger": "build_artifact" }
+  ],
+  "hard_rules_mirror": [
+    "Never commit secrets",
+    "Confirm before destructive git operations",
+    "Confirm before DB migrations",
+    "No bare fetch/axios retries without a shared exponential-backoff helper"
+  ],
+  "stop_conditions": [
+    "secrets / credentials in diff",
+    "destructive command without explicit approval",
+    "a new production dependency added without justification",
+    "change touches more than one workspace package without explicit scope confirmation"
+  ],
+  "response_format": {
+    "required_sections_after_changes": ["Execution Ledger"],
+    "ledger_fields": ["work_label", "goal", "what_changed", "files_touched", "validation"]
+  },
+  "classifier_keyword_hints": {
+    "code-bug":     ["bug", "fix", "broken", "error", "fail", "regression"],
+    "code-feature": ["add", "implement", "build", "feature", "endpoint", "create"],
+    "docs":         ["doc", "document", "readme"],
+    "review":       ["review", "audit", "check", "pr", "diff"],
+    "ops":          ["deploy", "migrate", "env", "infra", "docker"]
+  },
+  "classifier_trigger_boosters": {
+    "env_secrets":  [".env", "credentials", "secret", "api key"],
+    "db_migration": ["migration", "schema", "prisma"],
+    "build_artifact": ["node_modules", "dist", "build"]
+  },
+  "review_independence": { "enforced": false, "minimum_level": "isolated_actor" }
+}

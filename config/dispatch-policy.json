@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "_artifact": "P8C (Batch 1, hk/p8c-agent-dispatch): risk-class -> routing-policy mapping for scripts/dispatcher.js. See docs/AGENT_DISPATCH_MODEL_ROUTING.md section 5 for the full design this data supports.",
+  "_enforcement_status": "advisory_only",
+  "_enforcement_note": "scripts/dispatcher.js is a design skeleton -- not wired into bin/harnesskit.js, execute-workflow.js, or loop-conductor.js. This file has no effect on execution today.",
+  "risk_class_routing": {
+    "low": {
+      "producer_policy": "highest_verified_quality",
+      "reviewer_policy": "independent_review",
+      "requires_human_approval": false
+    },
+    "med": {
+      "producer_policy": "highest_verified_quality",
+      "reviewer_policy": "independent_review",
+      "requires_human_approval": false
+    },
+    "high": {
+      "producer_policy": "highest_verified_quality",
+      "reviewer_policy": "independent_review",
+      "requires_human_approval": false,
+      "note": "scripts/check-approval-needed.js's own halt/approval logic is authoritative and is never bypassed or duplicated here"
+    },
+    "critical": {
+      "producer_policy": "local_cli_only",
+      "reviewer_policy": "independent_review",
+      "requires_human_approval": true,
+      "note": "matches scripts/detect-risk.js haltConditions semantics (env_secrets, wiki_handbook_docs) -- dispatcher must refuse to auto-select a producer without approval"
+    },
+    "unknown": {
+      "producer_policy": "highest_verified_quality",
+      "reviewer_policy": "independent_review",
+      "requires_human_approval": false,
+      "note": "fail-safe default when risk_class could not be computed -- same bar as 'low', never more permissive than the lowest tier and never silently escalated either"
+    }
+  },
+  "role_minimum_capabilities": {
+    "producer": [],
+    "reviewer": ["review"],
+    "challenger_addition": ["security"]
+  },
+  "panel_consensus_rule": "all_pass_or_escalate",
+  "worktree_required_for_roles": ["producer"]
+}

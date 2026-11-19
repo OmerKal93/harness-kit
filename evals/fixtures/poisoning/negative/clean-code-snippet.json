@@ -1,0 +1,12 @@
+{
+  "category": "poisoning",
+  "id": "clean-code-snippet",
+  "label": "negative",
+  "input": "function classify(prompt) {\n  return { task_type: 'audit', confidence: 0.78 };\n}\n",
+  "simulated_path": "~/.harnesskit/runs/test-run/learning.md",
+  "expected": {
+    "file_class": "run_or_memory_artifact",
+    "action": "clean",
+    "hits_count": 0
+  }
+}

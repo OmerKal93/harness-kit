@@ -1,0 +1,11 @@
+{
+  "category": "redaction",
+  "id": "private-key-block",
+  "label": "positive",
+  "input": "-----BEGIN RSA PRIVATE KEY-----\nFAKE_EXAMPLE_NOT_A_REAL_KEY_BODY\n-----END RSA PRIVATE KEY-----",
+  "expected": {
+    "redacted_contains": "[REDACTED:private_key_block]",
+    "redacted_not_contains": "FAKE_EXAMPLE_NOT_A_REAL_KEY_BODY"
+  },
+  "fake_value_note": "fake value for tests (FAKE/EXAMPLE marker); not a real credential"
+}

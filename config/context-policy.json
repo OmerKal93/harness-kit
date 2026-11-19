@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "policy_owner": "owner",
+  "created": "2026-05-28",
+  "phase": "3C-batch3",
+  "source_of_truth": "this file",
+  "human_mirror": "reference/context-engineering.md",
+  "constitution_ref": "reference/agent-safety-constitution.md",
+  "alignment_risk_policy_ref": "config/alignment-risk-policy.json",
+
+  "per_task_type_budgets": {
+    "_comment": "Token budgets per task type. Treat as ceilings, not targets. Tune via eval-harness category 2.",
+    "_default_total_tokens": 32000,
+    "research": 24000,
+    "explainer": 16000,
+    "review": 32000,
+    "code-bug": 48000,
+    "session-recover": 32000,
+    "session-debug": 48000,
+    "planning": 40000,
+    "migration": 48000,
+    "doc-write": 24000,
+    "spike": 32000
+  },
+
+  "per_section_budgets": {
+    "_comment": "Per-section token caps within a pack. Truncation rule applies on overrun (see truncation_rule below).",
+    "memory_tier_files": 6000,
+    "learnings_index": 4000,
+    "reference_doc_excerpt": 8000,
+    "run_artifacts": 6000,
+    "architecture_map": 8000,
+    "playbook_for_task_type": 4000,
+    "gbrain_hits": 8000,
+    "untrusted_external_appendix": 4000,
+    "known_gaps": 1000,
+    "_default_section_max_tokens": 6000
+  },
+
+  "truncation_rule": {
+    "_comment": "When per_section budget is exceeded, apply one of: head_plus_tail | evidence_anchored | fail_pack",
+    "strategy": "head_plus_tail",
+    "marker_text": "[truncated <bytes_omitted> bytes — see source <path> at <sha256> for full]"
+  },
+
+  "required_sources_per_task_type": {
+    "_comment": "Sections that must appear in every pack for the named task type. Missing → NEEDS_USER for context-gathering re-do.",
+    "code-bug": ["memory_tier_files", "architecture_map", "reference_doc_excerpt"],
+    "migration": ["architecture_map", "reference_doc_excerpt"],
+    "review": ["memory_tier_files", "specification_gaming_checklist_excerpt"],
+    "planning": ["memory_tier_files", "learnings_index"],
+    "research": ["learnings_index"],
+    "doc-write": ["agent_safety_constitution_excerpt"]
+  },
+
+  "forbidden_sections": [
+    {"glob": "**/runs/*/tool-log.ndjson", "reason": "secret-leak risk even post-redaction"},
+    {"glob": "**/runs/*/decision-log.ndjson", "reason": "secret-leak risk"},
+    {"glob": "**/.env*", "reason": "secrets"},
+    {"glob": "**/credentials*", "reason": "secrets"},
+    {"glob": "**/.ssh/**", "reason": "secrets"},
+    {"glob": "**/secrets*", "reason": "secrets"},
+    {"glob": "**/.gbrain/**", "reason": "avoid self-recursion"},
+    {"glob": "**/node_modules/**", "reason": "noise + license risk"},
+    {"glob": "**/_Project_SecOps/**", "reason": "forensics + audit content; private"}
+  ],
+
+  "trust_tier_precedence": {
+    "_comment": "Higher number wins on conflict. Within same tier, newest fresh_at wins. Tie → NEEDS_USER per agent-safety-constitution.",
+    "source_of_truth": 4,
+    "curated_memory": 3,
+    "run_artifact": 2,
+    "curated_external": 1,
+    "untrusted_external": 0
+  },
+
+  "drift_staleness_days": {
+    "_comment": "If a referenced source has not been re-fetched/re-confirmed in N days, surface a freshness warning. Per-tier defaults.",
+    "source_of_truth": 30,
+    "curated_memory": 30,
+    "run_artifact": 14,
+    "curated_external": 7,
+    "untrusted_external": 1
+  },
+
+  "quality_scoring": {
+    "enabled": false,
+    "_enabled_note": "Phase 5 turns this on when score-context-pack.js ships. Today the score is design-target only.",
+    "implementation_ref": "scripts/score-context-pack.js",
+    "advisory_at_tier": "L0",
+    "gating_at_tier": "L1",
+    "weights": {
+      "relevance": 1.5,
+      "sufficiency": 1.5,
+      "provenance": 1.2,
+      "isolation": 1.0,
+      "economy": 1.0,
+      "omission_compliance": 0.8
+    },
+    "max_total": 35,
+    "thresholds": {
+      "pass": 28,
+      "warn": 20,
+      "halt_below": 20
+    }
+  },
+
+  "drift_detection": {
+    "enabled": false,
+    "_enabled_note": "Phase 5 turns this on when detect-context-drift.js ships. Today SHA recording is design-target only.",
+    "implementation_ref": "scripts/detect-context-drift.js",
+    "rebuild_on_drift": "needs_user_first",
+    "_rebuild_options": ["auto", "needs_user_first", "warn_only"]
+  },
+
+  "conflict_resolution": {
+    "rule": "surface_both_never_silent_pick",
+    "tie_break_order": ["trust_tier", "fresh_at_recency", "explicit_needs_user"],
+    "implementation_ref": "scripts/build-context-pack.js (Phase 5 update)"
+  },
+
+  "playbook_abstraction": {
+    "enabled": false,
+    "_enabled_note": "Phase 5 introduces `reference/playbooks/<task-type>.md` files updated by score-run-quality.js outputs.",
+    "playbook_dir_ref": "reference/playbooks/",
+    "fallback_to_select_context": true
+  },
+
+  "gbrain_hits_section": {
+    "enabled": false,
+    "_enabled_note": "Gated by gbrain-import-policy.json#context_pack_integration (also false). Phase 5 turns both on after eval-harness category 2 baseline.",
+    "max_hits_per_pack": 5,
+    "demote_untrusted_at_retrieval": true,
+    "always_show_citations": true
+  },
+
+  "kill_switch": {
+    "honored": true,
+    "_note": "build-context-pack.js exits 0 silent when DISABLED; this policy is moot in that state."
+  }
+}

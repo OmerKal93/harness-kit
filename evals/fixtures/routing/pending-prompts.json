@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "_pending": true,
+  "description": "Phase 4 Batch 3 routing pending-regression fixtures. NOT loaded by current routing/run.js driver (driver reads only prompts.json). Stash for future promotion once classifier is explicitly tuned. Items below are documented classifier near-misses or known-ambiguous prompts; promote individually to prompts.json with care.",
+  "profile": "example-app",
+  "prompts": [
+    {
+      "id": "pending-01",
+      "prompt": "compound this learning from the auditor migration retro",
+      "expected_task_type": "memory-capture",
+      "expected_triggers": ["audit_tool_docs"],
+      "note": "Phrase 'compound this learning' overlaps memory-capture vs learning task types."
+    },
+    {
+      "id": "pending-02",
+      "prompt": "explore options for refreshing stale handbook docs",
+      "expected_task_type": "ideate",
+      "expected_triggers": ["wiki_handbook_docs"],
+      "note": "'refresh stale' currently routes to memory-refresh; ideate is the intent."
+    },
+    {
+      "id": "pending-03",
+      "prompt": "review and audit the doc for accuracy in the outreach pipeline readme",
+      "expected_task_type": "doc-review",
+      "expected_triggers": ["outreach_pipeline", "wiki_handbook_docs"],
+      "note": "Triggers vector spans two domains; multi-trigger expectation may need classifier multi-tag work."
+    }
+  ]
+}

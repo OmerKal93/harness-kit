@@ -1,0 +1,11 @@
+{
+  "category": "redaction",
+  "id": "g2-redacted-url-creds-rematch",
+  "label": "regression",
+  "input": "Repo URL: https://[REDACTED:url_creds]@git.example.com/repo.git",
+  "expected": {
+    "unchanged": true,
+    "idempotent": true
+  },
+  "notes": "G2 audit FP (2026-05-28 runs/20260528-190211-phase-3b-hotfix-dry-run-v2/gbrain-secret-audit.md). The url_with_creds regex matches its own placeholder on a second pass; redactString stays idempotent because the replacement equals the matched substring. Companion fix in scripts/gbrain-audit-secrets.js strips [REDACTED:*] placeholders before the audit rescan."
+}

@@ -1,0 +1,147 @@
+{
+  "schema_version": 2,
+  "schema_v2_changes": "Phase 3B hotfix: path-scoped content_blocklist (applies_to_paths/excludes_paths/severity/action); trust_level metadata + forbidden_in_phase_3b; poisoning_scan delegated to config/alignment-risk-policy.json",
+  "_purpose": "SCHEMA/POLICY-SHAPE ONLY. This file demonstrates the GBrain import-policy shape (allowlist/blocklist/content-scan/gate structure). Real approval-history entries, real operator identity, real staged-import diff paths, and real client-identifying content-blocklist patterns were stripped during the HarnessKit extraction -- a real deployment supplies its own populated version.",
+  "policy_owner": "example-owner",
+  "phase": "3B",
+  "source_of_truth": "this file",
+  "human_mirror": "reference/gbrain-import-policy.md",
+  "design_doc": "reference/gbrain-integration.md",
+  "constitution_ref": "reference/agent-safety-constitution.md",
+  "alignment_risk_policy_ref": "config/alignment-risk-policy.json",
+  "memory_poisoning_policy_ref": "reference/memory-poisoning-policy.md",
+
+  "version_pin": "v0.41.26.0",
+  "commit_pin": "42d99b6fca3b5270f664dd61b8b1e3091e493760",
+  "upgrade_approval_token": "approve harnesskit gbrain upgrade",
+
+  "embedding_mode": "keyword_only",
+  "embedding_mode_notes": "Phase 3B: BM25 + RRF only. No remote embedding API call. Vector mode (local or remote) deferred to a future phase decision.",
+
+  "scheduling": "manual_only",
+  "scheduling_forbid": ["cron", "sync_watch", "fs_watch", "autopilot"],
+
+  "context_pack_integration": false,
+  "context_pack_integration_phase": "3C",
+
+  "kill_switch_honored": true,
+  "redaction_required": true,
+  "redaction_rules_ref": "config/redaction-rules.json",
+
+  "harness_allowlist": [
+    {"glob": "reference/*.md", "include": true, "note": "design docs"},
+    {"glob": "memory/personal-patterns.md", "include": true},
+    {"glob": "memory/recurring-failures.md", "include": true},
+    {"glob": "memory/rejected-patterns.md", "include": true},
+    {"glob": "memory/routing-lessons.md", "include": true},
+    {"glob": "memory/learnings-index.json", "include": true, "note": "imported as one page with section per entry"},
+    {"glob": "runs/*/learning.md", "include": true, "condition": "run.state == DONE"},
+    {"glob": "runs/*/review.md", "include": true, "condition": "not flagged draft"},
+    {"glob": "runs/*/verification.md", "include": true},
+    {"glob": "runs/*/next-action.md", "include": false, "reason": "ephemeral"},
+    {"glob": "runs/*/run.json", "include": false, "reason": "structured state; use status command"},
+    {"glob": "runs/*/route.json", "include": false, "reason": "structured state"},
+    {"glob": "runs/*/tool-log.ndjson", "include": false, "reason": "secret-leak risk even post-redaction"},
+    {"glob": "runs/*/decision-log.ndjson", "include": false, "reason": "secret-leak risk"},
+    {"glob": "runs/*/context-pack.md", "include": false, "reason": "derived; would duplicate"}
+  ],
+
+  "path_blocklist": [
+    ".env*",
+    "**/credentials*",
+    "**/*.pem",
+    "**/*.key",
+    "**/.gbrain/**",
+    "**/node_modules/**",
+    "**/runs/*/tool-log.ndjson",
+    "**/runs/*/decision-log.ndjson",
+    "**/archive/old-clients/**",
+    "**/clients/**"
+  ],
+
+  "content_blocklist": [
+    {
+      "id": "client_first_names_runs_memory",
+      "pattern": "\\b(ExampleClientA|ExampleClientB)\\b",
+      "applies_to_paths": ["**/runs/**", "**/memory/**"],
+      "excludes_paths": [],
+      "severity": "high",
+      "action": "exclude",
+      "note": "EXAMPLE PATTERN: client first names in run artifacts or curated memory = PII leak; hard-exclude. Replace with real client-name patterns in a real deployment."
+    },
+    {
+      "id": "client_first_names_policy_docs",
+      "pattern": "\\b(ExampleClientA|ExampleClientB)\\b",
+      "applies_to_paths": ["**/reference/*.md", "**/security/*.md"],
+      "excludes_paths": [],
+      "severity": "medium",
+      "action": "warn",
+      "note": "Name in policy/process doc = meta-reference, not raw client data."
+    },
+    {
+      "id": "client_business_fragments_runs_memory",
+      "pattern": "\\b(example client business fragment)\\b",
+      "applies_to_paths": ["**/runs/**", "**/memory/**"],
+      "excludes_paths": [],
+      "severity": "high",
+      "action": "exclude"
+    },
+    {
+      "id": "il_phone_anchored",
+      "pattern": "(?<![\\d\\-])(?:\\+972|0)(?:[ \\-]?\\d){8,9}(?!\\d)",
+      "applies_to_paths": ["**"],
+      "excludes_paths": [],
+      "severity": "high",
+      "action": "exclude"
+    },
+    {
+      "id": "bearer_token_residual",
+      "pattern": "\\b[Bb]earer\\s+[A-Za-z0-9._\\-]{20,}",
+      "applies_to_paths": ["**"],
+      "excludes_paths": [],
+      "severity": "high",
+      "action": "exclude"
+    }
+  ],
+
+  "trust_level_assignments_ref": "config/alignment-risk-policy.json#trust_level.assignments",
+  "trust_levels_forbidden_in_phase_3b": ["untrusted_external"],
+  "poisoning_scan_ref": "config/alignment-risk-policy.json#poisoning_scan",
+
+  "audit_obligations_per_import": [
+    "resolve_allowlist_deterministically",
+    "apply_path_blocklist",
+    "apply_content_blocklist",
+    "redact_every_byte",
+    "write_import_diff_to_runs",
+    "run_gbrain_audit_secrets_after_import",
+    "emit_tool_log_line_per_debug_contract"
+  ],
+
+  "rollback_command": "rm -rf ~/.gbrain/ scripts/gbrain-*.js config/gbrain-import-policy.json reference/gbrain-*.md",
+
+  "gates": {
+    "G0_forensics": {"status": "example_only", "approval_token": "approve harnesskit gbrain forensics-clean", "approved": false, "note": "real gate history stripped -- populate with a real forensics report reference in a live deployment"},
+    "G1_phase_3a_docs": {"status": "example_only", "approval_token": "approve harnesskit gbrain phase 3a", "approved": false},
+    "G2_first_live_import": {"status": "example_only", "approval_token": "approve harnesskit gbrain import-curated", "approved": false, "note": "real deployment history (diff review path, staged-import temp directory, staged file count) was stripped during extraction -- not reusable across machines/repos"},
+    "G3_mcp_registration": {"status": "blocked_until_G2_evidence", "approval_token": "approve harnesskit gbrain mcp", "approved": false, "evidence_bar": "ONE of: (a) 7 clean days, (b) 10 useful queries, (c) 3 runs with measured recall improvement"},
+    "G4_external_docs": {"status": "blocked_until_G3", "approval_token": "approve harnesskit gbrain external-docs", "approved": false, "requires": ["owner_approval", "per_file_allowlist_review"]},
+    "G5_write_back_or_cron": {"status": "not_offered", "approval_token": null, "note": "requires fresh planning round"},
+    "G6_autonomy_tier_promotion": {"status": "locked_L0", "approval_token": "approve harnesskit tier L1", "approved": false, "ref": "reference/autonomy-levels.md"}
+  },
+
+  "forbidden_actions": [
+    "write_back_to_harness_memory",
+    "write_to_external_project_repo",
+    "sync_watch",
+    "cron",
+    "fs_watch_daemon",
+    "autopilot",
+    "import_source_code",
+    "import_secrets",
+    "import_run_tool_logs",
+    "import_run_decision_logs",
+    "remote_embedding_without_approval",
+    "promote_autonomy_above_L0"
+  ]
+}

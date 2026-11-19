@@ -1,0 +1,4 @@
+[reasoning] Considering the plan's migration safety and the index strategy...
+
+The review was interrupted before a final verdict line could be produced
+(reasoning timed out). No VERDICT token is present in this message.

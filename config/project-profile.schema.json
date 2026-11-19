@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project-profile.schema.json",
+  "title": "HarnessKit project profile",
+  "description": "Schema for config/project-profiles/<name>.json -- the machine-local project-overlay layer, matched to a target repo by project_root prefix (scripts/_lib.js#detectProjectProfile) or by exact project_root prefix on the file being written (scripts/_lib.js#findProfileForFile). 'default.json' is the fallback profile used when cwd matches no other profile's project_root. This schema also describes the shape a proposed team-committed profile (<project_root>/.harnesskit/profile.json, design-only) would use, so both layers stay structurally compatible. additionalProperties is true: real profiles (e.g. config/project-profiles/example-app.json) carry project-specific *_source pointer fields (identity_source, rules_source, ...) and a free-form _purpose string that this schema deliberately does not enumerate.",
+  "type": "object",
+  "required": ["schema_version", "project", "sensitive_paths"],
+  "properties": {
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "project": { "type": "string", "minLength": 1 },
+    "project_root": { "type": ["string", "null"] },
+    "read_only": { "type": "boolean" },
+    "_purpose": { "type": "string" },
+    "sensitive_paths": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["glob", "trigger"],
+        "properties": {
+          "glob": { "type": "string", "minLength": 1 },
+          "trigger": { "type": "string", "minLength": 1 },
+          "approval": { "type": "string" },
+          "note": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "hard_rules_mirror": { "type": "array", "items": { "type": "string" } },
+    "stop_conditions": { "type": "array", "items": { "type": "string" } },
+    "response_format": {
+      "type": "object",
+      "properties": {
+        "required_sections_after_changes": { "type": "array", "items": { "type": "string" } },
+        "ledger_fields": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "classifier_keyword_hints": {
+      "type": "object",
+      "additionalProperties": { "type": "array", "items": { "type": "string" } }
+    },
+    "classifier_trigger_boosters": {
+      "type": "object",
+      "additionalProperties": { "type": "array", "items": { "type": "string" } }
+    },
+    "review_independence": {
+      "type": "object",
+      "properties": {
+        "enforced": { "type": "boolean" },
+        "minimum_level": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

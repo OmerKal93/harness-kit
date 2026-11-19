@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "policy_owner": "owner",
+  "created": "2026-05-28",
+  "phase": "3C-batch3",
+  "source_of_truth": "this file",
+  "human_mirror": "reference/research-ingestion.md",
+
+  "enabled": true,
+  "_enabled_note": "Watchlist is active; ingestion remains manual. No cron, no scrapers, no automated fetches. The owner dispatches checks on cadence.",
+
+  "tiers": {
+    "1": {
+      "label": "primary — load-bearing",
+      "policy": "Adopted controls must trace to Tier 1 source. Citations in agent-safety-constitution.md / alignment-risk-policy.json should reference Tier 1 wherever possible."
+    },
+    "2": {
+      "label": "practitioner",
+      "policy": "Concrete patterns from experienced operators. Adopted only when corroborated by Tier 1 source OR by repeated practical signal in HarnessKit runs."
+    },
+    "3": {
+      "label": "supporting only",
+      "policy": "Never sole source for an adopted control. Cited for context, never as ground truth."
+    }
+  },
+
+  "cadence_defaults": {
+    "_comment": "Manual dispatch only. These are suggested intervals; the owner initiates the check.",
+    "tier_1_days": 14,
+    "tier_2_days": 30,
+    "tier_3_days": null
+  },
+
+  "sources": [
+    {
+      "id": "anthropic_engineering",
+      "tier": 1,
+      "url": "https://www.anthropic.com/engineering",
+      "domain": "agent-safety",
+      "cadence_days": 14,
+      "last_checked": null,
+      "notes": "Containment, Claude Code architecture, MCP design, agent safety. Highest priority."
+    },
+    {
+      "id": "openai_agents_guide",
+      "tier": 1,
+      "url": "https://platform.openai.com/docs/guides/agents",
+      "domain": "agentic-se",
+      "cadence_days": 14,
+      "last_checked": null,
+      "notes": "Practical guide; eval cycle; tool-risk classification."
+    },
+    {
+      "id": "openai_safety_best_practices",
+      "tier": 1,
+      "url": "https://platform.openai.com/docs/guides/safety-best-practices",
+      "domain": "agent-safety",
+      "cadence_days": 30,
+      "last_checked": null
+    },
+    {
+      "id": "claude_code_docs",
+      "tier": 1,
+      "url": "https://docs.claude.com/en/docs/claude-code",
+      "domain": "tooling",
+      "cadence_days": 14,
+      "last_checked": null,
+      "notes": "Hook events, MCP transports, plugin lifecycle, skill SDK. The harness IS Claude Code."
+    },
+    {
+      "id": "gbrain_upstream",
+      "tier": 1,
+      "url": "https://github.com/garrytan/gbrain",
+      "domain": "memory-retrieval",
+      "cadence_days": 14,
+      "last_checked": null,
+      "notes": "Releases + CHANGELOG + open issues (especially security advisories). Re-run forensics on every version-pin bump."
+    },
+    {
+      "id": "metr",
+      "tier": 1,
+      "url": "https://metr.org/",
+      "domain": "agent-eval",
+      "cadence_days": 30,
+      "last_checked": null,
+      "notes": "Agent-eval methodology + benchmark releases."
+    },
+    {
+      "id": "arc_evals",
+      "tier": 1,
+      "url": "https://www.alignment.org/",
+      "domain": "agent-eval",
+      "cadence_days": 30,
+      "last_checked": null
+    },
+    {
+      "id": "arxiv_agent_safety",
+      "tier": 1,
+      "url": "https://arxiv.org/list/cs.AI/recent",
+      "domain": "research-papers",
+      "cadence_days": 14,
+      "last_checked": null,
+      "notes": "Search terms: agent safety · context engineering · agentic SE · hallucination · uncertainty · spec gaming · goal misgeneralization · trajectory safety."
+    },
+    {
+      "id": "owasp_llm_top10",
+      "tier": 1,
+      "url": "https://genai.owasp.org/llm-top-10/",
+      "domain": "tool-security",
+      "cadence_days": 60,
+      "last_checked": null,
+      "notes": "Periodically revised. Map every revision to alignment-risk-policy.json risk classes."
+    },
+    {
+      "id": "nist_ai_agent_identity",
+      "tier": 1,
+      "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "domain": "agent-identity",
+      "cadence_days": 60,
+      "last_checked": null,
+      "notes": "Drafts on agent identity / scoped authorization."
+    },
+    {
+      "id": "boris_cherny",
+      "tier": 2,
+      "url": "https://www.borischerny.com/",
+      "domain": "claude-code-practices",
+      "cadence_days": 30,
+      "last_checked": null,
+      "notes": "Claude Code engineering practices."
+    },
+    {
+      "id": "karpathy",
+      "tier": 2,
+      "url": "https://karpathy.ai/",
+      "domain": "context-engineering",
+      "cadence_days": 30,
+      "last_checked": null,
+      "notes": "Software 3.0; context engineering as discipline."
+    },
+    {
+      "id": "simon_willison",
+      "tier": 2,
+      "url": "https://simonwillison.net/tags/prompt-injection/",
+      "domain": "tool-security",
+      "cadence_days": 14,
+      "last_checked": null,
+      "notes": "Prompt injection catalog. Critical for external-content-quarantine updates."
+    },
+    {
+      "id": "garry_tan_practitioner",
+      "tier": 2,
+      "url": "https://github.com/garrytan",
+      "domain": "memory-retrieval",
+      "cadence_days": 30,
+      "last_checked": null,
+      "notes": "GStack/GBrain practitioner posts beyond the repo CHANGELOG."
+    }
+  ],
+
+  "external_research_tools": {
+    "_comment": "Owner directive 2026-06-04. Subscriptions the owner operates MANUALLY as external research inputs only. Excluded from all automated HarnessKit plans unless a separate future approval explicitly allows API-key integration.",
+    "policy": "manual-only",
+    "tools": [
+      { "id": "perplexity_pro", "tier": 3, "mode": "manual-only" },
+      { "id": "grok", "tier": 3, "mode": "manual-only" }
+    ],
+    "forbidden_roles": ["advisor", "harness-dependency", "eval-dependency", "hook", "registry", "source-of-truth", "authority"],
+    "forbidden_integrations": ["api-usage", "api-key-request", "browser-automation", "required-by-any-batch"],
+    "output_handling": "research notes / evidence candidates only (Tier 3 — never load-bearing); normal source verification required before any output becomes policy, eval, or skill content",
+    "unblock_condition": "separate future approval explicitly allowing API-key integration"
+  },
+
+  "critical_alert_sources": [
+    {
+      "id": "gbrain_security_advisories",
+      "url_pattern": "https://github.com/garrytan/gbrain/security/advisories",
+      "response_sla_hours": 24,
+      "action": "ingest_note + run-forensics-scan + flag for version-pin review"
+    },
+    {
+      "id": "claude_code_security_changelog",
+      "url_pattern": "https://docs.claude.com/en/release-notes/claude-code",
+      "response_sla_hours": 48,
+      "action": "ingest_note + flag for hook-coverage review"
+    },
+    {
+      "id": "anthropic_security_posts",
+      "url_pattern": "https://www.anthropic.com/news?topic=security",
+      "response_sla_hours": 48,
+      "action": "ingest_note + map to alignment-risk-policy.json risk classes"
+    }
+  ],
+
+  "ingestion_targets": {
+    "_comment": "Where ingested notes and registries live. Phase 4 scripts populate these.",
+    "notes_dir": "research/notes/",
+    "adopted_controls_file": "research/adopted-controls.json",
+    "rejected_ideas_file": "research/rejected-ideas.json",
+    "proposals_dir": "proposals/policy-updates/"
+  },
+
+  "templates": {
+    "note_template": "templates/research-note.template.md",
+    "proposal_template": "templates/policy-update-candidate.template.md"
+  },
+
+  "scripts_planned": {
+    "_comment": "These do not exist yet. Phase 4 ships them.",
+    "research_ingest": "scripts/research-ingest.js",
+    "research_to_controls": "scripts/research-to-controls.js"
+  },
+
+  "discipline_rules": [
+    "Adopted controls must trace to a Tier 1 source (or Tier 2 corroborated by run signal). Tier 3 alone is insufficient.",
+    "Rejected ideas append-only — deletion requires Owner approval and a fresh re-debate note.",
+    "Every adopted control change to a constitution / policy file requires a proposal in proposals/policy-updates/ that the owner reviews before merge.",
+    "Notes carry trust_level: untrusted_external in their frontmatter; they pass through memory-poisoning-scan.js before reaching memory layer.",
+    "No automated web fetches in Phase 3C-4. Manual cadence only.",
+    "Perplexity Pro and Grok are manual external research inputs only (see external_research_tools). Never advisors, harness/eval dependencies, hooks, registries, source of truth, or authority. No API usage, no API-key requests, no browser automation; no batch may require them. Their outputs are evidence candidates requiring normal source verification before becoming policy, eval, or skill content."
+  ],
+
+  "kill_switch": {
+    "honored": true,
+    "_note": "research-ingest.js + research-to-controls.js (Phase 4) exit 0 silent when DISABLED; manual reading remains possible (owner-typed prompts unaffected)."
+  }
+}

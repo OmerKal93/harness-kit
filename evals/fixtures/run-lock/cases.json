@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "description": "RUN-LOCK-1 scenario manifest (documentation). The run-lock eval is logic-driven: evals/core/run-lock/run.js builds synthetic harnesskit roots under .tmp/ with injected clocks and asserts against scripts/session.js + scripts/lease.js + scripts/harness-commit.js directly. This file documents the scenarios; the driver does not parse fixtures from here.",
+  "scenarios": [
+    { "id": "two-readers-no-ambiguity", "asserts": "no active runs => not ambiguous; protected write has no active context" },
+    { "id": "writer-bound-ok", "asserts": "HARNESSKIT_RUN_ID resolves to a valid owned run (authoritative)" },
+    { "id": "two-writers-different-scopes", "asserts": "non-overlapping path leases both acquire" },
+    { "id": "two-writers-same-scope-blocks", "asserts": "overlapping path lease by a second session is refused" },
+    { "id": "grant-session-bound", "asserts": "a grant bound to S1/run1 is NOT matchable by S2" },
+    { "id": "pointer-hijack-defeated", "asserts": "env-bound run wins even when .current-run is repointed by another session" },
+    { "id": "stale-lease-expires", "asserts": "expired lease is cleaned up and scope is reclaimable" },
+    { "id": "precommit-head-moved-stops", "asserts": "harness-commit precommitCheck stops when HEAD != base_head" },
+    { "id": "legacy-grant-backcompat", "asserts": "legacy grant (no owner_session/run_id) still matches single-session" },
+    { "id": "cap0-unrelated-writer-nonblocking", "asserts": "env-bound CAP-0 write proceeds despite an unrelated active writer when scopes don't overlap" },
+    { "id": "ambiguous-without-binding-fails-closed", "asserts": ">1 active run + no HARNESSKIT_RUN_ID => protected write blocked" },
+    { "id": "scope-overlap-logic", "asserts": "scopesOverlap prefix logic correctness" }
+  ]
+}

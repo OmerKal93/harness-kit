@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "category": "context-quality",
+  "established_at": "2026-06-13T14:07:08.785Z",
+  "source_runs": [
+    "20260613-170613-regression-baseline-01",
+    "20260613-170632-regression-baseline-02",
+    "20260613-170650-regression-baseline-03"
+  ],
+  "baseline": {
+    "score_mean": 1,
+    "score_min": 1,
+    "score_max": 1,
+    "variance_pct": 0,
+    "pass_count": 3,
+    "fail_count": 0,
+    "duration_mean_ms": 84,
+    "total_cases": 40
+  }
+}

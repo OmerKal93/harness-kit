@@ -1,0 +1,12 @@
+{
+  "category": "redaction",
+  "id": "stripe-test-key",
+  "label": "positive",
+  "input": "Use Stripe test key sk_test_FAKEEXAMPLE00000000000000 in the dev seed.",
+  "expected": {
+    "redacted_contains": "[REDACTED:stripe_key]",
+    "redacted_not_contains": "sk_test_FAKEEXAMPLE00000000000000"
+  },
+  "notes": "Avoid UPPER=value form so dotenv_assign does not overwrite the specific stripe_key placeholder.",
+  "fake_value_note": "fake value for tests (FAKE/EXAMPLE marker); not a real credential"
+}

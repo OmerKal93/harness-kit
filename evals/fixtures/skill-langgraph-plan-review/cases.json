@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "description": "Harness fixtures for skill-langgraph-plan-review. Each fixture feeds plan_text (+ optional in-fixture cited contents) to check-langgraph-plan.js analyze() and asserts helper-JSON outcomes deterministically (no LLM-judge). 13 fixtures per the binding grilling tree: 4 check families + FP-negation guard + plan-vs-code mismatch + thin input + carve-out boundary.",
+  "fixtures": [
+    {
+      "id": "lg-01-clean-fixture-plan",
+      "label": "positive",
+      "plan_text": "# Plan: extend fixture graph\n\nAdd a deterministic dedupe node between a and b in the fixture graph. Fixture-only and offline; tests added for the new node. Cited file shows the literal wiring.",
+      "cited": [{ "path": "fixtureGraph.ts", "content": "const g = new StateGraph(S).addNode(\"a\", fa).addNode(\"dedupe\", fd).addNode(\"b\", fb).addEdge(START, \"a\").addEdge(\"a\", \"dedupe\").addEdge(\"dedupe\", \"b\").addEdge(\"b\", END);" }],
+      "expected": { "non_negated_boundary_categories": [], "unreachable_count": 0, "no_path_to_end_count": 0, "missing_end": false, "mismatch_count": 0, "parse_limited": false, "thin_input": false }
+    },
+    {
+      "id": "lg-02-provider-call",
+      "label": "boundary",
+      "plan_text": "# Plan: smarter summaries\n\nAdd a summarize node that uses ChatOpenAI to compress the run context before routing.",
+      "cited": [],
+      "expected": { "non_negated_boundary_categories": ["provider"] }
+    },
+    {
+      "id": "lg-03-persistence-checkpointer",
+      "label": "boundary",
+      "plan_text": "# Plan: durable graph state\n\nCompile the graph with a checkpointer (MemorySaver) so state survives restarts between runs.",
+      "cited": [],
+      "expected": { "non_negated_boundary_categories": ["persistence"] }
+    },
+    {
+      "id": "lg-04-prisma-via-node",
+      "label": "boundary",
+      "plan_text": "# Plan: persist results\n\nAdd a final node that writes scored leads through PrismaClient and runs a db migration for the new table.",
+      "cited": [],
+      "expected": { "non_negated_boundary_categories": ["prisma"] }
+    },
+    {
+      "id": "lg-05-env-secret",
+      "label": "boundary",
+      "plan_text": "# Plan: configure model access\n\nThe router node reads process.env.OPENAI_API_KEY at startup so later phases can call models.",
+      "cited": [],
+      "expected": { "non_negated_boundary_categories": ["secrets"] }
+    },
+    {
+      "id": "lg-06-unreachable-node",
+      "label": "topology",
+      "plan_text": "# Plan: add audit node\n\nWire an audit step into the fixture graph as shown in the cited file. Fixture-only work.",
+      "cited": [{ "path": "g.ts", "content": "g.addNode(\"a\", fa).addNode(\"b\", fb).addNode(\"audit\", fx);\ng.addEdge(START, \"a\").addEdge(\"a\", \"b\").addEdge(\"b\", END);" }],
+      "expected": { "unreachable_includes": ["audit"], "parse_limited": false }
+    },
+    {
+      "id": "lg-07-missing-end",
+      "label": "topology",
+      "plan_text": "# Plan: two-step pipeline\n\nCreate the two-step pipeline exactly as in the cited wiring.",
+      "cited": [{ "path": "g.ts", "content": "g.addNode(\"a\", fa).addNode(\"b\", fb).addEdge(START, \"a\").addEdge(\"a\", \"b\");" }],
+      "expected": { "missing_end": true, "no_path_to_end_count": 2 }
+    },
+    {
+      "id": "lg-08-dynamic-wiring-honesty",
+      "label": "honesty",
+      "plan_text": "# Plan: config-driven nodes\n\nRegister nodes dynamically from the workflow config array and wire edges in a loop, as in the cited file.",
+      "cited": [{ "path": "g.ts", "content": "for (const n of cfg.nodes) g.addNode(n.name, n.fn);\ng.addEdge(START, cfg.nodes[0].name);" }],
+      "expected": { "parse_limited": true, "reachability_suppressed": true, "unreachable_count": 0 }
+    },
+    {
+      "id": "lg-09-untyped-state",
+      "label": "state",
+      "plan_text": "# Plan: add routing state field\n\nExtend graph state with a routing decision field. The cited graph file shows current state usage.",
+      "cited": [{ "path": "g.ts", "content": "const g = new StateGraph(S).addNode(\"a\", fa).addEdge(START, \"a\").addEdge(\"a\", END); // state: any" }],
+      "expected": { "stategraph_present": true, "annotation_root_present": false, "any_typed_state": true }
+    },
+    {
+      "id": "lg-10-plan-vs-code-mismatch",
+      "label": "mismatch",
+      "plan_text": "# Plan: tiny fixture tweak\n\nThis change is fixture-only and offline. We only rename one node label; no behavior change.",
+      "cited": [{ "path": "fixtureGraph.ts", "content": "import { ChatAnthropic } from \"@langchain/anthropic\";\nconst g = new StateGraph(S).addNode(\"a\", fa).addEdge(START, \"a\").addEdge(\"a\", END);" }],
+      "expected": { "mismatch_min": 1 }
+    },
+    {
+      "id": "lg-11-fp-negation-guard",
+      "label": "fp-guard",
+      "plan_text": "# Plan: stay offline\n\nThis phase remains fixture-only. We will NOT call the LLM provider, and we will not add ChatOpenAI anywhere. One new deterministic edge b->c with a test.",
+      "cited": [],
+      "expected": { "negated_boundary_min": 1, "non_negated_boundary_categories": [], "mismatch_count": 0 }
+    },
+    {
+      "id": "lg-12-thin-input",
+      "label": "fail-closed",
+      "plan_text": "improve the graph somehow",
+      "cited": [],
+      "expected": { "thin_input": true }
+    },
+    {
+      "id": "lg-13-carve-out-internal",
+      "label": "boundary-d",
+      "plan_text": "# Plan: HarnessKit internal eval fixture graph\n\nBuild a small synthetic StateGraph fixture inside the HarnessKit eval harness (not the example project) to exercise the run-lifecycle eval: nodes intake -> route -> done, literal wiring, deterministic, offline, no providers will be added.",
+      "cited": [],
+      "expected": { "non_negated_boundary_categories": [], "mismatch_count": 0, "thin_input": false, "no_zone_keys": true }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "category": "redaction",
+  "id": "email-pii",
+  "label": "positive",
+  "input": "Contact jane.doe@example.com about the ticket.",
+  "expected": {
+    "redacted_contains": "[REDACTED:email]",
+    "redacted_not_contains": "jane.doe@example.com"
+  }
+}

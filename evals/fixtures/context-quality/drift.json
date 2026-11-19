@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "description": "Phase 5 Batch 2 context-quality drift fixtures. 10 cases across 6 patterns. _now anchors freshness scoring deterministically.",
+  "_reference_now": "2026-05-29T00:00:00Z",
+  "fixtures": [
+    {
+      "id": "stale-01",
+      "expected": { "patterns": { "stale_source": true } },
+      "pack": {
+        "task_type": "research",
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "st1", "kind": "doc", "trust_tier": "untrusted_external", "tokens": 1000, "provenance": { "source": "_synthetic/stale-doc.md", "mtime": "2026-04-01T00:00:00Z", "sha256": "deadbeefcafebabe1234567890abcdef1234567890abcdef1234567890abcdef" } }
+        ]
+      }
+    },
+    {
+      "id": "stale-02",
+      "expected": { "patterns": { "stale_source": true } },
+      "pack": {
+        "task_type": "research",
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "st2a", "kind": "doc", "trust_tier": "curated_external", "tokens": 500, "provenance": { "source": "_synthetic/old-ref.md", "mtime": "2026-05-10T00:00:00Z", "sha256": "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef" } },
+          { "id": "st2b", "kind": "doc", "trust_tier": "curated_memory", "tokens": 500, "provenance": { "source": "_synthetic/old-mem.md", "mtime": "2026-01-01T00:00:00Z", "sha256": "abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890" } }
+        ]
+      }
+    },
+    {
+      "id": "mismatch-01",
+      "expected": { "patterns": { "content_mismatch": true } },
+      "_materialize": { "mismatch1.md": "actual file content that does not match declared sha" },
+      "pack": {
+        "task_type": "research",
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "mm1", "kind": "doc", "trust_tier": "curated_memory", "tokens": 100, "provenance": { "source": "mismatch1.md", "mtime": "2026-05-28T00:00:00Z", "sha256": "deadbeefcafebabe0000000000000000000000000000000000000000deadbeef" } }
+        ]
+      }
+    },
+    {
+      "id": "mismatch-02",
+      "expected": { "patterns": { "content_mismatch": true } },
+      "_materialize": { "mismatch2a.md": "first file content", "mismatch2b.md": "second file content" },
+      "pack": {
+        "task_type": "research",
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "mm2a", "kind": "doc", "trust_tier": "curated_memory", "tokens": 100, "provenance": { "source": "mismatch2a.md", "mtime": "2026-05-28T00:00:00Z", "sha256": "00000000111111112222222233333333444444445555555566666666aaaaaaaa" } },
+          { "id": "mm2b", "kind": "doc", "trust_tier": "curated_memory", "tokens": 100, "provenance": { "source": "mismatch2b.md", "mtime": "2026-05-28T00:00:00Z", "sha256": "11111111222222223333333344444444555555556666666677777777bbbbbbbb" } }
+        ]
+      }
+    },
+    {
+      "id": "docconflict-01",
+      "expected": { "patterns": { "doc_code_conflict": true } },
+      "pack": {
+        "task_type": "code-bug",
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "dc1a", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 500, "mentions": ["UserService.authenticate"], "provenance": { "source": "_synthetic/doc1.md", "mtime": "2026-05-28T00:00:00Z", "sha256": "doc1234567890abcdef1234567890abcdef1234567890abcdef1234567890dca" } },
+          { "id": "dc1b", "kind": "code", "trust_tier": "curated_memory", "tokens": 500, "mentions": ["UserService.authenticate"], "provenance": { "source": "_synthetic/code1.ts", "mtime": "2026-05-28T00:00:00Z", "sha256": "code1234567890abcdef1234567890abcdef1234567890abcdef1234567890dcb" } }
+        ]
+      }
+    },
+    {
+      "id": "docconflict-02",
+      "expected": { "patterns": { "doc_code_conflict": true } },
+      "pack": {
+        "task_type": "code-bug",
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "dc2a", "kind": "doc", "trust_tier": "source_of_truth", "tokens": 500, "mentions": ["PaymentGateway.charge", "Order.total"], "provenance": { "source": "_synthetic/doc2.md", "mtime": "2026-05-28T00:00:00Z", "sha256": "doc2222222222222222222222222222222222222222222222222222222222222" } },
+          { "id": "dc2b", "kind": "code", "trust_tier": "curated_memory", "tokens": 500, "mentions": ["PaymentGateway.charge"], "provenance": { "source": "_synthetic/code2.ts", "mtime": "2026-05-28T00:00:00Z", "sha256": "code2222222222222222222222222222222222222222222222222222222222222" } },
+          { "id": "dc2c", "kind": "code", "trust_tier": "curated_memory", "tokens": 500, "mentions": ["Order.total"], "provenance": { "source": "_synthetic/code2-order.ts", "mtime": "2026-05-28T00:00:00Z", "sha256": "code333333333333333333333333333333333333333333333333333333333333" } }
+        ]
+      }
+    },
+    {
+      "id": "missing-01",
+      "expected": { "patterns": { "missing_provenance": true } },
+      "pack": {
+        "task_type": "research",
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "ms1", "kind": "doc", "trust_tier": "curated_memory", "tokens": 500, "provenance": { "source": "_synthetic/ms1.md" } }
+        ]
+      }
+    },
+    {
+      "id": "missing-02",
+      "expected": { "patterns": { "missing_provenance": true } },
+      "pack": {
+        "task_type": "research",
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "ms2a", "kind": "doc", "trust_tier": "curated_memory", "tokens": 500, "provenance": {} },
+          { "id": "ms2b", "kind": "doc", "trust_tier": "curated_memory", "tokens": 500, "provenance": { "mtime": "2026-05-28T00:00:00Z" } }
+        ]
+      }
+    },
+    {
+      "id": "overbudget-01",
+      "expected": { "patterns": { "over_budget": true } },
+      "pack": {
+        "task_type": "research",
+        "total_tokens": 64000,
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "ob1", "kind": "doc", "trust_tier": "curated_memory", "tokens": 64000, "provenance": { "source": "_synthetic/ob1.md", "mtime": "2026-05-28T00:00:00Z", "sha256": "ob11111111111111111111111111111111111111111111111111111111111111" } }
+        ]
+      }
+    },
+    {
+      "id": "forbidden-01",
+      "expected": { "patterns": { "forbidden_glob": true } },
+      "pack": {
+        "task_type": "research",
+        "_now": "2026-05-29T00:00:00Z",
+        "sections": [
+          { "id": "fb1", "kind": "doc", "trust_tier": "untrusted_external", "tokens": 500, "provenance": { "source": "runs/x/tool-log.ndjson", "mtime": "2026-05-28T00:00:00Z", "sha256": "fb11111111111111111111111111111111111111111111111111111111111111" } }
+        ]
+      }
+    }
+  ]
+}

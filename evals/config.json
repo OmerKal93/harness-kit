@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "description": "Per-category enable + threshold for the HarnessKit eval harness. Phase 4 Batch 1: redaction + poisoning. Batch 2: + gbrain-ab + claim-support. Batch 3: + trajectory + tool-risk + routing. Phase 5 Batch 1: + spec-gaming + approval-registry. Other categories added in later batches per docs/plans/.",
+  "categories": {
+    "redaction": {
+      "enabled": true,
+      "min_pass_ratio": 1,
+      "max_fp_ratio": 0.01
+    },
+    "poisoning": {
+      "enabled": true,
+      "min_pass_ratio": 0.95,
+      "max_fp_ratio": 0.05
+    },
+    "gbrain-ab": {
+      "enabled": true,
+      "win_threshold_advisory": 7,
+      "gating_metric": "unsafe_count_eq_zero"
+    },
+    "claim-support": {
+      "enabled": true,
+      "min_pass_ratio": 1
+    },
+    "trajectory": {
+      "enabled": true,
+      "min_pass_ratio": 1
+    },
+    "tool-risk": {
+      "enabled": true,
+      "min_pass_ratio": 0.95
+    },
+    "routing": {
+      "enabled": true,
+      "task_type_exact_min_ratio": 0.85,
+      "trigger_jaccard_min": 0.9
+    },
+    "spec-gaming": {
+      "enabled": true,
+      "min_pass_ratio": 0.8
+    },
+    "approval-registry": {
+      "enabled": true,
+      "min_pass_ratio": 1
+    },
+    "agent-identity": {
+      "enabled": true,
+      "min_pass_ratio": 1
+    },
+    "context-quality": {
+      "enabled": true,
+      "min_pass_ratio": 0.8
+    },
+    "goal-drift": {
+      "enabled": true,
+      "min_pass_ratio": 1,
+      "_justification": "Eval Integrity batch. 12 deterministic fixtures (>=8) covering all four recommendation bands + edge cases (empty goal, empty log, stopword goal, scope creep, path-token noise). Calls check() directly — deterministic, no LLM, no network. Driver: evals/core/goal-drift/run.js."
+    },
+    "skill-registry-security": {
+      "enabled": true,
+      "min_pass_ratio": 1,
+      "_justification": "Skill Registry Security v1 batch. 12 deterministic fixtures (>=8) across all trust tiers + both hash domains (runtime/validation, corrupted separately) + the six security gates. Validator deterministic, read-only, no network; fixture hashes computed at eval time, never hand-typed. Driver: evals/core/skill-registry-security/run.js."
+    },
+    "skill-langgraph-plan-review": {
+      "enabled": true,
+      "min_pass_ratio": 1,
+      "_justification": "Skillpack #2 (G4 track), grilling tree 2026-06-06 binding. 13 deterministic fixtures (>=8): 4 check families (boundary/topology/state/fixture-discipline), FP-negation guard, plan-vs-code mismatch, thin-input fail-closed, carve-out boundary-D case. Helper-JSON grading only, zero network, zero LLM-judge. Driver: evals/core/skill-langgraph-plan-review/run.js."
+    },
+    "guard-triggers": {
+      "enabled": true,
+      "min_pass_ratio": 1,
+      "_justification": "Harness v1 G3 trigger precision. 14 deterministic fixtures (>=8): destructive-bash block/allow matrix incl. the 2 harvested git patterns + reset --hard regression guard (guard spawned with stdin events, decided pre-run-resolution), and generic-profile glob assertions via pure _lib.sensitivePathHits against a synthetic example project layout (catches future glob drift). Zero network, zero external fs access. Driver: evals/core/guard-triggers/run.js."
+    },
+    "run-lifecycle": {
+      "enabled": true,
+      "min_pass_ratio": 1,
+      "_justification": "run-lifecycle-hygiene-v1 E2. 13 deterministic fixtures (>=8): pointer+TTL resolution, fail-closed nulls, approval single-use flip, close-run end-to-end, EXPIRED terminality, legacy degradation, and the 3 Codex-review additions (missing run dir, corrupt pointer/run.json never-throw, exact TTL boundary). Synthetic roots under .tmp/, injected 'now', zero writes to real runs/. Driver: evals/core/run-lifecycle/run.js."
+    },
+    "run-lock": {
+      "enabled": true,
+      "min_pass_ratio": 1,
+      "_justification": "RUN-LOCK-1 multi-session concurrency safety. 12 deterministic fixtures (>=8): session-bound protected-write resolution (env HARNESSKIT_RUN_ID authoritative over .current-run), pointer-hijack defeat, ambiguous-multi-session fail-closed, session-bound + legacy-backcompat grant matching, path-lease overlap/non-overlap/same-scope-block, stale-lease reclamation, commit-wrapper base-HEAD stop, and the CAP-0 non-overlapping-writer scenario. Synthetic roots under .tmp/, injected 'now', zero writes to real runs/. Driver: evals/core/run-lock/run.js."
+    }
+  }
+}
